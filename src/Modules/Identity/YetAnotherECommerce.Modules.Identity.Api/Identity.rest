@@ -1,0 +1,12 @@
+@moduleUrl = http://localhost:5000/identity-module
+@email = test@yetanotherecommerce.com
+@password = super$ecret
+
+### Sign-up
+POST {{moduleUrl}}/sign-up
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
