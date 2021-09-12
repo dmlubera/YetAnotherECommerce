@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+using System;
 using YetAnotherECommerce.Modules.Identity.Api.Extensions;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Users.Api.Extensions;
+using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 namespace YetAnotherECommerce.Bootstrapper
@@ -22,7 +23,8 @@ namespace YetAnotherECommerce.Bootstrapper
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<IdentityModuleMongoSettings>(Configuration.GetSection(nameof(IdentityModuleMongoSettings)));
-            services.AddInfrastructure();
+            services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
+            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
             services.AddIdentityModule();
             services.AddUsersModule();
         }

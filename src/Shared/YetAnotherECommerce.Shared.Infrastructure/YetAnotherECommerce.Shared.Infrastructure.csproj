@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Scrutor" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\YetAnotherECommerce.Shared.Abstractions\YetAnotherECommerce.Shared.Abstractions.csproj" />
   </ItemGroup>
 
