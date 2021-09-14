@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\YetAnotherECommerce.Shared.Infrastructure\YetAnotherECommerce.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\YetAnotherECommerce.Modules.Users.Core\YetAnotherECommerce.Modules.Users.Core.csproj" />
   </ItemGroup>
 

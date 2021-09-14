@@ -4,9 +4,9 @@ using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Repositories;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Users.Api")]
-namespace YetAnotherECommerce.Modules.Users.Core.Extensions
+namespace YetAnotherECommerce.Modules.Users.Core.DI
 {
-    internal static class Extensions
+    internal static class CoreInstaller
     {
         public static IServiceCollection AddCore(this IServiceCollection services)
         {

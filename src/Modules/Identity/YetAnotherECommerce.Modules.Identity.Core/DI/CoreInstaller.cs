@@ -6,9 +6,9 @@ using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Identity.Api")]
-namespace YetAnotherECommerce.Modules.Identity.Core.Extensions
+namespace YetAnotherECommerce.Modules.Identity.Core.DI
 {
-    internal static class Extensions
+    internal static class CoreInstaller
     {
         public static IServiceCollection AddCore(this IServiceCollection services)
         {

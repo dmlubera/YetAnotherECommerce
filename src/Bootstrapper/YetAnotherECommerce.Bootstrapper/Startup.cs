@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using YetAnotherECommerce.Modules.Identity.Api.Extensions;
+using YetAnotherECommerce.Modules.Identity.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Users.Api.Extensions;
+using YetAnotherECommerce.Modules.Users.Api.DI;
 using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Shared.Infrastructure.Extensions;
+using YetAnotherECommerce.Shared.Infrastructure.DI;
 
 namespace YetAnotherECommerce.Bootstrapper
 {

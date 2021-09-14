@@ -9,9 +9,9 @@ using YetAnotherECommerce.Shared.Infrastructure.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
-namespace YetAnotherECommerce.Shared.Infrastructure.Extensions
+namespace YetAnotherECommerce.Shared.Infrastructure.DI
 {
-    internal static class Extensions
+    internal static class SharedInfrastructureInstaller
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
@@ -29,7 +29,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Extensions
                 .AddClasses(x => x.AssignableTo(typeof(IEventHandler<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
-            
+
             return services;
         }
     }
