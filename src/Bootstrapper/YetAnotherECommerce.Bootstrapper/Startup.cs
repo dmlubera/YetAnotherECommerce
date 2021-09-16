@@ -36,6 +36,8 @@ namespace YetAnotherECommerce.Bootstrapper
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseInfrastructure();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

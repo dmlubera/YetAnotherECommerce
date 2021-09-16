@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,7 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
 namespace YetAnotherECommerce.Shared.Infrastructure.DI
@@ -31,6 +33,13 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                 .WithTransientLifetime());
 
             return services;
+        }
+
+        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            return app;
         }
     }
 }
