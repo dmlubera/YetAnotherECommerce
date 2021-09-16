@@ -11,11 +11,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 
         protected User() { }
 
-        public User(string email, string passwordHash, string passwordSalt)
+        public User(string email, string password)
         {
             Id = Guid.NewGuid();
             Email = Email.Create(email);
-            Password = Password.Create(passwordHash, passwordSalt);
+            Password = Password.Create(password);
         }
     }
 }

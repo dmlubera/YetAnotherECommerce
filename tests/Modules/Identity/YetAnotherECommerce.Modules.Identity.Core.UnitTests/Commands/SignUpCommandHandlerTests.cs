@@ -56,6 +56,21 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
             exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData(null)]
+        public async Task WhenGivenPasswordhHasInvalidFormat_ThenShouldThrowAnException(string invalidPassword)
+        {
+            var command = new SignUpCommand("test@yetanotherecommerce.com", invalidPassword);
+            var expectedException = new InvalidPasswordFormatException();
+
+            var exception = await Assert.ThrowsAsync<InvalidPasswordFormatException>(async () => await _handler.HandleAsync(command));
+
+            exception.Message.ShouldBe(expectedException.Message);
+            exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        }
+
         [Fact]
         public async Task WhenGivenDataIsCorrect_ThenShouldAddUserToDatabaseAndPublishEvent()
         {
