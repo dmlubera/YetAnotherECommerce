@@ -6,6 +6,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Fixtures.Commands;
 using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
@@ -28,7 +29,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         [Fact]
         public async Task WhenGivenEmailAlreadyInUse_ThenShouldThrowAnException()
         {
-            var command = new SignUpCommand("test@yetanotherecommerce.com", "super$ecret");
+            var command = SignUpCommandFixture.Create();
             var expectedException = new EmailInUseException();
             _repositoryMock
                 .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
@@ -58,7 +59,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         [Fact]
         public async Task WhenGivenDataIsCorrect_ThenShouldAddUserToDatabaseAndPublishEvent()
         {
-            var command = new SignUpCommand("test@yetanotherecommerce.com", "super$ecret");
+            var command = SignUpCommandFixture.Create();
             _repositoryMock
                 .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
