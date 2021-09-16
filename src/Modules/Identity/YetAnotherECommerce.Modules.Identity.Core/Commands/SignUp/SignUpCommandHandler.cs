@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
@@ -20,15 +21,13 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
 
         public async Task HandleAsync(SignUpCommand command)
         {
-            var existingUser = await _repository.GetByEmailAsync(command.Email);
+            if (await _repository.CheckIfEmailIsInUseAsync(command.Email))
+                throw new EmailInUseException();
 
-            if (existingUser is null)
-            {
-                var user = new User(command.Email, command.Password, command.Password);
-                await _repository.AddAsync(user);
+            var user = new User(command.Email, command.Password, command.Password);
+            await _repository.AddAsync(user);
 
-                await _eventDispatcher.PublishAsync(new UserRegistered(user.Id, user.Email.Value, user.Password.Hash));
-            }
+            await _eventDispatcher.PublishAsync(new UserRegistered(user.Id, user.Email.Value, user.Password.Hash));
         }
     }
 }

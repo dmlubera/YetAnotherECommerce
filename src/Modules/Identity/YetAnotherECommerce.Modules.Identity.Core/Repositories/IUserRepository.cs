@@ -7,5 +7,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Repositories
     {
         Task AddAsync(User user);
         Task<User> GetByEmailAsync(string email);
+        Task<bool> CheckIfEmailIsInUseAsync(string email);
     }
 }

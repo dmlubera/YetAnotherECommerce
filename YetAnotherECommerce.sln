@@ -27,11 +27,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Shared.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Shared.Infrastructure", "src\Shared\YetAnotherECommerce.Shared.Infrastructure\YetAnotherECommerce.Shared.Infrastructure.csproj", "{77374815-4916-4B31-BC5D-966EAB64FEFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Identity.Core", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core\YetAnotherECommerce.Modules.Identity.Core.csproj", "{1BE43977-565C-49B1-BA3A-EC22CD6275DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Core", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core\YetAnotherECommerce.Modules.Identity.Core.csproj", "{1BE43977-565C-49B1-BA3A-EC22CD6275DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Users.Core", "src\Modules\Users\YetAnotherECommerce.Modules.Users.Core\YetAnotherECommerce.Modules.Users.Core.csproj", "{41E7FFCC-3F03-4A81-9C80-C790A63A8D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Users.Core", "src\Modules\Users\YetAnotherECommerce.Modules.Users.Core\YetAnotherECommerce.Modules.Users.Core.csproj", "{41E7FFCC-3F03-4A81-9C80-C790A63A8D49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Identity.Messages", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Messages\YetAnotherECommerce.Modules.Identity.Messages.csproj", "{A502E091-DD2C-4F24-B9BF-5AB47377E57A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Messages", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Messages\YetAnotherECommerce.Modules.Identity.Messages.csproj", "{A502E091-DD2C-4F24-B9BF-5AB47377E57A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{10381D27-084B-474E-8A7C-40DFBD08DA57}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E24E98D7-2041-437C-96F1-362B42875378}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Identity.Core.UnitTests", "tests\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core.UnitTests\YetAnotherECommerce.Modules.Identity.Core.UnitTests.csproj", "{59D6BAC7-D669-4056-BAC1-13762A6656C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +77,10 @@ Global
 		{A502E091-DD2C-4F24-B9BF-5AB47377E57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A502E091-DD2C-4F24-B9BF-5AB47377E57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A502E091-DD2C-4F24-B9BF-5AB47377E57A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +99,9 @@ Global
 		{1BE43977-565C-49B1-BA3A-EC22CD6275DA} = {4FEC0D54-8212-4A24-96E3-04323C94C863}
 		{41E7FFCC-3F03-4A81-9C80-C790A63A8D49} = {D5413548-BCFC-478F-8906-0484E2D94B25}
 		{A502E091-DD2C-4F24-B9BF-5AB47377E57A} = {4FEC0D54-8212-4A24-96E3-04323C94C863}
+		{10381D27-084B-474E-8A7C-40DFBD08DA57} = {53982C5F-E220-4BC1-9900-3C92151B12DE}
+		{E24E98D7-2041-437C-96F1-362B42875378} = {10381D27-084B-474E-8A7C-40DFBD08DA57}
+		{59D6BAC7-D669-4056-BAC1-13762A6656C9} = {E24E98D7-2041-437C-96F1-362B42875378}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {781452E1-07B7-4B57-B526-70AA1377597C}
