@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using YetAnotherECommerce.Modules.Identity.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Modules.Products.Api.DI;
 using YetAnotherECommerce.Modules.Users.Api.DI;
 using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
@@ -27,6 +28,7 @@ namespace YetAnotherECommerce.Bootstrapper
             services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
             services.AddIdentityModule();
             services.AddUsersModule();
+            services.AddProductsModule();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
