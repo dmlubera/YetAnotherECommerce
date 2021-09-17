@@ -5,10 +5,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
+using YetAnotherECommerce.Shared.Infrastructure.Queries;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
 namespace YetAnotherECommerce.Shared.Infrastructure.DI
@@ -25,6 +27,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                 });
 
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+            services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
 
             services.Scan(x => x.FromAssemblies(assemblies)
