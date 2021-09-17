@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using YetAnotherECommerce.Modules.Identity.Api.Extensions;
-using YetAnotherECommerce.Modules.Users.Api.Extensions;
-using YetAnotherECommerce.Shared.Infrastructure.Extensions;
+using System;
+using YetAnotherECommerce.Modules.Identity.Api.DI;
+using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Modules.Users.Api.DI;
+using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Shared.Infrastructure.DI;
 
 namespace YetAnotherECommerce.Bootstrapper
 {
@@ -19,7 +22,9 @@ namespace YetAnotherECommerce.Bootstrapper
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInfrastructure();
+            services.Configure<IdentityModuleMongoSettings>(Configuration.GetSection(nameof(IdentityModuleMongoSettings)));
+            services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
+            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
             services.AddIdentityModule();
             services.AddUsersModule();
         }
@@ -30,6 +35,8 @@ namespace YetAnotherECommerce.Bootstrapper
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseInfrastructure();
 
             app.UseRouting();
 

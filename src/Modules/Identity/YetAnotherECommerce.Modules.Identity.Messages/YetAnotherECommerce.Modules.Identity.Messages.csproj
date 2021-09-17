@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\YetAnotherECommerce.Modules.Users.Core\YetAnotherECommerce.Modules.Users.Core.csproj" />
+    <ProjectReference Include="..\..\..\Shared\YetAnotherECommerce.Shared.Abstractions\YetAnotherECommerce.Shared.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
