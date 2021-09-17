@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Identity\YetAnotherECommerce.Modules.Identity.Api\YetAnotherECommerce.Modules.Identity.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Products\YetAnotherECommerce.Modules.Products.Api\YetAnotherECommerce.Modules.Products.Api.csproj" />
     <ProjectReference Include="..\..\Modules\Users\YetAnotherECommerce.Modules.Users.Api\YetAnotherECommerce.Modules.Users.Api.csproj" />
   </ItemGroup>
 

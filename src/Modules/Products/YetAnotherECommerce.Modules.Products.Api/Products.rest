@@ -1,0 +1,13 @@
+@moduleUrl = http://localhost:5000/identity-module
+
+### Get all products
+GET {{moduleUrl}}/products
+
+### Add product
+POST {{moduleUrl}}/products
+Content-Type: application/json
+
+{
+    "name": "Apple iPhone 12",
+    "price": 3999.99    
+}

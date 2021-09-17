@@ -37,7 +37,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{1038
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E24E98D7-2041-437C-96F1-362B42875378}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Identity.Core.UnitTests", "tests\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core.UnitTests\YetAnotherECommerce.Modules.Identity.Core.UnitTests.csproj", "{59D6BAC7-D669-4056-BAC1-13762A6656C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Core.UnitTests", "tests\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core.UnitTests\YetAnotherECommerce.Modules.Identity.Core.UnitTests.csproj", "{59D6BAC7-D669-4056-BAC1-13762A6656C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{2A13C821-43CD-465E-BF2E-F5E2692C59DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Products.Api", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Api\YetAnotherECommerce.Modules.Products.Api.csproj", "{DB6821F5-292C-4412-8D15-F8B323B52C62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Products.Core", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Core\YetAnotherECommerce.Modules.Products.Core.csproj", "{B25B6552-4F0E-422A-ABD0-AECA9C082247}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Products.UnitTests", "tests\Modules\Products\YetAnotherECommerce.Modules.Products.UnitTests\YetAnotherECommerce.Modules.Products.UnitTests.csproj", "{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +91,18 @@ Global
 		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59D6BAC7-D669-4056-BAC1-13762A6656C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB6821F5-292C-4412-8D15-F8B323B52C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB6821F5-292C-4412-8D15-F8B323B52C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB6821F5-292C-4412-8D15-F8B323B52C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB6821F5-292C-4412-8D15-F8B323B52C62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25B6552-4F0E-422A-ABD0-AECA9C082247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25B6552-4F0E-422A-ABD0-AECA9C082247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25B6552-4F0E-422A-ABD0-AECA9C082247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25B6552-4F0E-422A-ABD0-AECA9C082247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +124,11 @@ Global
 		{10381D27-084B-474E-8A7C-40DFBD08DA57} = {53982C5F-E220-4BC1-9900-3C92151B12DE}
 		{E24E98D7-2041-437C-96F1-362B42875378} = {10381D27-084B-474E-8A7C-40DFBD08DA57}
 		{59D6BAC7-D669-4056-BAC1-13762A6656C9} = {E24E98D7-2041-437C-96F1-362B42875378}
+		{2A13C821-43CD-465E-BF2E-F5E2692C59DD} = {D74CBF10-4A6B-49DA-96F4-41EE87E75DAB}
+		{DB6821F5-292C-4412-8D15-F8B323B52C62} = {2A13C821-43CD-465E-BF2E-F5E2692C59DD}
+		{B25B6552-4F0E-422A-ABD0-AECA9C082247} = {2A13C821-43CD-465E-BF2E-F5E2692C59DD}
+		{0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A} = {10381D27-084B-474E-8A7C-40DFBD08DA57}
+		{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF} = {0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {781452E1-07B7-4B57-B526-70AA1377597C}
