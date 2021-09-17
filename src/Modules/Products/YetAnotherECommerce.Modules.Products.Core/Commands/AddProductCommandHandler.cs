@@ -1,5 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Products.Core.Entitites;
+using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
@@ -14,9 +15,14 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
             _productRepository = productRepository;
         }
 
-        public Task HandleAsync(AddProductCommand command)
+        public async Task HandleAsync(AddProductCommand command)
         {
-            throw new NotImplementedException();
+            if (await _productRepository.CheckIfProductAlreadyExistsAsync(command.Name))
+                throw new ProductWithGivenNameAlreadyExistsException();
+
+            var product = new Product(command.Name, command.Description, command.Price);
+
+            await _productRepository.AddAsync(product);
         }
     }
 }

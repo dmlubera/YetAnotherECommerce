@@ -8,6 +8,7 @@ using System;
 using YetAnotherECommerce.Modules.Identity.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Products.Api.DI;
+using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Users.Api.DI;
 using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
@@ -25,6 +26,7 @@ namespace YetAnotherECommerce.Bootstrapper
         {
             services.Configure<IdentityModuleMongoSettings>(Configuration.GetSection(nameof(IdentityModuleMongoSettings)));
             services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
+            services.Configure<ProductsModuleMongoSettings>(Configuration.GetSection(nameof(ProductsModuleMongoSettings)));
             services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
             services.AddIdentityModule();
             services.AddUsersModule();
