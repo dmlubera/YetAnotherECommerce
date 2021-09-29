@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using YetAnotherECommerce.Modules.Carts.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Products.Api.DI;
@@ -31,6 +32,7 @@ namespace YetAnotherECommerce.Bootstrapper
             services.AddIdentityModule();
             services.AddUsersModule();
             services.AddProductsModule();
+            services.AddCartsModule();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
