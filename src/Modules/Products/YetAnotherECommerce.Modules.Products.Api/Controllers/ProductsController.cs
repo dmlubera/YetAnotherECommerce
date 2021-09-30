@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
@@ -29,6 +30,15 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequest request)
         {
             var command = new AddProductCommand(request.Name, request.Description, request.Price);
+            await _commandDispatcher.DispatchAsync(command);
+
+            return Ok();
+        }
+
+        [HttpPost("add-to-cart")]
+        public async Task<IActionResult> AddProductToCartAsync([FromBody] AddProductToCartRequest request)
+        {
+            var command = new AddProductToCartCommand(request.ProductId, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();
