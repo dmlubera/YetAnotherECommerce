@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
             if (product is null)
                 throw new ProductDoesNotExistException(command.ProductId);
 
-            await _eventDispatcher.PublishAsync(new ProductAddedToCart(command.ProductId, command.Quantity));
+            await _eventDispatcher.PublishAsync(new ProductAddedToCart(command.ProductId, product.Name, product.Price, command.Quantity));
         }
     }
 }
