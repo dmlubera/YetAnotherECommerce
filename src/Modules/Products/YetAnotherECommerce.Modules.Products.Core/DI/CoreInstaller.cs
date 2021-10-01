@@ -17,6 +17,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.DI
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddTransient<ICommandHandler<AddProductCommand>, AddProductCommandHandler>();
+            services.AddTransient<ICommandHandler<AddProductToCartCommand>, AddProductToCartCommandHandler>();
             services.AddTransient<IQueryHandler<GetAllProductsQuery, IEnumerable<Product>>, GetAllProductsQueryHandler>();
             services.AddTransient<IProductRepository, ProductRepository>();
 

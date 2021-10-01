@@ -1,4 +1,4 @@
-@moduleUrl = http://localhost:5000/identity-module
+@moduleUrl = http://localhost:5000/products-module
 
 ### Get all products
 GET {{moduleUrl}}/products
@@ -10,4 +10,16 @@ Content-Type: application/json
 {
     "name": "Apple iPhone 12",
     "price": 3999.99    
+}
+
+###
+@productId =
+
+### Add product to cart
+POST {{moduleUrl}}/products/add-to-cart
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity": 10
 }

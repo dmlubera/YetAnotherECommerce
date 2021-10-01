@@ -1,0 +1,7 @@
+@moduleUrl = http://localhost:5000/carts-module
+
+### Get cart
+GET {{moduleUrl}}/carts
+
+### Clear cart
+DELETE {{moduleUrl}}/carts

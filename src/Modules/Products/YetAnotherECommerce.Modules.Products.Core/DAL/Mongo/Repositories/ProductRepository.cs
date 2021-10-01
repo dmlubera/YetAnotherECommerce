@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
@@ -17,6 +18,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
         {
             _database = client.GetDatabase(settings.Value.DatabaseName);
         }
+
+        public async Task<Product> GetByIdAsync(Guid id)
+            => await Products.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task<IEnumerable<Product>> GetAsync()
             => await Products.Find(x => true).ToListAsync();
