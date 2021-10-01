@@ -47,10 +47,22 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         [InlineData(null)]
         public async Task WhenGivenEmailHasInvalidFormat_ThenShouldThrowAnException(string invalidEmail)
         {
-            var command = new SignUpCommand(invalidEmail, "super$ecret");
+            var command = new SignUpCommand(invalidEmail, "super$ecret", "customer");
             var expectedException = new InvalidEmailFormatException();
 
             var exception = await Assert.ThrowsAsync<InvalidEmailFormatException>(async () => await _handler.HandleAsync(command));
+
+            exception.Message.ShouldBe(expectedException.Message);
+            exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        }
+
+        [Fact]
+        public async Task WhenGivenRoleIsInvalid_ThenShouldThrowAnException()
+        {
+            var command = new SignUpCommand("test@yetanotherecommerce.com", "super$ecret", "invalidRole");
+            var expectedException = new RoleNotExistException(command.Role);
+
+            var exception = await Assert.ThrowsAsync<RoleNotExistException>(async () => await _handler.HandleAsync(command));
 
             exception.Message.ShouldBe(expectedException.Message);
             exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
@@ -62,7 +74,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         [InlineData(null)]
         public async Task WhenGivenPasswordhHasInvalidFormat_ThenShouldThrowAnException(string invalidPassword)
         {
-            var command = new SignUpCommand("test@yetanotherecommerce.com", invalidPassword);
+            var command = new SignUpCommand("test@yetanotherecommerce.com", invalidPassword, "customer");
             var expectedException = new InvalidPasswordFormatException();
 
             var exception = await Assert.ThrowsAsync<InvalidPasswordFormatException>(async () => await _handler.HandleAsync(command));

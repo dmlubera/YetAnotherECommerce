@@ -17,7 +17,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Auth
             _authSettings = authSettings;
         }
 
-        public JsonWebToken GenerateJwtToken(Guid userId)
+        public JsonWebToken GenerateJwtToken(Guid userId, string userRole)
         {
             var utcNow = DateTime.UtcNow;
             var expires = utcNow.Add(_authSettings.Expiry);
@@ -27,7 +27,8 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Auth
                 new (JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new (JwtRegisteredClaimNames.UniqueName, userId.ToString()),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new (JwtRegisteredClaimNames.Iat, new DateTimeOffset(utcNow).ToUnixTimeSeconds().ToString())
+                new (JwtRegisteredClaimNames.Iat, new DateTimeOffset(utcNow).ToUnixTimeSeconds().ToString()),
+                new (ClaimTypes.Role, userRole)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.IssuerSigningKey));

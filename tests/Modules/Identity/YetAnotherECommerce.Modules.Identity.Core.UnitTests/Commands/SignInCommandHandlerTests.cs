@@ -48,7 +48,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         {
             var commandFixture = SignInCommandFixture.Create();
             var expectedException = new InvalidCredentialsException();
-            var user = new User(commandFixture.Email, "incorrectPassword");
+            var user = new User(commandFixture.Email, "incorrectPassword", "customer");
             _repositoryMock.Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
@@ -63,10 +63,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         public async Task WhenCredentialsAreValid_ThenShouldReturnToken()
         {
             var commandFixture = SignInCommandFixture.Create();
-            var user = new User(commandFixture.Email, commandFixture.Password);
+            var user = new User(commandFixture.Email, commandFixture.Password, "customer");
             _repositoryMock.Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
-            _authManagerMock.Setup(x => x.GenerateJwtToken(It.IsAny<Guid>()))
+            _authManagerMock.Setup(x => x.GenerateJwtToken(It.IsAny<Guid>(), It.IsAny<string>()))
                 .Returns(new JsonWebToken());
 
             await _handler.HandleAsync(commandFixture);

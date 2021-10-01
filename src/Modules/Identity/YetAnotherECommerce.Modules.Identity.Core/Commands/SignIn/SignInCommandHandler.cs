@@ -31,7 +31,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn
             if (!Password.IsValid(user.Password, command.Password))
                 throw new InvalidCredentialsException();
 
-            var jwtToken = _authManager.GenerateJwtToken(user.Id);
+            var jwtToken = _authManager.GenerateJwtToken(user.Id, user.Role);
             _cache.Set(command.CacheKey, jwtToken);
         }
     }

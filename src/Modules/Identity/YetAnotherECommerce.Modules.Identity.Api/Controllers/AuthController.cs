@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
@@ -26,7 +24,7 @@ namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
-            var command = new SignUpCommand(request.Email, request.Password);
+            var command = new SignUpCommand(request.Email, request.Password, request.Role);
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();

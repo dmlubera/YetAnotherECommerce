@@ -11,6 +11,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Fixtures.Commands
                 .CustomInstantiator(x => Activator.CreateInstance(typeof(SignUpCommand), nonPublic: true) as SignUpCommand)
                 .RuleFor(x => x.Email, f => f.Internet.Email())
                 .RuleFor(x => x.Password, f => f.Internet.Password())
+                .RuleFor(x => x.Role, f => f.PickRandom(new[] { "admin", "customer" }))
                 .Generate();
     }
 }
