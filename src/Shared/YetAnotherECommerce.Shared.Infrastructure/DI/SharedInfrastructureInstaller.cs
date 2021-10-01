@@ -3,11 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using YetAnotherECommerce.Shared.Abstractions.Auth;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
+using YetAnotherECommerce.Shared.Infrastructure.Auth;
 using YetAnotherECommerce.Shared.Infrastructure.Cache;
 using YetAnotherECommerce.Shared.Infrastructure.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
@@ -33,6 +35,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
             services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
+            services.AddSingleton<IAuthManager, AuthManager>();
 
             services.Scan(x => x.FromAssemblies(assemblies)
                 .AddClasses(x => x.AssignableTo(typeof(IEventHandler<>)))

@@ -46,6 +46,9 @@ namespace YetAnotherECommerce.Bootstrapper
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

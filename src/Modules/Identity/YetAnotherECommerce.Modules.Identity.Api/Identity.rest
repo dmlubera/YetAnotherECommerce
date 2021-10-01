@@ -10,3 +10,12 @@ Content-Type: application/json
     "email": "{{email}}",
     "password": "{{password}}"
 }
+
+### Sign-in
+POST {{moduleUrl}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
