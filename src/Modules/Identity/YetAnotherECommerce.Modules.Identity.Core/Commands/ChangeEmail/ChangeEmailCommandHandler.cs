@@ -32,9 +32,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail
             if (user is null)
                 throw new UserNotExistException(command.UserId);
 
-            if (user.Email == command.Email)
-                throw new ProvidedEmailIsExactlyTheSameAsTheCurrentOneException();
-
             user.ChangeEmail(command.Email);
 
             await _userRepository.UpdateAsync(user);

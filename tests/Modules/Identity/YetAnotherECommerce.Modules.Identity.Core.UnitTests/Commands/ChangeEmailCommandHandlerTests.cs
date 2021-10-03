@@ -26,27 +26,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         }
 
         [Fact]
-        public async Task WhenProvidedEmailIsExactlyTheSameAsTheCurrentOne_ThenShouldThrowAnException()
-        {
-            var command = new ChangeEmailCommand(Guid.NewGuid(), "test@yetanotherecommerce.com");
-            var user = new User(command.Email, "super$ecret", "admin");
-            var expectedException = new ProvidedEmailIsExactlyTheSameAsTheCurrentOneException();
-            _repositoryMock
-                .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
-                .ReturnsAsync(false);
-            _repositoryMock
-                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(user);
-
-            var result = 
-                await Assert.ThrowsAsync<ProvidedEmailIsExactlyTheSameAsTheCurrentOneException>(() => _handler.HandleAsync(command));
-
-            result.ShouldNotBeNull();
-            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            result.Message.ShouldBe(expectedException.Message);
-        }
-
-        [Fact]
         public async Task WhenProvidedEmailHasInvalidFormat_ThenShouldThrowAnException()
         {
             var command = new ChangeEmailCommand(Guid.NewGuid(), "");
