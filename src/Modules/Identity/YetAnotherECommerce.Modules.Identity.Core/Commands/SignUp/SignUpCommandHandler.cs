@@ -24,10 +24,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
             if (await _repository.CheckIfEmailIsInUseAsync(command.Email))
                 throw new EmailInUseException();
 
-            var user = new User(command.Email, command.Password);
+            var user = new User(command.Email, command.Password, command.Role);
             await _repository.AddAsync(user);
 
-            await _eventDispatcher.PublishAsync(new UserRegistered(user.Id, user.Email.Value, user.Password.Hash));
+            await _eventDispatcher.PublishAsync(new UserRegistered(user.Id, user.Email, user.Password.Hash));
         }
     }
 }

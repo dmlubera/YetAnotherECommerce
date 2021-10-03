@@ -1,6 +1,5 @@
 ﻿using System;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
-using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 {
@@ -23,5 +22,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 
             return new Email(email);
         }
+
+        public static implicit operator string(Email value)
+            => value.Value;
+
+        public static implicit operator Email(string value)
+            => Create(value);
     }
 }

@@ -44,5 +44,8 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8
                 ));
+
+        public static bool IsValid(Password password, string givenPassword)
+            => password.Hash == GenerateHash(givenPassword, password.Salt);
     }
 }

@@ -6,10 +6,15 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
 
         private SignUpCommand() { }
 
-        public SignUpCommand(string email, string password)
-            => (Email, Password) = (email, password);
+        public SignUpCommand(string email, string password, string role)
+        {
+            Email = email;
+            Password = password;
+            Role = role;
+        }
     }
 }
