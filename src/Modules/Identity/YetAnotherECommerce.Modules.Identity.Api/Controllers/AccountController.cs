@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail;
+using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
 namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
@@ -23,6 +24,14 @@ namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
             var userId = Guid.Parse(User.Identity.Name);
             await _commandDispatcher.DispatchAsync(new ChangeEmailCommand(userId, request.Email));
             
+            return Ok();
+        }
+
+        public async Task<IActionResult> ChangePassswordAsync([FromBody] ChangePasswordRequest request)
+        {
+            var userId = Guid.Parse(User.Identity.Name);
+            await _commandDispatcher.DispatchAsync(new ChangePasswordCommand(userId, request.Password));
+
             return Ok();
         }
     }
