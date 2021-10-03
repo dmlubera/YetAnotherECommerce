@@ -21,3 +21,15 @@ Content-Type: application/json
     "email": "{{email}}",
     "password": "{{password}}"
 }
+
+### 
+@jwt =
+
+### Change email
+POST {{moduleUrl}}/account/change-email
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "email": "newemailaddress@yetanotherecommerce.com"
+}

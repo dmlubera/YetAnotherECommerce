@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
@@ -15,6 +16,8 @@ namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
         public AccountController(ICommandDispatcher commandDispatcher)
             => _commandDispatcher = commandDispatcher;
 
+        [Authorize]
+        [HttpPost("change-email")]
         public async Task<IActionResult> ChangeEmailAsync([FromBody] ChangeEmailRequest request)
         {
             var userId = Guid.Parse(User.Identity.Name);
