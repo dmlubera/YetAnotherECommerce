@@ -1,6 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
@@ -17,9 +18,21 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail
             _eventDispatcher = eventDispatcher;
         }
 
-        public Task HandleAsync(ChangeEmailCommand command)
+        public async Task HandleAsync(ChangeEmailCommand command)
         {
-            throw new NotImplementedException();
+            if (!Email.HasValidFormat(command.Email))
+                throw new InvalidEmailFormatException();
+
+            if (await _userRepository.CheckIfEmailIsInUseAsync(command.Email))
+                throw new EmailInUseException();
+
+            var user = await _userRepository.GetByIdAsync(command.UserId);
+
+            if (user is null)
+                throw new UserNotExistException(command.UserId);
+
+            if (user.Email == command.Email)
+                throw new ProvidedEmailIsExactlyTheSameAsTheCurrentOneException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Repositories
@@ -7,6 +8,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Repositories
     {
         Task AddAsync(User user);
         Task<User> GetByEmailAsync(string email);
+        Task<User> GetByIdAsync(Guid id);
         Task<bool> CheckIfEmailIsInUseAsync(string email);
     }
 }

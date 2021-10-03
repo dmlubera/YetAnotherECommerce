@@ -15,9 +15,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
         public bool Equals(Email other)
             => other is Email && Value == other.Value;
 
+        public static bool HasValidFormat(string email)
+            => !string.IsNullOrWhiteSpace(email);
+
         public static Email Create(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (!HasValidFormat(email))
                 throw new InvalidEmailFormatException();
 
             return new Email(email);

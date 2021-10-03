@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail;
@@ -16,7 +17,8 @@ namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
 
         public async Task<IActionResult> ChangeEmailAsync([FromBody] ChangeEmailRequest request)
         {
-            await _commandDispatcher.DispatchAsync(new ChangeEmailCommand(request.Email));
+            var userId = Guid.Parse(User.Identity.Name);
+            await _commandDispatcher.DispatchAsync(new ChangeEmailCommand(userId, request.Email));
             
             return Ok();
         }
