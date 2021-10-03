@@ -2,6 +2,7 @@
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
+using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
@@ -33,6 +34,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail
 
             if (user.Email == command.Email)
                 throw new ProvidedEmailIsExactlyTheSameAsTheCurrentOneException();
+
+            user.ChangeEmail(command.Email);
+
+            await _userRepository.UpdateAsync(user);
+
+            await _eventDispatcher.PublishAsync(new EmailChanged(user.Id, user.Email));
         }
     }
 }

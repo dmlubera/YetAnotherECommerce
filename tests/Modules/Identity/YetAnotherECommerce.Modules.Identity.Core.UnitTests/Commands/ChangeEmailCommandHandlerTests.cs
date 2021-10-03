@@ -7,6 +7,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
@@ -96,7 +97,19 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         [Fact]
         public async Task WhenProvidedEmailIsValid_ThenShouldUpdateEmailAndPublishEvent()
         {
+            var command = new ChangeEmailCommand(Guid.NewGuid(), "test@yetanotherecommerce.com");
+            var user = new User("admin@yetanotherecommerce.com", "super$ecret", "admin");
+            _repositoryMock
+                .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
+                .ReturnsAsync(false);
+            _repositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(user);
 
+            await _handler.HandleAsync(command);
+
+            _repositoryMock.Verify(x => x.UpdateAsync(It.IsAny<User>()));
+            _eventDispatcherMock.Verify(x => x.PublishAsync(It.IsAny<EmailChanged>()));
         }
     }
 }

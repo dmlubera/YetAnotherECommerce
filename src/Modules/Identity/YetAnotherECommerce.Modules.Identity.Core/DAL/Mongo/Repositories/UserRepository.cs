@@ -31,6 +31,9 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories
         public async Task<bool> CheckIfEmailIsInUseAsync(string email)
             => await Users.AsQueryable().AnyAsync(x => x.Email.Value == email);
 
+        public async Task UpdateAsync(User user)
+            => await Users.ReplaceOneAsync(x => x.Id == user.Id, user);
+
         private IMongoCollection<User> Users => _database.GetCollection<User>("Users");
     }
 }

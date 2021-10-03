@@ -23,6 +23,9 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             CreatedAt = DateTime.UtcNow;
         }
 
+        public void ChangeEmail(string email)
+           => Email = Email.Create(email);
+
         private void SetRole(string role)
         {
             if (!Enum.IsDefined(typeof(AllowedRoles), role.ToLower()))
