@@ -27,6 +27,8 @@ namespace YetAnotherECommerce.Modules.Identity.Api.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassswordAsync([FromBody] ChangePasswordRequest request)
         {
             var userId = Guid.Parse(User.Identity.Name);
