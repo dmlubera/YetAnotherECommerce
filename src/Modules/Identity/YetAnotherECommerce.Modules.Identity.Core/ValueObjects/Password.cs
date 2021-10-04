@@ -18,7 +18,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 
         public static Password Create(string password)
         {
-            if (string.IsNullOrWhiteSpace(password))
+            if (!HasValidFormat(password))
                 throw new InvalidPasswordFormatException();
 
             var salt = GenerateSalt();
@@ -47,5 +47,8 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 
         public static bool IsValid(Password password, string givenPassword)
             => password.Hash == GenerateHash(givenPassword, password.Salt);
+
+        public static bool HasValidFormat(string password)
+            => !string.IsNullOrWhiteSpace(password);
     }
 }

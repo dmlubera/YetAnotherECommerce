@@ -24,7 +24,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
         }
 
         public void ChangeEmail(string email)
-           => Email = Email.Create(email);
+            => Email = Email.Create(email);
+
+        public void ChangePassword(string password)
+            => Password = Password.Create(password);
 
         private void SetRole(string role)
         {
