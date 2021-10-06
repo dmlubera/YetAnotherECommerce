@@ -13,7 +13,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 
         protected Password() { }
 
-        protected Password(string hash, string salt)
+        public Password(string hash, string salt)
             => (Hash, Salt) = (hash, salt);
 
         public static Password Create(string password)

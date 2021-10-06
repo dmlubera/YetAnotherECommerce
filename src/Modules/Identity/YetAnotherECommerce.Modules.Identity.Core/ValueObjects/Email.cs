@@ -9,7 +9,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
         
         protected Email() { }
 
-        protected Email(string value)
+        public Email(string value)
             => Value = value;
 
         public bool Equals(Email other)
