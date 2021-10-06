@@ -1,12 +1,12 @@
 ﻿using System;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 {
-    public class User
+    public class User : AggregateRoot
     {
-        public Guid Id { get; private set; }
         public Email Email { get; private set; }
         public Password Password { get; private set; }
         public string Role { get; private set; }
@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 
         public User(string email, string password, string role)
         {
-            Id = Guid.NewGuid();
+            Id = new AggregateId();
             Email = Email.Create(email);
             Password = Password.Create(password);
             SetRole(role);
