@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
@@ -29,7 +28,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequest request)
         {
-            var command = new AddProductCommand(request.Name, request.Description, request.Price);
+            var command = new AddProductCommand(request.Name, request.Description, request.Price, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();

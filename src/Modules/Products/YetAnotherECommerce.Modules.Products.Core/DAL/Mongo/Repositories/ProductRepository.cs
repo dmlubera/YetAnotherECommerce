@@ -3,7 +3,9 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Products.Core.Entitites;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
@@ -20,17 +22,25 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
-            => await Products.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+        {
+            var document = await Products.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+
+            return document.AsEntity();
+        }
 
         public async Task<IEnumerable<Product>> GetAsync()
-            => await Products.Find(x => true).ToListAsync();
+        {
+            var documents = await Products.Find(x => true).ToListAsync();
+
+            return documents.Select(x => x.AsEntity());
+        }
 
         public async Task AddAsync(Product product)
-            => await Products.InsertOneAsync(product);
+            => await Products.InsertOneAsync(product.AsDocument());
 
         public async Task<bool> CheckIfProductAlreadyExistsAsync(string name)
             => await Products.AsQueryable().AnyAsync(x => x.Name == name);
 
-        private IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
+        private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>("Products");
     }
 }

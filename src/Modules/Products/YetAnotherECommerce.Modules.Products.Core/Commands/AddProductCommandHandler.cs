@@ -20,7 +20,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
             if (await _productRepository.CheckIfProductAlreadyExistsAsync(command.Name))
                 throw new ProductWithGivenNameAlreadyExistsException();
 
-            var product = new Product(command.Name, command.Description, command.Price);
+            var product = new Product(command.Name, command.Description, command.Price, command.Quantity);
 
             await _productRepository.AddAsync(product);
         }
