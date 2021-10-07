@@ -14,10 +14,32 @@ Content-Type: application/json
 }
 
 ### Sign-in
+# @name signIn
 POST {{moduleUrl}}/sign-in
 Content-Type: application/json
 
 {
     "email": "{{email}}",
     "password": "{{password}}"
+}
+
+### 
+@jwt = {{signIn.response.body.$.accessToken}}
+
+### Change email
+POST {{moduleUrl}}/account/change-email
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "email": "newemailaddress@yetanotherecommerce.com"
+}
+
+### Change password
+POST {{moduleUrl}}/account/change-password
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "password": "new$uper$ecret"
 }
