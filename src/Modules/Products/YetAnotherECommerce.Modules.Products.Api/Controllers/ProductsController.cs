@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Api.Models.Requests;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
@@ -32,6 +33,13 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await _commandDispatcher.DispatchAsync(new DeleteProductCommand(id));
+            return NoContent();
         }
 
         [HttpPost("add-to-cart")]

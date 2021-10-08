@@ -41,6 +41,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
         public async Task<bool> CheckIfProductAlreadyExistsAsync(string name)
             => await Products.AsQueryable().AnyAsync(x => x.Name == name);
 
+        public async Task DeleteAsync(Guid id)
+            => await Products.DeleteOneAsync(x => x.Id == id);
+
         private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>("Products");
     }
 }

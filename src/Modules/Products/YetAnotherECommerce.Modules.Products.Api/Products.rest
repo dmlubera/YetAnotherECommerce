@@ -8,12 +8,13 @@ POST {{moduleUrl}}/products
 Content-Type: application/json
 
 {
-    "name": "Apple iPhone 12",
-    "price": 3999.99    
+    "name": "Apple iPhone 13 Pro",
+    "price": 3999.99,
+    "quantity": 100
 }
 
 ###
-@productId =
+@productId = 
 
 ### Add product to cart
 POST {{moduleUrl}}/products/add-to-cart
@@ -23,3 +24,6 @@ Content-Type: application/json
     "productId": "{{productId}}",
     "quantity": 10
 }
+
+###
+DELETE {{moduleUrl}}/products

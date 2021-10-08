@@ -11,5 +11,6 @@ namespace YetAnotherECommerce.Modules.Products.Core.Repositories
         Task<Product> GetByIdAsync(Guid id);
         Task AddAsync(Product product);
         Task<bool> CheckIfProductAlreadyExistsAsync(string name);
+        Task DeleteAsync(Guid id);
     }
 }
