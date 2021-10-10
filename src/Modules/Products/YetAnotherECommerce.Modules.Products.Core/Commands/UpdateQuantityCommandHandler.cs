@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
@@ -12,9 +12,16 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
         public UpdateQuantityCommandHandler(IProductRepository repository)
             => _repository = repository;
 
-        public Task HandleAsync(UpdateQuantityCommand command)
+        public async Task HandleAsync(UpdateQuantityCommand command)
         {
-            throw new NotImplementedException();
+            var product = await _repository.GetByIdAsync(command.ProductId);
+
+            if (product is null)
+                throw new ProductDoesNotExistException(command.ProductId);
+
+            product.UpdateQuantity(command.Quantity);
+
+            await _repository.UpdateAsync(product);
         }
     }
 }

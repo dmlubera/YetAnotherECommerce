@@ -25,13 +25,13 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
         public async Task WhenGivenQuantityIsLesserThanZero_ThenShouldThrowAnException()
         {
             var command = new UpdateQuantityCommand(Guid.NewGuid(), -1);
-            var expectedException = new InvalidQuantityException();
+            var expectedException = new InvalidQuantityValueException();
             var product = new Product("Test", string.Empty, 10, 10);
             _productRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(product);
 
-            var result = await Assert.ThrowsAsync<InvalidQuantityException>(() => _handler.HandleAsync(command));
+            var result = await Assert.ThrowsAsync<InvalidQuantityValueException>(() => _handler.HandleAsync(command));
 
             result.ShouldNotBeNull();
             result.ErrorCode.ShouldBe(expectedException.ErrorCode);

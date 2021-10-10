@@ -31,5 +31,8 @@ namespace YetAnotherECommerce.Modules.Products.Core.Entitites
             Price = Price.Create(price);
             Quantity = Quantity.Create(quantity);
         }
+
+        public void UpdateQuantity(int quantity)
+            => Quantity = Quantity.Create(quantity);
     }
 }
