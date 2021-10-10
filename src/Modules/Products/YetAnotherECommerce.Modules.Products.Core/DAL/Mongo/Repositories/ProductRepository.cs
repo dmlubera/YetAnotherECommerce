@@ -44,6 +44,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
         public async Task DeleteAsync(Guid id)
             => await Products.DeleteOneAsync(x => x.Id == id);
 
+        public async Task UpdateAsync(Product product)
+            => await Products.InsertOneAsync(product.AsDocument());
+
         private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>("Products");
     }
 }
