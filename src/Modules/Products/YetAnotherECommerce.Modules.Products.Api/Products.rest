@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ###
-@productId = 
+@productId =
 
 ### Add product to cart
 POST {{moduleUrl}}/products/add-to-cart
@@ -25,5 +25,15 @@ Content-Type: application/json
     "quantity": 10
 }
 
+### Update product quantity
+POST {{moduleUrl}}/products/update-quantity
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity": 10
+}
+
+
 ###
-DELETE {{moduleUrl}}/products
+DELETE {{moduleUrl}}/products/{{productId}}
