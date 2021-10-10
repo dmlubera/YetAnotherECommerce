@@ -19,6 +19,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.DI
             services.AddTransient<ICommandHandler<AddProductCommand>, AddProductCommandHandler>();
             services.AddTransient<ICommandHandler<AddProductToCartCommand>, AddProductToCartCommandHandler>();
             services.AddTransient<ICommandHandler<DeleteProductCommand>, DeleteProductCommandHandler>();
+            services.AddTransient<ICommandHandler<UpdateQuantityCommand>, UpdateQuantityCommandHandler>();
             services.AddTransient<IQueryHandler<GetAllProductsQuery, IEnumerable<Product>>, GetAllProductsQueryHandler>();
             services.AddTransient<IProductRepository, ProductRepository>();
 

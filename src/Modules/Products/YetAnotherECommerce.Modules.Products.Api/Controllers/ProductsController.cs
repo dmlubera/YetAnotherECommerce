@@ -42,6 +42,15 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
             return NoContent();
         }
 
+        [HttpPost("update-quantity")]
+        public async Task<IActionResult> UpdateQuantityAsync([FromBody] UpdateQuantityRequest request)
+        {
+            var command = new UpdateQuantityCommand(request.ProductId, request.Quantity);
+            await _commandDispatcher.DispatchAsync(command);
+
+            return Ok();
+        }
+
         [HttpPost("add-to-cart")]
         public async Task<IActionResult> AddProductToCartAsync([FromBody] AddProductToCartRequest request)
         {
