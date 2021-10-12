@@ -23,13 +23,13 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
-            => Ok(await _queryDispatcher.DispatchAsync(new GetAllProductsQuery()));
+        public async Task<IActionResult> BrowseAsync()
+            => Ok(await _queryDispatcher.DispatchAsync(new BrowseProductsQuery()));
 
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequest request)
+        public async Task<IActionResult> AddAsync([FromBody] AddProductRequest request)
         {
             var command = new AddProductCommand(request.Name, request.Description, request.Price, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
@@ -57,7 +57,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
 
         [HttpPost("add-to-cart")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> AddProductToCartAsync([FromBody] AddProductToCartRequest request)
+        public async Task<IActionResult> AddToCartAsync([FromBody] AddProductToCartRequest request)
         {
             var command = new AddProductToCartCommand(request.ProductId, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
