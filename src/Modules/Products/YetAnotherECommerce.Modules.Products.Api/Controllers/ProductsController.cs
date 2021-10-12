@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Api.Models.Requests;
@@ -27,6 +28,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequest request)
         {
             var command = new AddProductCommand(request.Name, request.Description, request.Price, request.Quantity);
@@ -36,6 +38,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             await _commandDispatcher.DispatchAsync(new DeleteProductCommand(id));
@@ -43,6 +46,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         }
 
         [HttpPost("update-quantity")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateQuantityAsync([FromBody] UpdateQuantityRequest request)
         {
             var command = new UpdateQuantityCommand(request.ProductId, request.Quantity);
@@ -52,6 +56,7 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         }
 
         [HttpPost("add-to-cart")]
+        [Authorize(Roles = "customer")]
         public async Task<IActionResult> AddProductToCartAsync([FromBody] AddProductToCartRequest request)
         {
             var command = new AddProductToCartCommand(request.ProductId, request.Quantity);
