@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Api.Models.Requests;
@@ -22,21 +23,41 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
-            => Ok(await _queryDispatcher.DispatchAsync(new GetAllProductsQuery()));
+        public async Task<IActionResult> BrowseAsync()
+            => Ok(await _queryDispatcher.DispatchAsync(new BrowseProductsQuery()));
 
 
         [HttpPost]
-        public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequest request)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> AddAsync([FromBody] AddProductRequest request)
         {
-            var command = new AddProductCommand(request.Name, request.Description, request.Price);
+            var command = new AddProductCommand(request.Name, request.Description, request.Price, request.Quantity);
+            await _commandDispatcher.DispatchAsync(command);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await _commandDispatcher.DispatchAsync(new DeleteProductCommand(id));
+            return NoContent();
+        }
+
+        [HttpPost("update-quantity")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateQuantityAsync([FromBody] UpdateQuantityRequest request)
+        {
+            var command = new UpdateQuantityCommand(request.ProductId, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();
         }
 
         [HttpPost("add-to-cart")]
-        public async Task<IActionResult> AddProductToCartAsync([FromBody] AddProductToCartRequest request)
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> AddToCartAsync([FromBody] AddProductToCartRequest request)
         {
             var command = new AddProductToCartCommand(request.ProductId, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);

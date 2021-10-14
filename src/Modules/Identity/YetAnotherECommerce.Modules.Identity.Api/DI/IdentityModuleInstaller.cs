@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using System;
 using System.Runtime.CompilerServices;
 using System.Text;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;

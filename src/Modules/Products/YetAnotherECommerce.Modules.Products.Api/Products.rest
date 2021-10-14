@@ -1,15 +1,18 @@
 @moduleUrl = http://localhost:5000/products-module
+@accessToken = 
 
 ### Get all products
 GET {{moduleUrl}}/products
 
 ### Add product
 POST {{moduleUrl}}/products
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-    "name": "Apple iPhone 12",
-    "price": 3999.99    
+    "name": "Apple iPhone 13 Pro",
+    "price": 3999.99,
+    "quantity": 100
 }
 
 ###
@@ -17,9 +20,24 @@ Content-Type: application/json
 
 ### Add product to cart
 POST {{moduleUrl}}/products/add-to-cart
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
     "productId": "{{productId}}",
     "quantity": 10
 }
+
+### Update product quantity
+POST {{moduleUrl}}/products/update-quantity
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity": 10
+}
+
+
+###
+DELETE {{moduleUrl}}/products/{{productId}}

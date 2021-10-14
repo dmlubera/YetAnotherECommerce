@@ -1,25 +1,38 @@
 ﻿using System;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Modules.Products.Core.ValueObjects;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Entitites
 {
-    public class Product
+    public class Product : AggregateRoot
     {
-        public Guid Id { get; private set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public Price Price { get; private set; }
+        public Quantity Quantity { get; private set; }
         
-        public Product(string name, string description, decimal price)
+        public Product(Guid id, string name, string description, decimal price, int quantity)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Price = new Price(price);
+            Quantity = new Quantity(quantity);
+        }
+
+        public Product(string name, string description, decimal price, int quantity)
         {
             Id = Guid.NewGuid();
             if (string.IsNullOrWhiteSpace(name))
                 throw new InvalidProductNameException();
             Name = name;
             Description = description;
-            if (price <= 0)
-                throw new InvalidPriceException();
-            Price = price;
+            Price = Price.Create(price);
+            Quantity = Quantity.Create(quantity);
         }
+
+        public void UpdateQuantity(int quantity)
+            => Quantity = Quantity.Create(quantity);
     }
 }
