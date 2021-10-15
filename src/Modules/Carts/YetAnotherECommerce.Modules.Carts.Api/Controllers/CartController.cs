@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 
@@ -15,13 +17,19 @@ namespace YetAnotherECommerce.Modules.Carts.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "customer")]
         public IActionResult Get()
-            => Ok(_cache.Get<Cart>("cart"));
+        {
+            var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            return Ok(_cache.Get<Cart>($"{userId}-cart"));
+        }
 
         [HttpDelete]
+        [Authorize(Roles = "customer")]
         public IActionResult Clear()
         {
-            _cache.Clear("cart");
+            var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            _cache.Clear($"{userId}-cart");
             return NoContent();
         }
     }
