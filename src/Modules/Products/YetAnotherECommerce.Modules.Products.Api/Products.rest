@@ -1,5 +1,6 @@
 @moduleUrl = http://localhost:5000/products-module
 @accessToken = 
+@productId = 
 
 ### Get all products
 GET {{moduleUrl}}/products
@@ -15,9 +16,6 @@ Content-Type: application/json
     "quantity": 100
 }
 
-###
-@productId =
-
 ### Add product to cart
 POST {{moduleUrl}}/products/add-to-cart
 Authorization: Bearer {{accessToken}}
@@ -25,7 +23,7 @@ Content-Type: application/json
 
 {
     "productId": "{{productId}}",
-    "quantity": 10
+    "quantity": 5
 }
 
 ### Update product quantity
@@ -38,6 +36,5 @@ Content-Type: application/json
     "quantity": 10
 }
 
-
-###
+### Delete product
 DELETE {{moduleUrl}}/products/{{productId}}

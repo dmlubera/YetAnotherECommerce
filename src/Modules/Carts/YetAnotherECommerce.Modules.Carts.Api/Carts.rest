@@ -1,7 +1,15 @@
 @moduleUrl = http://localhost:5000/carts-module
+@accessToken = 
+@cartItemId =
 
 ### Get cart
 GET {{moduleUrl}}/carts
+Authorization: Bearer {{accessToken}}
+
+### Remove cart item
+DELETE {{moduleUrl}}/carts/{{cartItemId}}
+Authorization: Bearer {{accessToken}}
 
 ### Clear cart
 DELETE {{moduleUrl}}/carts
+Authorization: Bearer {{accessToken}}
