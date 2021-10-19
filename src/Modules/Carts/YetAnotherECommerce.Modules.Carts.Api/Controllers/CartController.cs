@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Core.Services;
 
 namespace YetAnotherECommerce.Modules.Carts.Api.Controllers
@@ -21,6 +22,15 @@ namespace YetAnotherECommerce.Modules.Carts.Api.Controllers
         {
             var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
             return Ok(_cartService.Browse($"{userId}-cart"));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> PlaceOrder()
+        {
+            var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            await _cartService.PlaceOrderAsync(userId);
+            return Ok();
         }
 
         [HttpDelete("{itemId:guid}")]

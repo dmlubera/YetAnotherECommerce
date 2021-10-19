@@ -51,11 +51,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Carts", "Carts", "{EB3C2439-CE05-478C-9BBE-CD6C6CF566FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Carts.Api", "src\Modules\Carts\YetAnotherECommerce.Modules.Carts.Api\YetAnotherECommerce.Modules.Carts.Api.csproj", "{259E5344-B3E1-4AE2-A14F-86A67A348DA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Carts.Api", "src\Modules\Carts\YetAnotherECommerce.Modules.Carts.Api\YetAnotherECommerce.Modules.Carts.Api.csproj", "{259E5344-B3E1-4AE2-A14F-86A67A348DA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Carts.Core", "src\Modules\Carts\YetAnotherECommerce.Modules.Carts.Core\YetAnotherECommerce.Modules.Carts.Core.csproj", "{1C15F4C4-D7F7-41FE-84DE-7984B6A2F339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Carts.Core", "src\Modules\Carts\YetAnotherECommerce.Modules.Carts.Core\YetAnotherECommerce.Modules.Carts.Core.csproj", "{1C15F4C4-D7F7-41FE-84DE-7984B6A2F339}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Products.Messages", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Messages\YetAnotherECommerce.Modules.Products.Messages.csproj", "{3176DE42-0A13-4A84-B95F-F18D4E65B9AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Products.Messages", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Messages\YetAnotherECommerce.Modules.Products.Messages.csproj", "{3176DE42-0A13-4A84-B95F-F18D4E65B9AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Carts.Messages", "src\Modules\Carts\YetAnotherECommerce.Modules.Carts.Messages\YetAnotherECommerce.Modules.Carts.Messages.csproj", "{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{3176DE42-0A13-4A84-B95F-F18D4E65B9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3176DE42-0A13-4A84-B95F-F18D4E65B9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3176DE42-0A13-4A84-B95F-F18D4E65B9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,6 +159,7 @@ Global
 		{259E5344-B3E1-4AE2-A14F-86A67A348DA3} = {EB3C2439-CE05-478C-9BBE-CD6C6CF566FE}
 		{1C15F4C4-D7F7-41FE-84DE-7984B6A2F339} = {EB3C2439-CE05-478C-9BBE-CD6C6CF566FE}
 		{3176DE42-0A13-4A84-B95F-F18D4E65B9AC} = {2A13C821-43CD-465E-BF2E-F5E2692C59DD}
+		{455DF185-BAEC-469F-A45A-4D5F7B9D8E9E} = {EB3C2439-CE05-478C-9BBE-CD6C6CF566FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {781452E1-07B7-4B57-B526-70AA1377597C}

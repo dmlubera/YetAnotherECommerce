@@ -13,3 +13,7 @@ Authorization: Bearer {{accessToken}}
 ### Clear cart
 DELETE {{moduleUrl}}/carts
 Authorization: Bearer {{accessToken}}
+
+### Place order
+POST  {{moduleUrl}}/carts
+Authorization: Bearer {{accessToken}}
