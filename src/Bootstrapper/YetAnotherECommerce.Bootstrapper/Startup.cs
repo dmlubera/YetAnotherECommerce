@@ -8,6 +8,7 @@ using System;
 using YetAnotherECommerce.Modules.Carts.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Api.DI;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Modules.Orders.Api.DI;
 using YetAnotherECommerce.Modules.Products.Api.DI;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Users.Api.DI;
@@ -33,6 +34,7 @@ namespace YetAnotherECommerce.Bootstrapper
             services.AddUsersModule();
             services.AddProductsModule();
             services.AddCartsModule();
+            services.AddOrdersModule();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
