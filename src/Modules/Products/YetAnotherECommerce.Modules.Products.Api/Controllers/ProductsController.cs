@@ -59,7 +59,8 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> AddToCartAsync([FromBody] AddProductToCartRequest request)
         {
-            var command = new AddProductToCartCommand(request.ProductId, request.Quantity);
+            var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            var command = new AddProductToCartCommand(userId, request.ProductId, request.Quantity);
             await _commandDispatcher.DispatchAsync(command);
 
             return Ok();

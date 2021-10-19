@@ -17,14 +17,15 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Events.External.Handlers
 
         public async Task HandleAsync(ProductAddedToCart @event)
         {
-            var cart = _cache.Get<Cart>("cart");
+            var cacheKey = $"{@event.CustomerId}-cart";
+            var cart = _cache.Get<Cart>(cacheKey);
             if (cart is null)
                 cart = new Cart();
 
             var cartItem = new CartItem(@event.ProductId, @event.Name, @event.Quantity, @event.UnitPrice);
             cart.AddItem(cartItem);
             await Task.CompletedTask;
-            _cache.Set("cart", cart);
+            _cache.Set(cacheKey, cart);
         }
     }
 }

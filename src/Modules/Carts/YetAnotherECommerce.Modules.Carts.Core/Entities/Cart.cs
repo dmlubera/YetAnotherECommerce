@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YetAnotherECommerce.Modules.Carts.Core.Entities
@@ -25,6 +26,12 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Entities
             {
                 _items.Add(item);
             }
+        }
+
+        public void RemoveItem(Guid itemId)
+        {
+            var item = _items.FirstOrDefault(x => x.Id == itemId);
+            _items.Remove(item);
         }
     }
 }
