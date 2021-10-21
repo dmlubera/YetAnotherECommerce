@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Messages.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
+using YetAnotherECommerce.Modules.Orders.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers

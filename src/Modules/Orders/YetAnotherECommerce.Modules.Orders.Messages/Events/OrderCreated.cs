@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Events
+namespace YetAnotherECommerce.Modules.Orders.Messages.Events
 {
     public class OrderCreated : IEvent
     {
