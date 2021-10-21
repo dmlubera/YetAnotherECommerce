@@ -1,36 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Documents
 {
     public static class Extensions
     {
-        public static OrderDocument AsDocument(this Order order)
-        {
-            return new OrderDocument
-            {
-                Id = order.Id,
-                CustomerId = order.CustomerId,
-                Status = order.Status,
-                OrderItems = order.OrderItems.AsDocument()
-            };
-        }
+        public static OrderDocument AsDocument(this Order entity)
+            => new OrderDocument(entity.Id, entity.CustomerId, entity.Status, entity.OrderItems.AsDocument());
 
-        public static List<OrderItemDocument> AsDocument(this IReadOnlyCollection<OrderItem> orderItems)
-        {
-            var documents = new List<OrderItemDocument>();
-            foreach (var item in orderItems)
-            {
-                documents.Add(new OrderItemDocument
-                {
-                    Id = item.Id,
-                    ProductId = item.ProductId,
-                    Name = item.Name,
-                    Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice
-                });
-            }
-            return documents;
-        }
+        public static List<OrderItemDocument> AsDocument(this IReadOnlyCollection<OrderItem> entities)
+            => entities.Select(x => new OrderItemDocument(x.Id, x.ProductId, x.Name, x.UnitPrice, x.Quantity)).ToList();
+
+        public static Order AsEntity(this OrderDocument document)
+            => new Order(document.Id, document.CustomerId, document.Status, document.OrderItems.AsEntity());
+
+        public static List<OrderItem> AsEntity(this IReadOnlyCollection<OrderItemDocument> documents)
+            => documents.Select(x => new OrderItem(x.Id, x.ProductId, x.Name, x.UnitPrice, x.Quantity)).ToList();
     }
 }

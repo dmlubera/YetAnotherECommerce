@@ -9,5 +9,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Documents
         public string Name { get; set; }
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
+
+        public OrderItemDocument(Guid id, Guid productId, string name, decimal unitPrice, int quantity)
+        {
+            Id = id;
+            ProductId = productId;
+            Name = name;
+            UnitPrice = unitPrice;
+            Quantity = quantity;
+        }
     }
 }

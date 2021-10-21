@@ -11,11 +11,23 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
         public string Status { get; private set; }
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
+        public Order(Guid id, Guid customerId, string status, List<OrderItem> orderItems)
+        {
+            Id = id;
+            CustomerId = customerId;
+            Status = status;
+            _orderItems = orderItems;
+        }
+
         public Order(Guid customerId, List<OrderItem> orderItems)
         {
+            Id = Guid.NewGuid();
             CustomerId = customerId;
             _orderItems = orderItems;
             Status = "Created";
         }
+
+        public void UpdateStatus(string status)
+            => Status = status;
     }
 }

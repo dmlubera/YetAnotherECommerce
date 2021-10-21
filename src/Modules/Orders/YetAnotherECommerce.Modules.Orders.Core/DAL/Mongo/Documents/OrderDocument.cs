@@ -9,5 +9,13 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Documents
         public Guid CustomerId { get; set; }
         public string Status { get; set; }
         public List<OrderItemDocument> OrderItems { get; set; }
+
+        public OrderDocument(Guid id, Guid customerId, string status, List<OrderItemDocument> orderItems)
+        {
+            Id = id;
+            CustomerId = customerId;
+            Status = status;
+            OrderItems = orderItems;
+        }
     }
 }

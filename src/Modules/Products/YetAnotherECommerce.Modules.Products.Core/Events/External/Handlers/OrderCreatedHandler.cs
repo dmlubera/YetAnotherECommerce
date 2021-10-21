@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Messages.Events;
+using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Modules.Products.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
@@ -19,21 +21,28 @@ namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers
 
         public async Task HandleAsync(OrderCreated @event)
         {
-            foreach(var orderedProduct in @event.Products)
+            try
             {
-                var product = await _productRepository.GetByIdAsync(orderedProduct.Key);
-                if (product is null || product.Quantity < orderedProduct.Value)
+                foreach(var orderedProduct in @event.Products)
                 {
-                    await _eventDispatcher.PublishAsync(new OrderRejected(@event.OrderId));
-                }
-                else
-                {
+                    var product = await _productRepository.GetByIdAsync(orderedProduct.Key);
+                    if (product is null)
+                        throw new ProductDoesNotExistException(orderedProduct.Key);
+                    if (product.Quantity < orderedProduct.Value)
+                        throw new ProductIsNotAvailableInOrderedQuantityException();
+                    
+                    //TODO: Update can be performed only if all products exist and are avaiable
                     product.UpdateQuantity(product.Quantity - orderedProduct.Value);
                     await _productRepository.UpdateAsync(product);
                 }
-            }
 
-            await _eventDispatcher.PublishAsync(new OrderAccepted(@event.OrderId));
+                await _eventDispatcher.PublishAsync(new OrderAccepted(@event.OrderId));
+            }
+            catch(Exception ex)
+            {
+                await _eventDispatcher.PublishAsync(new OrderRejected(@event.OrderId));
+                throw;
+            }
         }
     }
 }

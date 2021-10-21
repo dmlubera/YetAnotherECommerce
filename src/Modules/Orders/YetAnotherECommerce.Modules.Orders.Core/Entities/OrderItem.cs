@@ -10,6 +10,15 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
 
+        public OrderItem(Guid id, Guid productId, string name, decimal unitPrice, int quantity)
+        {
+            Id = id;
+            ProductId = productId;
+            Name = name;
+            UnitPrice = unitPrice;
+            Quantity = quantity;
+        }
+
         public OrderItem(Guid productId, string name, decimal unitPrice, int quantity)
         {
             Id = Guid.NewGuid();
