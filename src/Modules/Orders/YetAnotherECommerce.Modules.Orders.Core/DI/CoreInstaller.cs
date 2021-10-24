@@ -15,6 +15,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DI
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IQueryHandler<BrowseQuery, IList<Order>>, BrowseQueryHandler>();
             return services;
         }
