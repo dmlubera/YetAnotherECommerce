@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\YetAnotherECommerce.Shared.Infrastructure\YetAnotherECommerce.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Identity\YetAnotherECommerce.Modules.Identity.Messages\YetAnotherECommerce.Modules.Identity.Messages.csproj" />
+    <ProjectReference Include="..\YetAnotherECommerce.Modules.Users.Messages\YetAnotherECommerce.Modules.Users.Messages.csproj" />
   </ItemGroup>
 
   <ItemGroup>
