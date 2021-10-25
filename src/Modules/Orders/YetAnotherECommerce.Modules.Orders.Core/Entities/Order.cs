@@ -8,10 +8,10 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
         private readonly List<OrderItem> _orderItems = new List<OrderItem>();
         public Guid Id { get; private set; }
         public Guid CustomerId { get; private set; }
-        public string Status { get; private set; }
+        public OrderStatus Status { get; private set; }
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
-        public Order(Guid id, Guid customerId, string status, List<OrderItem> orderItems)
+        public Order(Guid id, Guid customerId, OrderStatus status, List<OrderItem> orderItems)
         {
             Id = id;
             CustomerId = customerId;
@@ -24,10 +24,10 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
             Id = Guid.NewGuid();
             CustomerId = customerId;
             _orderItems = orderItems;
-            Status = "Created";
+            Status = OrderStatus.Created;
         }
 
-        public void UpdateStatus(string status)
+        public void UpdateStatus(OrderStatus status)
             => Status = status;
     }
 }
