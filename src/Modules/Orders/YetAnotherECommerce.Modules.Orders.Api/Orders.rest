@@ -1,0 +1,6 @@
+@moduleUrl = http://localhost:5000/orders-module
+@accessToken =
+
+### Browse
+GET {{moduleUrl}}/orders
+Authorization: Bearer {{accessToken}}

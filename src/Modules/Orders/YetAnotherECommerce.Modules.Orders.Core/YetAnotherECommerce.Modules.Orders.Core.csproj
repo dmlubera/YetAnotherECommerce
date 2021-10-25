@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\YetAnotherECommerce.Shared.Infrastructure\YetAnotherECommerce.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Carts\YetAnotherECommerce.Modules.Carts.Messages\YetAnotherECommerce.Modules.Carts.Messages.csproj" />
+    <ProjectReference Include="..\..\Products\YetAnotherECommerce.Modules.Products.Messages\YetAnotherECommerce.Modules.Products.Messages.csproj" />
+    <ProjectReference Include="..\..\Users\YetAnotherECommerce.Modules.Users.Messages\YetAnotherECommerce.Modules.Users.Messages.csproj" />
+    <ProjectReference Include="..\YetAnotherECommerce.Modules.Orders.Messages\YetAnotherECommerce.Modules.Orders.Messages.csproj" />
+  </ItemGroup>
+
+</Project>

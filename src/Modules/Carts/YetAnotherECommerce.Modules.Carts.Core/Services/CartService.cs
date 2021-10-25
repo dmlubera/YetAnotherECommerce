@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
+using YetAnotherECommerce.Modules.Carts.Core.Exceptions;
 using YetAnotherECommerce.Modules.Carts.Messages.Events;
+using YetAnotherECommerce.Modules.Carts.Messages.Model;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
@@ -25,13 +27,18 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Services
         {
             var cart = _cache.Get<Cart>($"{userId}-cart");
 
-            var products = new Dictionary<Guid, int>();
+            if (cart.Items.Count == 0)
+                throw new CannotCreateOrderFromEmptyCartException();
+
+            var productDtos = new List<ProductDto>();
             foreach(var item in cart.Items)
             {
-                products.Add(item.ProductId, item.Quantity);
+                if (item.Quantity == 0)
+                    throw new CannotOrderProductInZeroQuantityException();
+                productDtos.Add(new ProductDto(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
             }
 
-            await _eventDispatcher.PublishAsync(new OrderPlaced(userId, products));
+            await _eventDispatcher.PublishAsync(new OrderPlaced(userId, productDtos));
         }
 
         public void ClearCart(string cacheKey)
