@@ -30,7 +30,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
             order.UpdateStatus(OrderStatus.Canceled);
             await _orderRepository.UpdateAsync(order);
 
-            var orderCanceled = new OrderCanceled(command.CustomerId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
+            var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
 
             await _eventDispatcher.PublishAsync(orderCanceled);
         }
