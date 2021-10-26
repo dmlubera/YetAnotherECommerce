@@ -17,6 +17,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DI
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IQueryHandler<BrowseQuery, IList<Order>>, BrowseQueryHandler>();
+            services.AddTransient<IQueryHandler<BrowseCustomerOrdersQuery, IList<Order>>, BrowseCustomerOrdersQueryHandler>();
             return services;
         }
     }

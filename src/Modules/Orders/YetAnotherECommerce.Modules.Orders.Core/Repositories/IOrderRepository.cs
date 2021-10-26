@@ -8,6 +8,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Repositories
     public interface IOrderRepository
     {
         Task<IList<Order>> BrowseAsync();
+        Task<IList<Order>> BrowseByCustomerAsync(Guid customerId);
         Task<Order> GetByIdAsync(Guid id);
         Task AddAsync(Order order);
         Task UpdateAsync(Order order);
