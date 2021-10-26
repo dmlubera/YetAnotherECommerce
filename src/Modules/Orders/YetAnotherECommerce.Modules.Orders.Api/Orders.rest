@@ -1,6 +1,15 @@
 @moduleUrl = http://localhost:5000/orders-module
-@accessToken =
+@accessToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NWM4MmNkNy02Y2JiLTRlM2ItYjFmZS1lZDUxZGRhMTA1NGIiLCJ1bmlxdWVfbmFtZSI6Ijg1YzgyY2Q3LTZjYmItNGUzYi1iMWZlLWVkNTFkZGExMDU0YiIsImp0aSI6ImMwZGYyMGZjLTk0YTQtNDViYS05ZDhhLWU2YzJhZDFmOTM1MCIsImlhdCI6IjE2MzUyNzE0NDYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjdXN0b21lciIsIm5iZiI6MTYzNTI3MTQ0NiwiZXhwIjoxNjM1MjczMjQ2LCJpc3MiOiJZZXRBbm90aGVyRUNvbW1lcmNlIn0.HpdRoddsGBqEcWHnB91Ur0Pvm1f1sO1G1n3FvtpmTxg
+@orderId = c78e6beb-ef4b-449d-b605-7f7bea26cb0c
 
 ### Browse
 GET {{moduleUrl}}/orders
+Authorization: Bearer {{accessToken}}
+
+### Browse my orders
+GET {{moduleUrl}}/orders/my-orders
+Authorization: Bearer {{accessToken}}
+
+### Cancel order
+POST {{moduleUrl}}/orders/{{orderId}}/cancel
 Authorization: Bearer {{accessToken}}

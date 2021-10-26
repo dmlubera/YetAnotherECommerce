@@ -49,5 +49,14 @@ namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
 
             return Ok();
         }
+
+        [HttpPost("{orderId:guid}/complete")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CompleteOrderAsync(Guid orderId)
+        {
+            await _commandDispatcher.DispatchAsync(new CompleteOrderCommand(orderId));
+
+            return Ok();
+        }
     }
 }
