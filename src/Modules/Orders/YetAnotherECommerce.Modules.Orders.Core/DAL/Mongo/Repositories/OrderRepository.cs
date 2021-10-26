@@ -26,6 +26,13 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
             return documents.Select(x => x.AsEntity()).ToList();
         }
 
+        public async Task<IList<Order>> BrowseByCustomerAsync(Guid customerId)
+        {
+            var documents = await Orders.Find(x => x.CustomerId == customerId).ToListAsync();
+
+            return documents.Select(x => x.AsEntity()).ToList();
+        }
+
         public async Task<Order> GetByIdAsync(Guid id)
         {
             var document = await Orders.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
