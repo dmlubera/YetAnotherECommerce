@@ -58,5 +58,14 @@ namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
 
             return Ok();
         }
+
+        [HttpPost("{orderId:guid}/revoke")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> RevokeOrderAsync(Guid orderId)
+        {
+            await _commandDispatcher.DispatchAsync(new RevokeOrderCommand(orderId));
+
+            return Ok();
+        }
     }
 }

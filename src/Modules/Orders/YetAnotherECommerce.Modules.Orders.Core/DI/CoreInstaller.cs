@@ -22,6 +22,8 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DI
             services.AddTransient<IQueryHandler<BrowseCustomerOrdersQuery, IList<Order>>, BrowseCustomerOrdersQueryHandler>();
             services.AddTransient<ICommandHandler<CancelOrderCommand>, CancelOrderComandHandler>();
             services.AddTransient<ICommandHandler<CompleteOrderCommand>, CompleteOrderCommandHandler>();
+            services.AddTransient<ICommandHandler<RevokeOrderCommand>, RevokeOrderCommandHandler>();
+
             return services;
         }
     }
