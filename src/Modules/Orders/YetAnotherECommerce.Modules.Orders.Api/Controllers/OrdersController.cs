@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Orders.Core.Commands;
 using YetAnotherECommerce.Modules.Orders.Core.Queries;
+using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
 namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
@@ -11,10 +13,12 @@ namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
     internal class OrdersController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
+        private readonly ICommandDispatcher _commandDispatcher;
 
-        public OrdersController(IQueryDispatcher queryDispatcher)
+        public OrdersController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
+            _commandDispatcher = commandDispatcher;
         }
 
         [HttpGet]
@@ -34,6 +38,16 @@ namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
             var orders = await _queryDispatcher.DispatchAsync(new BrowseCustomerOrdersQuery(customerId));
 
             return Ok(orders);
+        }
+
+        [HttpPost("{orderId:guid}/cancel")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> CancelOrderAsync(Guid orderId)
+        {
+            var customerId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            await _commandDispatcher.DispatchAsync(new CancelOrderCommand(customerId, orderId));
+
+            return Ok();
         }
     }
 }
