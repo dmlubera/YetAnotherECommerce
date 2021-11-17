@@ -1,0 +1,103 @@
+@identityModuleUrl = http://localhost:5000/identity-module
+@usersModuleUrl = http://localhost:5000/users-module
+@productsModuleUrl = http://localhost:5000/products-module
+@cartsModuleUrl = http://localhost:5000/carts-module
+@ordersModuleUrl = http://localhost:5000/orders-module
+
+
+################################################
+################## Identity ####################
+################################################
+@adminEmail = admin@yetanotherecommerce.com
+@adminPassword = super$ecret
+@customerEmail = customer@yetanotherecommerce.com
+@customerPassword = super$ecret
+@accessToken = {{sign_in.response.body.$.accessToken}}
+
+### Sign-up
+POST  {{identityModuleUrl}}/sign-up
+Content-Type: application/json
+
+{
+    "email": "{{customerEmail}}",
+    "password": "{{customerPassword}}",
+    "role": "customer"
+}
+
+### Sign-in
+# @name sign_in
+POST {{identityModuleUrl}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{customerEmail}}",
+    "password": "{{customerPassword}}"
+}
+
+################################################
+################### Users ######################
+################################################
+
+### Complete registration
+POST {{usersModuleUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "firstName": "Carl",
+    "lastName": "Johnson",
+    "street": "Grove Street",
+    "city": "Los Santos",
+    "zipCode": "555-1111",
+    "country": "GTA"
+}
+
+################################################
+################## Products ####################
+################################################
+@productId = fdafbb5a-4dce-46b9-8bc9-94c1e165e040
+
+### Add product
+POST {{productsModuleUrl}}/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "name": "High performance ultrabook",
+    "price": 9999.99,
+    "quantity": 100
+}
+
+### Get products
+GET {{productsModuleUrl}}/products
+Authorization: Bearer {{accessToken}}
+
+### Add to cart
+POST {{productsModuleUrl}}/products/add-to-cart
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity":  10
+}
+
+################################################
+################### Carts ######################
+################################################
+
+### Get cart
+GET {{cartsModuleUrl}}/carts
+Authorization: Bearer {{accessToken}}
+
+### Place order
+POST {{cartsModuleUrl}}/carts
+Authorization: Bearer {{accessToken}}
+
+################################################
+################## Orders ######################
+################################################
+
+### Browse my orders
+GET {{ordersModuleUrl}}/orders/my-orders
+Authorization: Bearer {{accessToken}}
