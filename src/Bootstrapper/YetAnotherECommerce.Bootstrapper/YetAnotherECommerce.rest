@@ -69,11 +69,11 @@ Content-Type: application/json
 }
 
 ### Get products
-GET {{productsModuleUrl}}/products/{{productId}}
+GET {{productsModuleUrl}}/products/
 Authorization: Bearer {{accessToken}}
 
 ### Get product details
-GET {{productsModuleUrl}}/products
+GET {{productsModuleUrl}}/products/{{productId}}
 Authorization: Bearer {{accessToken}}
 
 ### Add to cart
