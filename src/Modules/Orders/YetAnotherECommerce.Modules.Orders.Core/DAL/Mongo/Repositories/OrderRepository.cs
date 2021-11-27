@@ -40,6 +40,13 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
             return document.AsEntity();
         }
 
+        public async Task<Order> GetForCustomerByIdAsync(Guid customerId, Guid orderId)
+        {
+            var document = await Orders.AsQueryable().FirstOrDefaultAsync(x => x.CustomerId == customerId && x.Id == orderId);
+
+            return document.AsEntity();
+        }
+
         public async Task AddAsync(Order order)
             => await Orders.InsertOneAsync(order.AsDocument());
 

@@ -55,7 +55,7 @@ Authorization: Bearer {{accessToken}}
 ################################################
 ################## Products ####################
 ################################################
-@productId = fdafbb5a-4dce-46b9-8bc9-94c1e165e040
+@productId = 
 
 ### Add product
 POST {{productsModuleUrl}}/products
@@ -69,7 +69,7 @@ Content-Type: application/json
 }
 
 ### Get products
-GET {{productsModuleUrl}}/products
+GET {{productsModuleUrl}}/products/{{productId}}
 Authorization: Bearer {{accessToken}}
 
 ### Get product details
@@ -101,7 +101,12 @@ Authorization: Bearer {{accessToken}}
 ################################################
 ################## Orders ######################
 ################################################
+@orderId = 
 
 ### Browse my orders
 GET {{ordersModuleUrl}}/orders/my-orders
+Authorization: Bearer {{accessToken}}
+
+### Get order details
+GET {{ordersModuleUrl}}/orders/my-orders/{{orderId}}
 Authorization: Bearer {{accessToken}}

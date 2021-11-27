@@ -40,6 +40,16 @@ namespace YetAnotherECommerce.Modules.Orders.Api.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("my-orders/{orderId:guid}")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> GetOrderDetailsAsync(Guid orderId)
+        {
+            var customerId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
+            var orderDetails = await _queryDispatcher.DispatchAsync(new GetOrderDetailsQuery(customerId, orderId));
+
+            return Ok(orderDetails);
+        }
+
         [HttpPost("{orderId:guid}/cancel")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> CancelOrderAsync(Guid orderId)
