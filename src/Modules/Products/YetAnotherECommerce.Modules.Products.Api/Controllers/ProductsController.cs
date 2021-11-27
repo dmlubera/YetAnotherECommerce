@@ -26,6 +26,10 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
         public async Task<IActionResult> BrowseAsync()
             => Ok(await _queryDispatcher.DispatchAsync(new BrowseProductsQuery()));
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetAsync(Guid id)
+            => Ok(await _queryDispatcher.DispatchAsync(new GetProductDetailsQuery(id)));
+
 
         [HttpPost]
         [Authorize(Roles = "admin")]

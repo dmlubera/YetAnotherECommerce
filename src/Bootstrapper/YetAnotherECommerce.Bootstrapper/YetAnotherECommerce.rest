@@ -72,6 +72,10 @@ Content-Type: application/json
 GET {{productsModuleUrl}}/products
 Authorization: Bearer {{accessToken}}
 
+### Get product details
+GET {{productsModuleUrl}}/products
+Authorization: Bearer {{accessToken}}
+
 ### Add to cart
 POST {{productsModuleUrl}}/products/add-to-cart
 Authorization: Bearer {{accessToken}}

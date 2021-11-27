@@ -37,6 +37,8 @@ namespace YetAnotherECommerce.Bootstrapper
             services.AddProductsModule();
             services.AddCartsModule();
             services.AddOrdersModule();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

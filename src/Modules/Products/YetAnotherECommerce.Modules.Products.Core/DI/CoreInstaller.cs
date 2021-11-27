@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories;
-using YetAnotherECommerce.Modules.Products.Core.Entitites;
+using YetAnotherECommerce.Modules.Products.Core.DTOs;
 using YetAnotherECommerce.Modules.Products.Core.Queries;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
@@ -20,7 +20,8 @@ namespace YetAnotherECommerce.Modules.Products.Core.DI
             services.AddTransient<ICommandHandler<AddProductToCartCommand>, AddProductToCartCommandHandler>();
             services.AddTransient<ICommandHandler<DeleteProductCommand>, DeleteProductCommandHandler>();
             services.AddTransient<ICommandHandler<UpdateQuantityCommand>, UpdateQuantityCommandHandler>();
-            services.AddTransient<IQueryHandler<BrowseProductsQuery, IEnumerable<Product>>, BrowseProductsQueryHandler>();
+            services.AddTransient<IQueryHandler<BrowseProductsQuery, IEnumerable<ProductDto>>, BrowseProductsQueryHandler>();
+            services.AddTransient<IQueryHandler<GetProductDetailsQuery, ProductDetailsDto>, GetProductDetailsQueryHandler>();
             services.AddTransient<IProductRepository, ProductRepository>();
 
             return services;
