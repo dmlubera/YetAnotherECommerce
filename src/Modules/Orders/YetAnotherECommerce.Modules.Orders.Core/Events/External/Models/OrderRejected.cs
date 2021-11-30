@@ -1,7 +1,7 @@
 ﻿using System;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Products.Messages.Events
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Models
 {
     public class OrderRejected : IEvent
     {

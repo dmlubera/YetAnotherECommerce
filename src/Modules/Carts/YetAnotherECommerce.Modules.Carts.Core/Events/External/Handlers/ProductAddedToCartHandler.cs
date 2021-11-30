@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
-using YetAnotherECommerce.Modules.Products.Messages.Events;
+using YetAnotherECommerce.Modules.Carts.Core.Events.External.Models;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 

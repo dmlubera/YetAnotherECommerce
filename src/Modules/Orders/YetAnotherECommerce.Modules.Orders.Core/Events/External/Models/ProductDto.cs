@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Modules.Carts.Messages.Model
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Models
 {
     public class ProductDto
     {

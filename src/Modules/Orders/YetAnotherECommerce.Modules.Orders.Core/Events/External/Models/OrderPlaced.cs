@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using YetAnotherECommerce.Modules.Carts.Messages.Model;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Carts.Messages.Events
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Models
 {
     public class OrderPlaced : IEvent
     {

@@ -31,12 +31,12 @@ namespace YetAnotherECommerce.Bootstrapper
             services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
             services.Configure<ProductsModuleMongoSettings>(Configuration.GetSection(nameof(ProductsModuleMongoSettings)));
             services.Configure<OrdersModuleMongoSettings>(Configuration.GetSection(nameof(OrdersModuleMongoSettings)));
-            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
             services.AddIdentityModule();
             services.AddUsersModule();
             services.AddProductsModule();
             services.AddCartsModule();
             services.AddOrdersModule();
+            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

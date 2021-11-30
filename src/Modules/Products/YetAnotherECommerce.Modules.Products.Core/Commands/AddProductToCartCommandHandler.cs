@@ -1,21 +1,21 @@
 ﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
-using YetAnotherECommerce.Modules.Products.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Commands
 {
     public class AddProductToCartCommandHandler : ICommandHandler<AddProductToCartCommand>
     {
         private readonly IProductRepository _productRepository;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBroker _messageBroker;
 
-        public AddProductToCartCommandHandler(IProductRepository productRepository, IEventDispatcher eventDispatcher)
+        public AddProductToCartCommandHandler(IProductRepository productRepository, IMessageBroker messageBroker)
         {
             _productRepository = productRepository;
-            _eventDispatcher = eventDispatcher;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync(AddProductToCartCommand command)
@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
             if (product is null)
                 throw new ProductDoesNotExistException(command.ProductId);
 
-            await _eventDispatcher.PublishAsync(new ProductAddedToCart(command.CustomerId, command.ProductId, product.Name, product.Price, command.Quantity));
+            await _messageBroker.PublishAsync(new ProductAddedToCart(command.CustomerId, command.ProductId, product.Name, product.Price, command.Quantity));
         }
     }
 }

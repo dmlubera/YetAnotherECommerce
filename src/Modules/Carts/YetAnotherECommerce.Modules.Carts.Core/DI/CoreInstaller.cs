@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Modules.Carts.Core.Events.External.Handlers;
+using YetAnotherECommerce.Modules.Carts.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Carts.Core.Services;
-using YetAnotherECommerce.Modules.Products.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Carts.Api")]

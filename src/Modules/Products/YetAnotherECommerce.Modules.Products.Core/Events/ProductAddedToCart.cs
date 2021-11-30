@@ -1,7 +1,7 @@
 ﻿using System;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Products.Messages.Events
+namespace YetAnotherECommerce.Modules.Products.Core.Events
 {
     public class ProductAddedToCart : IEvent
     {

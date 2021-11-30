@@ -1,7 +1,7 @@
 ﻿using System;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Identity.Messages.Events
+namespace YetAnotherECommerce.Modules.Identity.Core.Events
 {
     public class UserRegistered : IEvent
     {

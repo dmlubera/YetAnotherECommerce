@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
+using YetAnotherECommerce.Modules.Users.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
