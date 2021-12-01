@@ -49,6 +49,10 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             services.AddSingleton<IMessageClient, MessageClient>();
             services.AddSingleton<IMessageBroker, InMemoryMessageBroker>();
 
+            services.AddSingleton<IMessageChannel, MessageChannel>();
+            services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
+            services.AddHostedService<BackroundMessageDispatcher>();
+
             return services;
         }
 

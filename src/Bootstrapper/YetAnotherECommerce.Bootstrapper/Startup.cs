@@ -15,6 +15,7 @@ using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Users.Api.DI;
 using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Bootstrapper
 {
@@ -31,6 +32,7 @@ namespace YetAnotherECommerce.Bootstrapper
             services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
             services.Configure<ProductsModuleMongoSettings>(Configuration.GetSection(nameof(ProductsModuleMongoSettings)));
             services.Configure<OrdersModuleMongoSettings>(Configuration.GetSection(nameof(OrdersModuleMongoSettings)));
+            services.Configure<MessagingOptions>(Configuration.GetSection("Messaging"));
             services.AddIdentityModule();
             services.AddUsersModule();
             services.AddProductsModule();
