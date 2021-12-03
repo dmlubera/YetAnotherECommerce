@@ -11,7 +11,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.Entitites
         public string Description { get; private set; }
         public Price Price { get; private set; }
         public Quantity Quantity { get; private set; }
-        
+
+        private Product() { }
+
         public Product(Guid id, string name, string description, decimal price, int quantity)
         {
             Id = id;
