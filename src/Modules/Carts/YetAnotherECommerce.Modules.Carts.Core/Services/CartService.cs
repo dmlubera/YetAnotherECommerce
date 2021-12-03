@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
+using YetAnotherECommerce.Modules.Carts.Core.Events;
 using YetAnotherECommerce.Modules.Carts.Core.Exceptions;
-using YetAnotherECommerce.Modules.Carts.Messages.Events;
-using YetAnotherECommerce.Modules.Carts.Messages.Model;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.Core.Services
 {
     public class CartService : ICartService
     {
         private readonly ICache _cache;
-        private readonly IEventDispatcher _eventDispatcher;
-        public CartService(ICache cache, IEventDispatcher eventDispatcher)
+        private readonly IMessageBroker _messageBroker;
+        public CartService(ICache cache, IMessageBroker messageBroker)
         {
             _cache = cache;
-            _eventDispatcher = eventDispatcher;
+            _messageBroker = messageBroker;
         }
         
         public Cart Browse(string cacheKey)
@@ -38,7 +37,7 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Services
                 productDtos.Add(new ProductDto(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
             }
 
-            await _eventDispatcher.PublishAsync(new OrderPlaced(userId, productDtos));
+            await _messageBroker.PublishAsync(new OrderPlaced(userId, productDtos));
         }
 
         public void ClearCart(string cacheKey)

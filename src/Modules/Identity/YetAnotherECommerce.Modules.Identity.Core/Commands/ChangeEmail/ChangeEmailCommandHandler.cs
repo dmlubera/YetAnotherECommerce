@@ -1,22 +1,22 @@
 ﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
-using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail
 {
     public class ChangeEmailCommandHandler : ICommandHandler<ChangeEmailCommand>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBroker _messageBroker;
 
-        public ChangeEmailCommandHandler(IUserRepository userRepository, IEventDispatcher eventDispatcher)
+        public ChangeEmailCommandHandler(IUserRepository userRepository, IMessageBroker messageBroker)
         {
             _userRepository = userRepository;
-            _eventDispatcher = eventDispatcher;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync(ChangeEmailCommand command)
@@ -36,7 +36,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangeEmail
 
             await _userRepository.UpdateAsync(user);
 
-            await _eventDispatcher.PublishAsync(new EmailChanged(user.Id, user.Email));
+            await _messageBroker.PublishAsync(new EmailChanged(user.Id, user.Email));
         }
     }
 }

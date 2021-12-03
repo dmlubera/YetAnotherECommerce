@@ -1,20 +1,20 @@
 ﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Users.Core.Events;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
-using YetAnotherECommerce.Modules.Users.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Users.Core.Commands
 {
     public class CompleteRegistrationCommandHandler : ICommandHandler<CompleteRegistrationCommand>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBroker _messageBroker;
 
-        public CompleteRegistrationCommandHandler(IUserRepository userRepository, IEventDispatcher eventDispatcher)
+        public CompleteRegistrationCommandHandler(IUserRepository userRepository, IMessageBroker messageBroker)
         {
             _userRepository = userRepository;
-            _eventDispatcher = eventDispatcher;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync(CompleteRegistrationCommand command)
@@ -24,10 +24,11 @@ namespace YetAnotherECommerce.Modules.Users.Core.Commands
             user.UpdateFirstName(command.FirstName);
             user.UpdateLastName(command.LastName);
             user.UpdateAddress(command.Street, command.City, command.ZipCode, command.Country);
+            user.CompleteRegistration();
 
             await _userRepository.UpdateAsync(user);
 
-            await _eventDispatcher.PublishAsync(
+            await _messageBroker.PublishAsync(
                 new RegistrationCompleted(user.Id, user.FirstName, user.LastName, user.Email, user.Address.ToString()));
         }
     }

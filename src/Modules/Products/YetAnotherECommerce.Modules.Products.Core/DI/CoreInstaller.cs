@@ -1,13 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories;
-using YetAnotherECommerce.Modules.Products.Core.Entitites;
-using YetAnotherECommerce.Modules.Products.Core.Queries;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
-using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Queries;
+using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Products.Api")]
 namespace YetAnotherECommerce.Modules.Products.Core.DI
@@ -16,11 +12,8 @@ namespace YetAnotherECommerce.Modules.Products.Core.DI
     {
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
-            services.AddTransient<ICommandHandler<AddProductCommand>, AddProductCommandHandler>();
-            services.AddTransient<ICommandHandler<AddProductToCartCommand>, AddProductToCartCommandHandler>();
-            services.AddTransient<ICommandHandler<DeleteProductCommand>, DeleteProductCommandHandler>();
-            services.AddTransient<ICommandHandler<UpdateQuantityCommand>, UpdateQuantityCommandHandler>();
-            services.AddTransient<IQueryHandler<BrowseProductsQuery, IEnumerable<Product>>, BrowseProductsQueryHandler>();
+            services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
+            services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient<IProductRepository, ProductRepository>();
 
             return services;

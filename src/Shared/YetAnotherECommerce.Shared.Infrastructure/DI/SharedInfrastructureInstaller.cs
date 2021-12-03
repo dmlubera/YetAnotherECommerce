@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
@@ -14,6 +16,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Cache;
 using YetAnotherECommerce.Shared.Infrastructure.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Queries;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
@@ -42,6 +45,14 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
 
+            AddMessageRegistry(services, assemblies);
+            services.AddSingleton<IMessageClient, MessageClient>();
+            services.AddSingleton<IMessageBroker, InMemoryMessageBroker>();
+
+            services.AddSingleton<IMessageChannel, MessageChannel>();
+            services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
+            services.AddHostedService<BackroundMessageDispatcher>();
+
             return services;
         }
 
@@ -50,6 +61,33 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             return app;
+        }
+
+        private static void AddMessageRegistry(IServiceCollection services, IEnumerable<Assembly> assemblies)
+        { 
+            var registry = new MessageRegistry();
+            var types = assemblies
+                .Where(x => x.FullName.StartsWith("YetAnotherECommerce"))
+                .SelectMany(x => x.GetTypes())
+                .ToArray();
+            var eventTypes = types.Where(x => x.IsClass && typeof(IEvent).IsAssignableFrom(x)).ToArray();
+
+            services.AddSingleton<IMessageRegistry>(sp =>
+            {
+                var eventDsipatcher = sp.GetRequiredService<IEventDispatcher>();
+                var eventDispatcherType = eventDsipatcher.GetType();
+
+                foreach (var type in eventTypes)
+                {
+                    registry.AddRegistration(type, @event =>
+                        (Task)eventDispatcherType
+                            .GetMethod(nameof(eventDsipatcher.PublishAsync))
+                            ?.MakeGenericMethod(type)
+                            .Invoke(eventDsipatcher, new[] { @event }));
+                }
+
+                return registry;
+            });
         }
     }
 }

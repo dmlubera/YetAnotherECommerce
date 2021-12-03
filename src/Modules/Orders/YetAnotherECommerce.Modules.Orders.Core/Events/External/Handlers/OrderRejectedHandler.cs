@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
+using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
-using YetAnotherECommerce.Modules.Products.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers

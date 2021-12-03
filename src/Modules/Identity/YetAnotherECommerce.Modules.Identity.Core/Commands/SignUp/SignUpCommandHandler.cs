@@ -1,22 +1,22 @@
 ﻿using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
-using YetAnotherECommerce.Modules.Identity.Messages.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
 {
     public class SignUpCommandHandler : ICommandHandler<SignUpCommand>
     {
         private readonly IUserRepository _repository;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBroker _messageBroker;
 
-        public SignUpCommandHandler(IUserRepository repository, IEventDispatcher eventDispatcher)
+        public SignUpCommandHandler(IUserRepository repository, IMessageBroker messageBroker)
         {
             _repository = repository;
-            _eventDispatcher = eventDispatcher;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync(SignUpCommand command)
@@ -27,7 +27,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
             var user = new User(command.Email, command.Password, command.Role);
             await _repository.AddAsync(user);
 
-            await _eventDispatcher.PublishAsync(new UserRegistered(user.Id, user.Email, user.Password.Hash));
+            await _messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email, user.Password.Hash));
         }
     }
 }

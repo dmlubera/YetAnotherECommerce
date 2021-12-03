@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Orders.Messages.Events;
+using YetAnotherECommerce.Modules.Products.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
