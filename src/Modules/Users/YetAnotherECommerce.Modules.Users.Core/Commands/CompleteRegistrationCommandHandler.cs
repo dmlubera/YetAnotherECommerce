@@ -24,6 +24,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.Commands
             user.UpdateFirstName(command.FirstName);
             user.UpdateLastName(command.LastName);
             user.UpdateAddress(command.Street, command.City, command.ZipCode, command.Country);
+            user.CompleteRegistration();
 
             await _userRepository.UpdateAsync(user);
 
