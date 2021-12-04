@@ -28,6 +28,12 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
             return document.AsEntity();
         }
 
+        public async Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<Guid> ids)
+        {
+            var documents = await Products.Find(x => ids.Contains(x.Id)).ToListAsync();
+            return documents.Select(x => x.AsEntity()).ToList();
+        }
+
         public async Task<IEnumerable<Product>> GetAsync()
         {
             var documents = await Products.Find(x => true).ToListAsync();
@@ -46,6 +52,19 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
 
         public async Task UpdateAsync(Product product)
             => await Products.ReplaceOneAsync(x => x.Id == product.Id, product.AsDocument());
+
+        public async Task UpdateAsync(IEnumerable<Product> products)
+        {
+            var updates = new List<WriteModel<ProductDocument>>();
+            foreach(var product in products)
+            {
+                var document = product.AsDocument();
+                var filter = Builders<ProductDocument>.Filter.Eq(x => x.Id, document.Id);
+                updates.Add(new ReplaceOneModel<ProductDocument>(filter, document));
+            }
+
+            await Products.BulkWriteAsync(updates);
+        }
 
         private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>("Products");
     }

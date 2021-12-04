@@ -23,19 +23,19 @@ namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers
         {
             try
             {
-                foreach(var orderedProduct in @event.Products)
+                var products = await _productRepository.GetByIdsAsync(@event.Products.Keys);
+                if (products.Count < @event.Products.Count)
+                    throw new SomeOfOrderedProductsAreNotAvailableException();
+                foreach(var product in products)
                 {
-                    var product = await _productRepository.GetByIdAsync(orderedProduct.Key);
-                    if (product is null)
-                        throw new ProductDoesNotExistException(orderedProduct.Key);
-                    if (product.Quantity < orderedProduct.Value)
+                    @event.Products.TryGetValue(product.Id, out var orderedQuantity);
+                    if (product.Quantity < orderedQuantity)
                         throw new ProductIsNotAvailableInOrderedQuantityException();
                     
-                    //TODO: Update can be performed only if all products exist and are avaiable
-                    product.UpdateQuantity(product.Quantity - orderedProduct.Value);
-                    await _productRepository.UpdateAsync(product);
+                    product.UpdateQuantity(product.Quantity - orderedQuantity);
                 }
 
+                await _productRepository.UpdateAsync(products);
                 await _messageBroker.PublishAsync(new OrderAccepted(@event.OrderId));
             }
             catch(Exception ex)

@@ -9,9 +9,11 @@ namespace YetAnotherECommerce.Modules.Products.Core.Repositories
     {
         Task<IEnumerable<Product>> GetAsync();
         Task<Product> GetByIdAsync(Guid id);
+        Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task AddAsync(Product product);
         Task<bool> CheckIfProductAlreadyExistsAsync(string name);
         Task DeleteAsync(Guid id);
         Task UpdateAsync(Product product);
+        Task UpdateAsync(IEnumerable<Product> products);
     }
 }
