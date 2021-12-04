@@ -98,6 +98,10 @@ Authorization: Bearer {{accessToken}}
 POST {{cartsModuleUrl}}/carts
 Authorization: Bearer {{accessToken}}
 
+### Clear cart
+DELETE {{cartsModuleUrl}}/carts
+Authorization: Bearer {{accessToken}}
+
 ################################################
 ################## Orders ######################
 ################################################
@@ -109,4 +113,8 @@ Authorization: Bearer {{accessToken}}
 
 ### Get order details
 GET {{ordersModuleUrl}}/orders/my-orders/{{orderId}}
+Authorization: Bearer {{accessToken}}
+
+### Cancel order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/cancel
 Authorization: Bearer {{accessToken}}
