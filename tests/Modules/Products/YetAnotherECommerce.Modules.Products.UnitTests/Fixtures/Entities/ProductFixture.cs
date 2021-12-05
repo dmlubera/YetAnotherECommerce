@@ -12,6 +12,8 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Fixtures.Entities
             => new Faker<Product>()
                 .CustomInstantiator(x => Activator.CreateInstance(typeof(Product), nonPublic: true) as Product)
                 .RuleFor(x => x.Id, f => new AggregateId(Guid.NewGuid()))
+                .RuleFor(x => x.Name, f => f.Commerce.ProductName())
+                .RuleFor(x => x.Description, f => f.Lorem.Random.Words(5))
                 .RuleFor(x => x.Quantity, f => Quantity.Create(10))
                 .RuleFor(x => x.Price, f => Price.Create(10))
                 .Generate();

@@ -34,11 +34,11 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
             return documents.Select(x => x.AsEntity()).ToList();
         }
 
-        public async Task<IEnumerable<Product>> GetAsync()
+        public async Task<IReadOnlyList<Product>> GetAsync()
         {
             var documents = await Products.Find(x => true).ToListAsync();
 
-            return documents.Select(x => x.AsEntity());
+            return documents.Select(x => x.AsEntity()).ToList();
         }
 
         public async Task AddAsync(Product product)
