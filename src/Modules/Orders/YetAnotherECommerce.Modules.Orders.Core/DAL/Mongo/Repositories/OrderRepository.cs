@@ -19,14 +19,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
         public OrderRepository(IMongoClient mongoClient, IOptions<OrdersModuleMongoSettings> settings)
             => _mongoDatabase = mongoClient.GetDatabase(settings.Value.DatabaseName);
 
-        public async Task<IList<Order>> BrowseAsync()
+        public async Task<IReadOnlyList<Order>> BrowseAsync()
         {
             var documents = await Orders.Find(x => true).ToListAsync();
 
             return documents.Select(x => x.AsEntity()).ToList();
         }
 
-        public async Task<IList<Order>> BrowseByCustomerAsync(Guid customerId)
+        public async Task<IReadOnlyList<Order>> BrowseByCustomerAsync(Guid customerId)
         {
             var documents = await Orders.Find(x => x.CustomerId == customerId).ToListAsync();
 
