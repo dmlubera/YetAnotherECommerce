@@ -7,7 +7,7 @@ using YetAnotherECommerce.Shared.Abstractions.Queries;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Queries
 {
-    public class BrowseProductsQueryHandler : IQueryHandler<BrowseProductsQuery, IEnumerable<ProductDto>>
+    public class BrowseProductsQueryHandler : IQueryHandler<BrowseProductsQuery, IReadOnlyList<ProductDto>>
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Queries
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> HandleAsync(BrowseProductsQuery query)
-            => _mapper.Map<IEnumerable<ProductDto>>(await _productRepository.GetAsync());
+        public async Task<IReadOnlyList<ProductDto>> HandleAsync(BrowseProductsQuery query)
+            => _mapper.Map<IReadOnlyList<ProductDto>>(await _productRepository.GetAsync());
     }
 }

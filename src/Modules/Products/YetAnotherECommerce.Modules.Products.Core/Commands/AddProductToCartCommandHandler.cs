@@ -25,6 +25,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands
             if (product is null)
                 throw new ProductDoesNotExistException(command.ProductId);
 
+            if (product.Quantity < command.Quantity)
+                throw new ProductIsNotAvailableInOrderedQuantityException();
+
             await _messageBroker.PublishAsync(new ProductAddedToCart(command.CustomerId, command.ProductId, product.Name, product.Price, command.Quantity));
         }
     }

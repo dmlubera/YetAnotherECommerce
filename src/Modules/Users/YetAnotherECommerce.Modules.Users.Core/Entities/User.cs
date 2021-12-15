@@ -14,6 +14,20 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
         public Address Address { get; private set; }
         public bool IsRegistrationCompleted { get; private set; }
 
+        private User() { }
+
+        public User(Guid id, string firstName, string lastName, string email,
+            string password, Address address, bool isRegistrationCompleted)
+        {
+            Id = new AggregateId(id);
+            LastName = lastName;
+            FirstName = firstName;
+            Email = email;
+            Password = password;
+            Address = address;
+            IsRegistrationCompleted = isRegistrationCompleted;
+        }
+
         public User(Guid id, string email, string password)
         {
             Id = id;

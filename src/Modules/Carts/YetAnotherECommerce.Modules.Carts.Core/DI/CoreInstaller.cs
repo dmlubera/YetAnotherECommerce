@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
-using YetAnotherECommerce.Modules.Carts.Core.Events.External.Handlers;
-using YetAnotherECommerce.Modules.Carts.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Carts.Core.Services;
-using YetAnotherECommerce.Shared.Abstractions.Events;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Carts.Api")]
 namespace YetAnotherECommerce.Modules.Carts.Core.DI
@@ -12,7 +9,6 @@ namespace YetAnotherECommerce.Modules.Carts.Core.DI
     {
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
-            services.AddTransient<IEventHandler<ProductAddedToCart>, ProductAddedToCartHandler>();
             services.AddTransient<ICartService, CartService>();
 
             return services;

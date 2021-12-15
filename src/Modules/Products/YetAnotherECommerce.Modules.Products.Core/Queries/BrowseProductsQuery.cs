@@ -4,7 +4,7 @@ using YetAnotherECommerce.Shared.Abstractions.Queries;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Queries
 {
-    public class BrowseProductsQuery : IQuery<IEnumerable<ProductDto>>
+    public class BrowseProductsQuery : IQuery<IReadOnlyList<ProductDto>>
     {
     }
 }

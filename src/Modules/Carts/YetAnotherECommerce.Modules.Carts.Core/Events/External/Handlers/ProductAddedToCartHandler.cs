@@ -24,8 +24,8 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Events.External.Handlers
 
             var cartItem = new CartItem(@event.ProductId, @event.Name, @event.Quantity, @event.UnitPrice);
             cart.AddItem(cartItem);
-            await Task.CompletedTask;
             _cache.Set(cacheKey, cart);
+            await Task.CompletedTask;
         }
     }
 }
