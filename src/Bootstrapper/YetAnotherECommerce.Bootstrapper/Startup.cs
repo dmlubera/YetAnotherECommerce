@@ -40,6 +40,8 @@ namespace YetAnotherECommerce.Bootstrapper
             services.AddOrdersModule();
             services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddHttpContextAccessor();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

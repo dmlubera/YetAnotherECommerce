@@ -16,7 +16,13 @@ namespace YetAnotherECommerce.Bootstrapper
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseSerilog((hostingContext, loggerConfiguration) =>
-                    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+                .UseSerilog((context, configuration) =>
+                {
+                    configuration.Enrich.FromLogContext()
+                        .Enrich.WithCorrelationId()
+                        .WriteTo.Console(outputTemplate:
+                        "[{Timestamp:HH:mm:ss} {Level:u3} CorrelationId: {CorrelationId}] {Message:lj}{NewLine}{Exception}")
+                        .ReadFrom.Configuration(context.Configuration);
+                });
     }
 }
