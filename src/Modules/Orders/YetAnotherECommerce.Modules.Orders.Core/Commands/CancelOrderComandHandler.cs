@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
@@ -13,11 +14,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMessageBroker _messageBroker;
+        private readonly ILogger<CancelOrderComandHandler> _logger;
 
-        public CancelOrderComandHandler(IOrderRepository orderRepository, IMessageBroker messageBroker)
+        public CancelOrderComandHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
+            ILogger<CancelOrderComandHandler> logger)
         {
             _orderRepository = orderRepository;
             _messageBroker = messageBroker;
+            _logger = logger;
         }
 
         public async Task HandleAsync(CancelOrderCommand command)
@@ -33,6 +37,8 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
             var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
 
             await _messageBroker.PublishAsync(orderCanceled);
+
+            _logger.LogInformation("Order canceled: {@order}", orderCanceled);
         }
     }
 }

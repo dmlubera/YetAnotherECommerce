@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,15 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
     public class CompleteOrderCommandHandlerTests
     {
         private readonly Mock<IOrderRepository> _orderRepositoryMock;
+        private readonly Mock<ILogger<CompleteOrderCommandHandler>> _loggerMock;
         private readonly CompleteOrderCommandHandler _handler;
 
         public CompleteOrderCommandHandlerTests()
         {
             _orderRepositoryMock = new Mock<IOrderRepository>();
-            _handler = new CompleteOrderCommandHandler(_orderRepositoryMock.Object);
+            _loggerMock = new Mock<ILogger<CompleteOrderCommandHandler>>();
+            _handler = new CompleteOrderCommandHandler(_orderRepositoryMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]

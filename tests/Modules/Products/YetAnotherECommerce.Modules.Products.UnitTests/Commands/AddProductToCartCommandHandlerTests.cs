@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Threading.Tasks;
@@ -16,14 +17,16 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
     {
         private readonly Mock<IProductRepository> _productRepositoryMock;
         private readonly Mock<IMessageBroker> _messageBrokerMock;
+        private readonly Mock<ILogger<AddProductToCartCommandHandler>> _loggerMock;
         private readonly AddProductToCartCommandHandler _handler;
 
         public AddProductToCartCommandHandlerTests()
         {
             _productRepositoryMock = new Mock<IProductRepository>();
             _messageBrokerMock = new Mock<IMessageBroker>();
+            _loggerMock = new Mock<ILogger<AddProductToCartCommandHandler>>();
             _handler = new AddProductToCartCommandHandler(_productRepositoryMock.Object,
-                _messageBrokerMock.Object);
+                _messageBrokerMock.Object, _loggerMock.Object);
         }
 
         [Fact]

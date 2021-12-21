@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
@@ -13,11 +14,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMessageBroker _messageBroker;
+        private readonly ILogger<RevokeOrderCommandHandler> _logger;
 
-        public RevokeOrderCommandHandler(IOrderRepository orderRepository, IMessageBroker messageBroker)
+        public RevokeOrderCommandHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
+            ILogger<RevokeOrderCommandHandler> logger)
         {
             _orderRepository = orderRepository;
             _messageBroker = messageBroker;
+            _logger = logger;
         }
 
         public async Task HandleAsync(RevokeOrderCommand command)
@@ -30,8 +34,10 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
             order.UpdateStatus(OrderStatus.Rejected);
             await _orderRepository.UpdateAsync(order);
 
-            var orderCanceled = new OrderRevoked(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
-            await _messageBroker.PublishAsync(orderCanceled);
+            var orderRevoked = new OrderRevoked(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
+            await _messageBroker.PublishAsync(orderRevoked);
+
+            _logger.LogInformation("Order revoked: {@order}", orderRevoked);
         }
     }
 }
