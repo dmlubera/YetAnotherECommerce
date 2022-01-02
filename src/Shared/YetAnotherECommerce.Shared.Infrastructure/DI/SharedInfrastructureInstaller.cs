@@ -9,6 +9,7 @@ using YetAnotherECommerce.Shared.Abstractions.Auth;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.Auth;
@@ -26,6 +27,9 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
+            services.AddScoped<ExceptionHandlerMiddleware>();
+            services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
+            
             services.AddControllers()
                 .ConfigureApplicationPartManager(manager =>
                 {
@@ -33,6 +37,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                 });
 
             services.AddMemoryCache();
+
 
             services.AddTransient<ICache, InMemoryCache>();
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();

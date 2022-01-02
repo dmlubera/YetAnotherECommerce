@@ -7,47 +7,40 @@ using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Exceptions
 {
-    public class ExceptionHandlerMiddleware
+    internal class ExceptionHandlerMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+        private readonly IExceptionToResponseMapper _exceptionToResponseMapper;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+        public ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger, IExceptionToResponseMapper exceptionToResponseMapper)
         {
-            _next = next;
             _logger = logger;
+            _exceptionToResponseMapper = exceptionToResponseMapper;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
             {
-                await _next(httpContext);
+                await next(context);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                await HandleExceptionAsync(httpContext, ex);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            var statusCode = HttpStatusCode.InternalServerError;
-            var errorCode = "internal_server_error";
-            var errorMessage = "Oops, something went wrong. Please try again later.";
+            var errorResponse = _exceptionToResponseMapper.Map(ex);
+            context.Response.StatusCode = (int)(errorResponse?.StatusCode ?? HttpStatusCode.InternalServerError);
+            var response = errorResponse?.Response;
 
-            if(ex is YetAnotherECommerceException e)
-            {
-                statusCode = HttpStatusCode.BadRequest;
-                errorCode = e.ErrorCode;
-                errorMessage = e.Message;
-            }
+            if (response is null)
+                return;
 
-            var payload = new { ErrorCode = errorCode, ErrorMessage = errorMessage };
-            httpContext.Response.StatusCode = (int)statusCode;
-
-            await httpContext.Response.WriteAsJsonAsync(payload);
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }
