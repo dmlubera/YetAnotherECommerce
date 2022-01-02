@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
@@ -13,10 +14,13 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Services
     {
         private readonly ICache _cache;
         private readonly IMessageBroker _messageBroker;
-        public CartService(ICache cache, IMessageBroker messageBroker)
+        private readonly ILogger<CartService> _logger;
+
+        public CartService(ICache cache, IMessageBroker messageBroker, ILogger<CartService> logger)
         {
             _cache = cache;
             _messageBroker = messageBroker;
+            _logger = logger;
         }
         
         public Cart Browse(string cacheKey)
@@ -37,7 +41,10 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Services
                 productDtos.Add(new ProductDto(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
             }
 
-            await _messageBroker.PublishAsync(new OrderPlaced(userId, productDtos));
+            var orderPlaced = new OrderPlaced(userId, productDtos);
+            await _messageBroker.PublishAsync(orderPlaced);
+
+            _logger.LogInformation("Order placed: {@order}", orderPlaced);
         }
 
         public void ClearCart(string cacheKey)

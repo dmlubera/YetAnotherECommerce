@@ -10,7 +10,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Exceptions
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private ILogger<ExceptionHandlerMiddleware> _logger;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
         public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {

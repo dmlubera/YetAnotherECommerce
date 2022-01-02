@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,16 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
     {
         private readonly Mock<IOrderRepository> _orderRepositoryMock;
         private readonly Mock<IMessageBroker> _messageBrokerMock;
+        private readonly Mock<ILogger<CancelOrderComandHandler>> _loggerMock;
         private readonly CancelOrderComandHandler _handler;
 
         public CancelOrderCommandHandlerTests()
         {
             _orderRepositoryMock = new Mock<IOrderRepository>();
             _messageBrokerMock = new Mock<IMessageBroker>();
-            _handler = new CancelOrderComandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object);
+            _loggerMock = new Mock<ILogger<CancelOrderComandHandler>>();
+            _handler = new CancelOrderComandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
