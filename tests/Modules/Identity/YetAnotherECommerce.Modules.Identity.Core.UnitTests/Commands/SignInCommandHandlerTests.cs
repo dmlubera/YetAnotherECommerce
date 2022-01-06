@@ -32,11 +32,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         public async Task WhenUserWithGivenEmailDoesNotExist_ThenShouldThrowAnException()
         {
             var commandFixture = SignInCommandFixture.Create();
-            var expectedException = new UserNotExistException(commandFixture.Email);
+            var expectedException = new InvalidCredentialsException();
             _repositoryMock.Setup(x => x.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(() => null);
 
-            var result = await Assert.ThrowsAsync<UserNotExistException>(() => _handler.HandleAsync(commandFixture));
+            var result = await Assert.ThrowsAsync<InvalidCredentialsException>(() => _handler.HandleAsync(commandFixture));
 
             result.ShouldNotBeNull();
             result.ErrorCode.ShouldBe(expectedException.ErrorCode);
