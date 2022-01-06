@@ -1,10 +1,10 @@
 ﻿using System;
+using YetAnotherECommerce.Shared.Abstractions.Mongo;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents
 {
-    public class UserDocument
+    public class UserDocument : IDocument
     {
-        public Guid Id { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
