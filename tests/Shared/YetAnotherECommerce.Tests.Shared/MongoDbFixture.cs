@@ -3,6 +3,8 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Abstractions.Mongo;
+using YetAnotherECommerce.Tests.Shared.Helpers;
+using YetAnotherECommerce.Tests.Shared.Initializers;
 
 namespace YetAnotherECommerce.Tests.Shared
 {
@@ -11,6 +13,7 @@ namespace YetAnotherECommerce.Tests.Shared
         private readonly IMongoClient _client;
         private readonly IMongoCollection<TEntity> _collection;
         private readonly string _databaseName;
+        private readonly IMongoDatabase _database;
         protected bool _disposed = false;
 
         public MongoDbFixture(string collectionName)
@@ -18,15 +21,18 @@ namespace YetAnotherECommerce.Tests.Shared
             var options = OptionsHelper.GetOptions<TMongoSettings>();
             _client = new MongoClient(options.ConnectionString);
             _databaseName = options.DatabaseName;
-            var database = _client.GetDatabase(_databaseName);
-            _collection = database.GetCollection<TEntity>(collectionName);
+            _database = _client.GetDatabase(_databaseName);
+            _collection = _database.GetCollection<TEntity>(collectionName);
         }
+
+        public void InitializeAsync(IMongoDbSeeder seeder)
+            => seeder.Seed(_database).GetAwaiter().GetResult();
 
         public async Task<TEntity> GetAsync(Guid id)
             => await _collection.Find(x => x.Id == id).SingleOrDefaultAsync();
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter)
-            => await _collection.Find(filter).SingleOrDefaultAsync();
+            => await _collection.Find(filter).FirstOrDefaultAsync();
 
         public async Task InsertAsync(TEntity entity)
             => await _collection.InsertOneAsync(entity);

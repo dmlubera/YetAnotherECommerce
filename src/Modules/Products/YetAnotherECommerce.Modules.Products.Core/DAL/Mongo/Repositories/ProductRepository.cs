@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
         {
             var document = await Products.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
-            return document.AsEntity();
+            return document?.AsEntity();
         }
 
         public async Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<Guid> ids)

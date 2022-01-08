@@ -9,6 +9,7 @@ using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Tests.Shared;
+using YetAnotherECommerce.Tests.Shared.Helpers;
 
 namespace YetAnotherECommerce.Modules.Identity.E2ETests
 {

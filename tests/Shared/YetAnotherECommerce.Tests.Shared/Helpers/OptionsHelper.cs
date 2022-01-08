@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
-using YetAnotherECommerce.Shared.Abstractions.Mongo;
 
-namespace YetAnotherECommerce.Tests.Shared
+namespace YetAnotherECommerce.Tests.Shared.Helpers
 {
     public static class OptionsHelper
     {
-        public static TOptions GetOptions<TOptions>() where TOptions : IMongoSettings, new()
+        public static TOptions GetOptions<TOptions>() where TOptions : new()
         {
             var options = new TOptions();
 
