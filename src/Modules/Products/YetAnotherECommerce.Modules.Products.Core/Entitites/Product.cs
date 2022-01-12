@@ -1,4 +1,5 @@
 ﻿using System;
+using YetAnotherECommerce.Modules.Products.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
@@ -32,9 +33,15 @@ namespace YetAnotherECommerce.Modules.Products.Core.Entitites
             Description = description;
             Price = Price.Create(price);
             Quantity = Quantity.Create(quantity);
+
+            AddEvent(new ProductCreated(this));
         }
 
         public void UpdateQuantity(int quantity)
-            => Quantity = Quantity.Create(quantity);
+        {
+            Quantity = Quantity.Create(quantity);
+
+            AddEvent(new QuantityUpdated(this, quantity));
+        }
     }
 }
