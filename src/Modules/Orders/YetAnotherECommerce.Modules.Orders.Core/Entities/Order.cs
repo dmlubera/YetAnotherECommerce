@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using YetAnotherECommerce.Modules.Orders.Core.DomainEvents;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Entities
 {
-    public class Order
+    public class Order : AggregateRoot
     {
         private readonly List<OrderItem> _orderItems = new List<OrderItem>();
         public Guid Id { get; private set; }
@@ -25,9 +27,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
             CustomerId = customerId;
             _orderItems = orderItems;
             Status = OrderStatus.Created;
+
+            AddEvent(new OrderCreated(this));
         }
 
         public void UpdateStatus(OrderStatus status)
-            => Status = status;
+        {
+            Status = status;
+            AddEvent(new OrderStatusChanged(this, Status));
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using YetAnotherECommerce.Modules.Identity.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
@@ -30,13 +31,23 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             Password = Password.Create(password);
             SetRole(role);
             CreatedAt = DateTime.UtcNow;
+
+            AddEvent(new UserRegistered(this));
         }
 
         public void ChangeEmail(string email)
-            => Email = Email.Create(email);
+        {
+            Email = Email.Create(email);
+
+            AddEvent(new EmailChanged(this, Email));
+        }
 
         public void ChangePassword(string password)
-            => Password = Password.Create(password);
+        {
+            Password = Password.Create(password);
+         
+            AddEvent(new PasswordChanged(this, Password));
+        }
 
         private void SetRole(string role)
         {

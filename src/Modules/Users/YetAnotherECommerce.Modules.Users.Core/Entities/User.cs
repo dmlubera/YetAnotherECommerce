@@ -1,4 +1,5 @@
 ﻿using System;
+using YetAnotherECommerce.Modules.Users.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
@@ -33,6 +34,8 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
             Id = id;
             Email = email;
             Password = password;
+
+            AddEvent(new UserCreated(this));
         }
 
         public void UpdateFirstName(string firstName)
@@ -41,6 +44,8 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
                 throw new InvalidFirstNameValueException();
 
             FirstName = firstName;
+
+            AddEvent(new FirstNameChanged(this, firstName));
         }
 
         public void UpdateLastName(string lastName)
@@ -49,12 +54,22 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
                 throw new InvalidLastNameValueException();
 
             LastName = lastName;
+         
+            AddEvent(new FirstNameChanged(this, lastName));
         }
 
         public void CompleteRegistration()
-            => IsRegistrationCompleted = true;
+        {
+            IsRegistrationCompleted = true;
+
+            AddEvent(new RegistrationCompleted(this));
+        }
 
         public void UpdateAddress(string street, string city, string zipcode, string country)
-            => Address = Address.Create(street, city, zipcode, country);
+        {
+            Address = Address.Create(street, city, zipcode, country);
+
+            AddEvent(new AddressChanged(this, Address));
+        }
     }
 }
