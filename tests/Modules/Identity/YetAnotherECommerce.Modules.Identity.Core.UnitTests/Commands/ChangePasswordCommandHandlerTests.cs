@@ -25,7 +25,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         public async Task WhenProvidedPasswordHasInvalidFormat_ThenShouldThrowAnException()
         {
             var command = new ChangePasswordCommand(Guid.NewGuid(), "");
+            var user = new User("admin@yetanotherecommerce.com", "super$ecret", "admin");
             var expectedException = new InvalidPasswordFormatException();
+            _repositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(user);
 
             var result = await Assert.ThrowsAsync<InvalidPasswordFormatException>(() => _handler.HandleAsync(command));
 

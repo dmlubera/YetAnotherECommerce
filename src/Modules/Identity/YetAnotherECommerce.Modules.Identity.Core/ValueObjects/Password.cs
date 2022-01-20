@@ -47,10 +47,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
                 numBytesRequested: 256 / 8
                 ));
 
-        public static bool IsValid(Password password, string givenPassword)
+        public static bool Match(Password password, string givenPassword)
             => password.Hash == GenerateHash(givenPassword, password.Salt);
 
-        public static bool HasValidFormat(string password)
+        private static bool HasValidFormat(string password)
             => !string.IsNullOrWhiteSpace(password);
 
         protected override IEnumerable<object> GetEqualityComponents()

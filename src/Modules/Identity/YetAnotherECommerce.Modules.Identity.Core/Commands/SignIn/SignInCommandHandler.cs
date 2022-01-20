@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn
         {
             var user = await _userRepository.GetByEmailAsync(command.Email);
 
-            if (user is null || !Password.IsValid(user.Password, command.Password))
+            if (user is null || !Password.Match(user.Password, command.Password))
                 throw new InvalidCredentialsException();
 
             var jwtToken = _authManager.GenerateJwtToken(user.Id, user.Role);
