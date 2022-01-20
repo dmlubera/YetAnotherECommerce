@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 {
-    public class Password
+    public class Password : ValueObject
     {
         public string Hash { get; private set; }
         public string Salt { get; private set; }
@@ -50,5 +52,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 
         public static bool HasValidFormat(string password)
             => !string.IsNullOrWhiteSpace(password);
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Hash;
+            yield return Salt;
+        }
     }
 }
