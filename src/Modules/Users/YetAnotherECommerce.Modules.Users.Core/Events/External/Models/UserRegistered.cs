@@ -9,11 +9,10 @@ namespace YetAnotherECommerce.Modules.Users.Core.Events.External.Models
         public string Email { get; init; }
         public string Password { get; init; }
 
-        public UserRegistered(Guid id, string email, string password)
+        public UserRegistered(Guid id, string email)
         {
             Id = id;
             Email = email;
-            Password = password;
         }
     }
 }

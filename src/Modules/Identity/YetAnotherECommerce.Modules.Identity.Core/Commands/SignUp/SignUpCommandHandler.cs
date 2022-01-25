@@ -27,7 +27,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
             var user = new User(command.Email, command.Password, command.Role);
             await _repository.AddAsync(user);
 
-            await _messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email, user.Password.Hash));
+            await _messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
         }
     }
 }

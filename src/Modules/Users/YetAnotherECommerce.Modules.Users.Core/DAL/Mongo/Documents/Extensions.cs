@@ -10,7 +10,6 @@ namespace YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Documents
                 Id = entity.Id.Value,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
-                Password = entity.Password, 
                 Email = entity.Email,
                 Address = entity.Address,
                 IsRegistrationCompleted = entity.IsRegistrationCompleted
@@ -21,7 +20,6 @@ namespace YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Documents
                 document.FirstName,
                 document.LastName,
                 document.Email,
-                document.Password,
                 document.Address,
                 document.IsRegistrationCompleted);
     }

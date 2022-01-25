@@ -11,29 +11,26 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
         public FirstName FirstName { get; private set; }
         public LastName LastName { get; private set; }
         public string Email { get; private set; }
-        public string Password { get; private set; }
         public Address Address { get; private set; }
         public bool IsRegistrationCompleted { get; private set; }
 
         private User() { }
 
         public User(Guid id, string firstName, string lastName, string email,
-            string password, Address address, bool isRegistrationCompleted)
+            Address address, bool isRegistrationCompleted)
         {
             Id = new AggregateId(id);
             LastName = lastName;
             FirstName = firstName;
             Email = email;
-            Password = password;
             Address = address;
             IsRegistrationCompleted = isRegistrationCompleted;
         }
 
-        public User(Guid id, string email, string password)
+        public User(Guid id, string email)
         {
             Id = id;
             Email = email;
-            Password = password;
 
             AddEvent(new UserCreated(this));
         }
