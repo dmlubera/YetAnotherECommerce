@@ -7,8 +7,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
 {
     public class Order : AggregateRoot
     {
-        private readonly List<OrderItem> _orderItems = new List<OrderItem>();
-        public Guid Id { get; private set; }
+        private readonly List<OrderItem> _orderItems;
         public Guid CustomerId { get; private set; }
         public OrderStatus Status { get; private set; }
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
