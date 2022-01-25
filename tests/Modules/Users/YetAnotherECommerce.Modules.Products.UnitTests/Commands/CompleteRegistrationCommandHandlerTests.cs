@@ -56,8 +56,8 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
 
             await _handler.HandleAsync(command);
 
-            user.FirstName.ShouldBe(command.FirstName);
-            user.LastName.ShouldBe(command.LastName);
+            user.FirstName.Value.ShouldBe(command.FirstName);
+            user.LastName.Value.ShouldBe(command.LastName);
             user.Address.Street.ShouldBe(command.Street);
             user.Address.City.ShouldBe(command.City);
             user.Address.ZipCode.ShouldBe(command.ZipCode);

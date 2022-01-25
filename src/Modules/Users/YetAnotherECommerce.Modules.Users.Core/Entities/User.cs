@@ -8,8 +8,8 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
 {
     public class User : AggregateRoot
     {
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public FirstName FirstName { get; private set; }
+        public LastName LastName { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
         public Address Address { get; private set; }
@@ -40,20 +40,14 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
 
         public void UpdateFirstName(string firstName)
         {
-            if (string.IsNullOrWhiteSpace(firstName))
-                throw new InvalidFirstNameValueException();
-
-            FirstName = firstName;
+            FirstName = FirstName.Create(firstName);
 
             AddEvent(new FirstNameChanged(this, firstName));
         }
 
         public void UpdateLastName(string lastName)
         {
-            if (string.IsNullOrWhiteSpace(lastName))
-                throw new InvalidLastNameValueException();
-
-            LastName = lastName;
+            LastName = LastName.Create(lastName);
          
             AddEvent(new FirstNameChanged(this, lastName));
         }
