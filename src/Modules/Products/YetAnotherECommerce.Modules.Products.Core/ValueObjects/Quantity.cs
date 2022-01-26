@@ -6,13 +6,13 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 {
     public class Quantity : ValueObject
     {
-        public int Value { get; }
+        public int Value { get; private set; }
 
-        public Quantity(int value)
+        private Quantity(int value)
         {
             Value = value;
         }
-        
+
         public static Quantity Create(int value)
         {
             if (value < 0)

@@ -6,9 +6,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 {
     public class Price : ValueObject
     {
-        public decimal Value { get; set; }
+        public decimal Value { get; private set; }
 
-        public Price(decimal value)
+        private Price(decimal value)
         {
             Value = value;
         }
