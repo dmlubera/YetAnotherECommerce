@@ -62,5 +62,12 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
 
             AddEvent(new AddressChanged(this, Address));
         }
+
+        public void UpdateEmail(string email)
+        {
+            Email = email;
+
+            AddEvent(new EmailChanged(this, Email));
+        }
     }
 }
