@@ -1,6 +1,5 @@
 ﻿using System;
 using YetAnotherECommerce.Modules.Users.Core.DomainEvents;
-using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 

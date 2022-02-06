@@ -35,6 +35,16 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             AddEvent(new UserRegistered(this));
         }
 
+        public User(Email email, Password password, string role)
+        {
+            Email = email;
+            Password = password;
+            Role = role;
+        }
+
+        public static User Create(Email email, Password password, string role)
+            => new User(email, password, role);
+
         public void ChangeEmail(string email)
         {
             Email = Email.Create(email);

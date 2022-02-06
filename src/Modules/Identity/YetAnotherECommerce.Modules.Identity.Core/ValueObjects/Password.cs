@@ -29,6 +29,9 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
             return new Password(hash, salt);
         }
 
+        public static Password Create(string hash, string salt)
+            => new Password(hash, salt);
+
         private static string GenerateSalt()
         {
             var bytes = new byte[128 / 8];
@@ -50,7 +53,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
         public static bool Match(Password password, string givenPassword)
             => password.Hash == GenerateHash(givenPassword, password.Salt);
 
-        private static bool HasValidFormat(string password)
+        public static bool HasValidFormat(string password)
             => !string.IsNullOrWhiteSpace(password);
 
         protected override IEnumerable<object> GetEqualityComponents()
