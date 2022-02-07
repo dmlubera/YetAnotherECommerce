@@ -1,8 +1,10 @@
 ﻿using Moq;
 using Shouldly;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
@@ -86,6 +88,86 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
 
             result.ShouldNotBeNull();
             result.Email.Value.ShouldBe(email);
+        }
+
+        [Fact]
+        public async Task ChangePasswordAsync_WhenUserWithProvidedIdDoesNotExist_ThenShouldThrowAnException()
+        {
+            var userId = Guid.NewGuid();
+            var expectedException = new UserNotExistException(userId);
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(() => null);
+
+            var result =
+                await Assert.ThrowsAsync<UserNotExistException>(() => _userService.ChangePasswordAsync(userId, "super$ecret"));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        public async Task ChangePasswordAsync_WhenGivenPaswordHasInvalidFormat_ThenShouldThrowAnException(string password)
+        {
+            var expectedException = new InvalidPasswordFormatException();
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(Mock.Of<User>());
+
+            var result =
+                await Assert.ThrowsAsync<InvalidPasswordFormatException>(() => _userService.ChangePasswordAsync(Guid.NewGuid(), password));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task ChangePasswordAsync_WhenGivenPasswordIsExactlyTheSameAsCurrentOne_ThenShouldThrowAnException()
+        {
+            var password = "super$ecret";
+            var user = new User("admin@yetanotherecommerce.com", password, "admin");
+            var expectedException = new ProvidedPasswordIsExactlyTheSameAsTheCurrentOne();
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(user);
+            _encrypterMock
+                .Setup(x => x.IsEqual(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(true);
+
+            var result =
+                await Assert.ThrowsAsync<ProvidedPasswordIsExactlyTheSameAsTheCurrentOne>(() => _userService.ChangePasswordAsync(Guid.NewGuid(), password));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task ChangePassowrdAsync_WhenProvidedPasswordHasValidFormat_ThenShouldUpdateEntityInDatabase()
+        {
+            var newPassword = "super$ecret";
+            var user = new User("admin@yetanotherecommerce.com", "previousOne", "admin");
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(user);
+            _encrypterMock
+                .Setup(x => x.IsEqual(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(false);
+            _encrypterMock
+                .Setup(x => x.GetSalt())
+                .Returns("salt");
+            _encrypterMock
+                .Setup(x => x.GetHash(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns("hash");
+
+            await _userService.ChangePasswordAsync(user.Id, newPassword);
+
+            _userRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<User>()));
         }
     }
 }

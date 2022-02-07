@@ -52,10 +52,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             AddEvent(new EmailChanged(this, Email));
         }
 
-        public void ChangePassword(string password)
+        public void ChangePassword(Password password)
         {
-            Password = Password.Create(password);
-         
+            Password = password;
+
             AddEvent(new PasswordChanged(this, Password));
         }
 

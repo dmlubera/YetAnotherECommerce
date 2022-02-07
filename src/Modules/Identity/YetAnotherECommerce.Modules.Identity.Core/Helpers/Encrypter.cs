@@ -24,5 +24,8 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Helpers
 
             return Convert.ToBase64String(bytes);
         }
+
+        public bool IsEqual(string originalHash, string originalSalt, string valueToCompare)
+            => originalHash == GetHash(valueToCompare, originalSalt);
     }
 }

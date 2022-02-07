@@ -1,90 +1,32 @@
 ﻿using Moq;
-using Shouldly;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
-using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
-using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
 {
     public class ChangePasswordCommandHandlerTests
     {
-        private readonly Mock<IUserRepository> _repositoryMock;
+        private readonly Mock<IUserService> _repositoryMock;
         private readonly ChangePasswordCommandHandler _handler;
 
         public ChangePasswordCommandHandlerTests()
         {
-            _repositoryMock = new Mock<IUserRepository>();
+            _repositoryMock = new Mock<IUserService>();
             _handler = new ChangePasswordCommandHandler(_repositoryMock.Object);
         }
 
         [Fact]
-        public async Task WhenProvidedPasswordHasInvalidFormat_ThenShouldThrowAnException()
-        {
-            var command = new ChangePasswordCommand(Guid.NewGuid(), "");
-            var user = new User("admin@yetanotherecommerce.com", "super$ecret", "admin");
-            var expectedException = new InvalidPasswordFormatException();
-            _repositoryMock
-                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(user);
-
-            var result = await Assert.ThrowsAsync<InvalidPasswordFormatException>(() => _handler.HandleAsync(command));
-
-            result.ShouldNotBeNull();
-            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            result.Message.ShouldBe(expectedException.Message);
-        }
-
-        [Fact]
-        public async Task WhenProvidedPasswordIsExactlyTheSameAsTheCurrentOne_ThenShouldThrowAnException()
+        public async Task ShouldInvokeChangePasswordMethodFromUserService()
         {
             var command = new ChangePasswordCommand(Guid.NewGuid(), "super$ecret");
-            var user = new User("admin@yetanotherecommerce.com", command.Password, "admin");
-            var expectedException = new ProvidedPasswordIsExactlyTheSameAsTheCurrentOne();
-            _repositoryMock
-                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(user);
-
-            var result =
-                await Assert.ThrowsAsync<ProvidedPasswordIsExactlyTheSameAsTheCurrentOne>(() => _handler.HandleAsync(command));
-
-            result.ShouldNotBeNull();
-            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            result.Message.ShouldBe(expectedException.Message);
-        }
-
-        [Fact]
-        public async Task WhenUserWithProvidedIdDoesNotExist_ThenShouldThrowAnException()
-        {
-            var command = new ChangePasswordCommand(Guid.NewGuid(), "super$ecret");
-            var expectedException = new UserNotExistException(command.UserId);
-            _repositoryMock
-                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(() => null);
-
-            var result =
-                await Assert.ThrowsAsync<UserNotExistException>(() => _handler.HandleAsync(command));
-
-            result.ShouldNotBeNull();
-            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            result.Message.ShouldBe(expectedException.Message);
-        }
-
-        [Fact]
-        public async Task WhenProvidedPasswordIsValid_ThenShouldUpdateEntityInDatabase()
-        {
-            var command = new ChangePasswordCommand(Guid.NewGuid(), "super$ecret");
-            var user = new User("admin@yetanotherecommerce.com", "previousOne", "admin");
-            _repositoryMock
-                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(user);
 
             await _handler.HandleAsync(command);
 
-            _repositoryMock.Verify(x => x.UpdateAsync(It.IsAny<User>()));
+            _repositoryMock
+                .Verify(x => x.ChangePasswordAsync(It.IsIn(command.UserId), It.IsIn(command.Password)), Times.Once);
         }
     }
 }
