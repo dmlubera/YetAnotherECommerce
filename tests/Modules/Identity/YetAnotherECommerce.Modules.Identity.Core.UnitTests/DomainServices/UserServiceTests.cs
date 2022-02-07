@@ -8,6 +8,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
 {
@@ -130,7 +131,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangePasswordAsync_WhenGivenPasswordIsExactlyTheSameAsCurrentOne_ThenShouldThrowAnException()
         {
             var password = "super$ecret";
-            var user = new User("admin@yetanotherecommerce.com", password, "admin");
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
             var expectedException = new ProvidedPasswordIsExactlyTheSameAsTheCurrentOne();
             _userRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
@@ -151,7 +152,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangePassowrdAsync_WhenProvidedPasswordHasValidFormat_ThenShouldUpdateEntityInDatabase()
         {
             var newPassword = "super$ecret";
-            var user = new User("admin@yetanotherecommerce.com", "previousOne", "admin");
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
             _userRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(user);

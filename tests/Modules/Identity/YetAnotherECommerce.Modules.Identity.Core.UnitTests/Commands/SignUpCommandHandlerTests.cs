@@ -7,6 +7,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Fixtures.Commands;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
@@ -31,7 +32,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         public async Task WhenUserServiceReturnsUser_ThenShouldAddUserToDatabaseAndPublishEvent()
         {
             var command = SignUpCommandFixture.Create();
-            var user = new User("test@yetanotherecommerce.com", "super$ecret", "admin");
+            var user = User.Create(Email.Create(command.Email), Password.Create("hash", "salt"), "admin");
             _userServiceMock
                 .Setup(x => x.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(user);

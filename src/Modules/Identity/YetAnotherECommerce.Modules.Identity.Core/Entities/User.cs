@@ -24,19 +24,9 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             CreatedAt = createdAt;
         }
 
-        public User(string email, string password, string role)
-        {
-            Id = new AggregateId();
-            Email = Email.Create(email);
-            Password = Password.Create(password);
-            SetRole(role);
-            CreatedAt = DateTime.UtcNow;
-
-            AddEvent(new UserRegistered(this));
-        }
-
         public User(Email email, Password password, string role)
         {
+            Id = Guid.NewGuid();
             Email = email;
             Password = password;
             Role = role;
