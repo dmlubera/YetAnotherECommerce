@@ -55,6 +55,24 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DomainServices
             await _userRepository.UpdateAsync(user);
         }
 
+        public async Task ChangeEmailAsync(Guid userId, string email)
+        {
+            if (!Email.HasValidFormat(email))
+                throw new InvalidEmailFormatException();
+
+            if (await _userRepository.CheckIfEmailIsInUseAsync(email))
+                throw new EmailInUseException();
+
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                throw new UserNotExistException(userId);
+
+            user.ChangeEmail(email);
+
+            await _userRepository.UpdateAsync(user);
+        }
+
         private Password EncryptPassword(string password)
         {
             var passwordSalt = _encrypter.GetSalt();

@@ -170,5 +170,75 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
 
             _userRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<User>()));
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public async Task ChangeEmailAsync_WhenEmailHasInvalidFormat_ThenShouldThrowsAnException(string email)
+        {
+            var expectedException = new InvalidEmailFormatException();
+
+            var result =
+                await Assert.ThrowsAsync<InvalidEmailFormatException>(() => _userService.ChangeEmailAsync(Guid.NewGuid(), email));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task ChangeEmailAsync_WhenEmailIsInUse_ThenShouldThrowsAnException()
+        {
+            var email = "test@yetanotherecommerce.com";
+            var expectedException = new EmailInUseException();
+            _userRepositoryMock
+                .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
+                .ReturnsAsync(true);
+
+            var result = await Assert.ThrowsAsync<EmailInUseException>(() => _userService.ChangeEmailAsync(Guid.NewGuid(), email));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task ChangeEmailAsync_WhenUserNotExists_ThenShouldThrowsAnException()
+        {
+            var userId = Guid.NewGuid();
+            var email = "test@yetanotherecommerce.com";
+            var expectedException = new UserNotExistException(userId);
+            _userRepositoryMock
+                .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
+                .ReturnsAsync(false);
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(() => null);
+
+            var result = await Assert.ThrowsAsync<UserNotExistException>(() => _userService.ChangeEmailAsync(userId, email));
+
+            result.ShouldNotBeNull();
+            result.ErrorCode.ShouldBe(expectedException.ErrorCode);
+            result.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task ChangeEmailAsync_WhenDataIsValid_ThenShouldUpdateEmailAndSaveChangesToDatabase()
+        {
+            var newEmail = "test@yetanotherecommerce.com";
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
+            _userRepositoryMock
+                .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
+                .ReturnsAsync(false);
+            _userRepositoryMock
+                .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(user);
+
+            await _userService.ChangeEmailAsync(user.Id, newEmail);
+
+            user.Email.Value.ShouldBe(newEmail);
+            _userRepositoryMock.Verify(x => x.UpdateAsync(It.IsIn(user)), Times.Once);
+        }
     }
 }
