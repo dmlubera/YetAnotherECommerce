@@ -29,7 +29,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             Id = Guid.NewGuid();
             Email = email;
             Password = password;
-            Role = role;
+            SetRole(role);
         }
 
         public static User Create(Email email, Password password, string role)
@@ -51,7 +51,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 
         private void SetRole(string role)
         {
-            if (!Enum.IsDefined(typeof(AllowedRoles), role.ToLower()))
+            if (string.IsNullOrWhiteSpace(role) || !Enum.IsDefined(typeof(AllowedRoles), role.ToLower()))
                 throw new RoleNotExistException(role);
 
             Role = role.ToLower();
