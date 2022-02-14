@@ -8,6 +8,8 @@ using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Helpers;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Tests.Shared;
 using YetAnotherECommerce.Tests.Shared.Helpers;
 
@@ -24,7 +26,7 @@ namespace YetAnotherECommerce.Modules.Identity.E2ETests
             var email = "test@yetanotherecommerce.com";
             var password = "super$ecret";
             var command = new SignInCommand(email, password);
-            var user = new User(email, password, "customer");
+            var user = CreateUser(email, password, "customer");
             await _dbFixture.InsertAsync(user.AsDocument());
 
             var httpResponse = await Act(command);
@@ -39,7 +41,7 @@ namespace YetAnotherECommerce.Modules.Identity.E2ETests
             var email = "test@yetanotherecommerce.com";
             var password = "super$ecret";
             var command = new SignInCommand(email, "wrongPassword");
-            var user = new User(email, password, "customer");
+            var user = CreateUser(email, password, "customer");
             await _dbFixture.InsertAsync(user.AsDocument());
 
             var httpResponse = await Act(command);
@@ -57,6 +59,15 @@ namespace YetAnotherECommerce.Modules.Identity.E2ETests
 
             httpResponse.ShouldNotBeNull();
             httpResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        }
+
+        private static User CreateUser(string email, string password, string role)
+        {
+            var encrypter = new Encrypter();
+            var salt = encrypter.GetSalt();
+            var hash = encrypter.GetHash(password, salt);
+
+            return User.Create(Email.Create(email), Password.Create(hash, salt), role);
         }
 
         #region Arrange

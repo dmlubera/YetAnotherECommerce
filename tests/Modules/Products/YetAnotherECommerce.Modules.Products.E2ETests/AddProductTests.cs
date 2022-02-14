@@ -8,6 +8,8 @@ using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Helpers;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
@@ -45,7 +47,7 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
                 price: 100,
                 quantity: 10);
             var user = await AddIdentityAsync("customer");
-            await AuthenticateAsync(user);
+            GenerateAuthenticationHeader(user);
 
             var httpResponse = await Act(command);
 
@@ -62,7 +64,7 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
                 price: 100,
                 quantity: 10);
             var user = await AddIdentityAsync("admin");
-            await AuthenticateAsync(user);
+            GenerateAuthenticationHeader(user);
 
             var httpResponse = await Act(command);
 
@@ -79,7 +81,7 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
                 price: 100,
                 quantity: 10);
             var user = await AddIdentityAsync("admin");
-            await AuthenticateAsync(user);
+            GenerateAuthenticationHeader(user);
 
             await Act(command);
 
@@ -105,7 +107,7 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
 
         private async Task<UserDocument> AddIdentityAsync(string role)
         {
-            var customer = new User(
+            var customer = CreateUser(
                 email: "test@yetanotherecommerce.com",
                 password: "super$ecret",
                 role: role);
@@ -114,10 +116,19 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
             return await _identityDbFixture.GetAsync((UserDocument user) => user.Role == role);
         }
 
-        private async Task AuthenticateAsync(UserDocument user)
+        private void GenerateAuthenticationHeader(UserDocument user)
         {
             var jwt = AuthHelper.GenerateJwt(user.Id, user.Role);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        }
+
+        private static User CreateUser(string email, string password, string role)
+        {
+            var encrypter = new Encrypter();
+            var salt = encrypter.GetSalt();
+            var hash = encrypter.GetHash(password, salt);
+
+            return User.Create(Email.Create(email), Password.Create(hash, salt), role);
         }
 
         public void Dispose()

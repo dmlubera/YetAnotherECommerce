@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Helpers;
+using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 
 namespace YetAnotherECommerce.Tests.Shared.Initializers
 {
@@ -9,9 +11,13 @@ namespace YetAnotherECommerce.Tests.Shared.Initializers
     {
         public async Task Seed(IMongoDatabase database)
         {
+            var encrypter = new Encrypter();
+            var salt = encrypter.GetSalt();
+            var hash = encrypter.GetHash("super$ecret", salt);
+            var password = Password.Create(hash, salt);
             var usersCollection = database.GetCollection<UserDocument>("Users");
-            var customer = new User("customer@yetanotherecommerce.com", "super$ecret", "customer");
-            var admin = new User("admin@yetanotherecommerce.com", "super$ecret", "admin");
+            var customer = new User(Email.Create("customer@yetanotherecommerce.com"), password, "customer");
+            var admin = new User(Email.Create("admin@yetanotherecommerce.com"), password, "admin");
 
             await usersCollection.InsertManyAsync(new []{ customer.AsDocument(), admin.AsDocument() });
         }
