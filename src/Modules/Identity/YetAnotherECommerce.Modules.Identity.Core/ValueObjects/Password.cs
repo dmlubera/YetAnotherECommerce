@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
@@ -14,7 +15,15 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
             => (Hash, Salt) = (hash, salt);
 
         public static Password Create(string hash, string salt)
-            => new Password(hash, salt);
+        {
+            if (string.IsNullOrWhiteSpace(hash))
+                throw new InvalidPasswordHashException();
+
+            if (string.IsNullOrWhiteSpace(salt))
+                throw new InvalidPasswordSaltException();
+
+            return new Password(hash, salt);
+        }
 
         public static bool HasValidFormat(string password)
             => !string.IsNullOrWhiteSpace(password);
