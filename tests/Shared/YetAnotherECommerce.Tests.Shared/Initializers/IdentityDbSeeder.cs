@@ -16,8 +16,8 @@ namespace YetAnotherECommerce.Tests.Shared.Initializers
             var hash = encrypter.GetHash("super$ecret", salt);
             var password = Password.Create(hash, salt);
             var usersCollection = database.GetCollection<UserDocument>("Users");
-            var customer = new User(Email.Create("customer@yetanotherecommerce.com"), password, "customer");
-            var admin = new User(Email.Create("admin@yetanotherecommerce.com"), password, "admin");
+            var customer = User.Create(Email.Create("customer@yetanotherecommerce.com"), password, "customer");
+            var admin = User.Create(Email.Create("admin@yetanotherecommerce.com"), password, "admin");
 
             await usersCollection.InsertManyAsync(new []{ customer.AsDocument(), admin.AsDocument() });
         }

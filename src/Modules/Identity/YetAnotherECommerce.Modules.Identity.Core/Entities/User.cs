@@ -24,7 +24,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             CreatedAt = createdAt;
         }
 
-        public User(Email email, Password password, string role)
+        private User(Email email, Password password, string role)
         {
             Id = Guid.NewGuid();
             Email = email;
