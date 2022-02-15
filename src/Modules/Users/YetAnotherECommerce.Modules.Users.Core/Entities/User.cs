@@ -13,7 +13,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
         public Address Address { get; private set; }
         public bool IsRegistrationCompleted { get; private set; }
 
-        private User() { }
+        protected User() { }
 
         public User(Guid id, string firstName, string lastName, string email,
             Address address, bool isRegistrationCompleted)
@@ -45,7 +45,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.Entities
         {
             LastName = LastName.Create(lastName);
          
-            AddEvent(new FirstNameChanged(this, lastName));
+            AddEvent(new LastNameChanged(this, lastName));
         }
 
         public void CompleteRegistration()
