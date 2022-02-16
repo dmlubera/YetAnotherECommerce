@@ -13,7 +13,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
 
         public static FirstName Create(string value)
         {
-            if(string.IsNullOrEmpty(value))
+            if(string.IsNullOrWhiteSpace(value))
                 throw new InvalidFirstNameValueException();
 
             return new(value);
