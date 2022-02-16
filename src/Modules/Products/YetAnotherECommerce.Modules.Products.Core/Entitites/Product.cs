@@ -12,7 +12,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Entitites
         public Price Price { get; private set; }
         public Quantity Quantity { get; private set; }
 
-        private Product() { }
+        protected Product() { }
 
         public Product(Guid id, string name, string description, decimal price, int quantity)
         {
