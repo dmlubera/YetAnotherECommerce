@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
@@ -25,7 +24,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
             if (order is null)
                 throw new OrderDoesNotExistException(command.OrderId);
 
-            order.UpdateStatus(OrderStatus.Completed);
+            order.CompleteOrder();
 
             await _orderRepository.UpdateAsync(order);
 

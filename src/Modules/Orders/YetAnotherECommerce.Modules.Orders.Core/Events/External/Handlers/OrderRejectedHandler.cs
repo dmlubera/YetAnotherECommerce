@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
@@ -21,7 +20,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
             if (order is null)
                 throw new OrderDoesNotExistException(@event.OrderId);
 
-            order.UpdateStatus(OrderStatus.Rejected);
+            order.RejectOrder();
 
             await _orderRepository.UpdateAsync(order);
         }

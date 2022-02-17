@@ -30,10 +30,28 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
             AddEvent(new OrderCreated(this));
         }
 
-        public void UpdateStatus(OrderStatus status)
+        public void AcceptOrder()
         {
-            Status = status;
-            AddEvent(new OrderStatusChanged(this, Status));
+            Status = OrderStatus.Accepted;
+            AddEvent(new OrderAccepted(this, Status));
+        }
+
+        public void CancelOrder()
+        {
+            Status = OrderStatus.Canceled;
+            AddEvent(new OrderCanceled(this, Status));
+        }
+
+        public void CompleteOrder()
+        {
+            Status = OrderStatus.Completed;
+            AddEvent(new OrderCompleted(this, Status));
+        }
+
+        public void RejectOrder()
+        {
+            Status = OrderStatus.Rejected;
+            AddEvent(new OrderRejected(this, Status));
         }
     }
 }

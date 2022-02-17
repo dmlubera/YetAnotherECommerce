@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
@@ -31,7 +30,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
             if (order is null)
                 throw new NoSuchOrderExistsForCustomerException(command.OrderId, command.CustomerId);
 
-            order.UpdateStatus(OrderStatus.Canceled);
+            order.CancelOrder();
             await _orderRepository.UpdateAsync(order);
 
             var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
