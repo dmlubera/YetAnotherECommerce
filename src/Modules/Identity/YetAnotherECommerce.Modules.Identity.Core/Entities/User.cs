@@ -51,10 +51,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 
         private void SetRole(string role)
         {
-            if (string.IsNullOrWhiteSpace(role) || !Enum.IsDefined(typeof(AllowedRoles), role.ToLower()))
+            if (!Entities.Role.IsValid(role))
                 throw new RoleNotExistException(role);
 
-            Role = role.ToLower();
+            Role = role.ToLowerInvariant();
         }
     }
 }
