@@ -10,13 +10,18 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Documents
         public Guid CustomerId { get; set; }
         public OrderStatus Status { get; set; }
         public List<OrderItemDocument> OrderItems { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? LastUpdatedAt { get; set; }
 
-        public OrderDocument(Guid id, Guid customerId, OrderStatus status, List<OrderItemDocument> orderItems)
+        public OrderDocument(Guid id, Guid customerId, OrderStatus status,
+            List<OrderItemDocument> orderItems, DateTime? createdAt, DateTime? lastUpdatedAt)
         {
             Id = id;
             CustomerId = customerId;
             Status = status;
             OrderItems = orderItems;
+            CreatedAt = createdAt;
+            LastUpdatedAt = lastUpdatedAt;
         }
     }
 }

@@ -6,22 +6,24 @@ using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 {
-    public class User : AggregateRoot
+    public class User : AggregateRoot, IAuditable
     {
         public Email Email { get; private set; }
         public Password Password { get; private set; }
         public string Role { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public DateTime? CreatedAt { get; private set; }
+        public DateTime? LastUpdatedAt { get; private set; }
 
         protected User() { }
 
-        public User(Guid id, string email, string hash, string salt, string role, DateTime createdAt)
+        public User(Guid id, string email, string hash, string salt, string role, DateTime? createdAt, DateTime? lastUpdatedAt)
         {
             Id = id;
             Email = new Email(email);
             Password = new Password(hash, salt);
             Role = role;
             CreatedAt = createdAt;
+            LastUpdatedAt = lastUpdatedAt;
         }
 
         private User(Email email, Password password, string role)
@@ -30,6 +32,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
             Email = email;
             Password = password;
             SetRole(role);
+            CreatedAt = DateTime.UtcNow;
         }
 
         public static User Create(Email email, Password password, string role)
@@ -38,6 +41,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
         public void ChangeEmail(string email)
         {
             Email = Email.Create(email);
+            LastUpdatedAt = DateTime.UtcNow;
 
             AddEvent(new EmailChanged(this, Email));
         }
@@ -45,6 +49,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
         public void ChangePassword(Password password)
         {
             Password = password;
+            LastUpdatedAt = DateTime.UtcNow;
 
             AddEvent(new PasswordChanged(this, Password));
         }

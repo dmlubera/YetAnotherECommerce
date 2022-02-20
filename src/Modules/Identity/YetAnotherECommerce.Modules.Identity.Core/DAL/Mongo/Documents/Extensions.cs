@@ -10,7 +10,8 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents
                 document.PasswordHash,
                 document.PasswordSalt,
                 document.Role,
-                document.CreatedAt);
+                document.CreatedAt,
+                document.LastUpdatedAt);
 
         public static UserDocument AsDocument(this User entity)
             => new UserDocument
@@ -20,7 +21,8 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents
                 PasswordHash = entity.Password.Hash,
                 PasswordSalt = entity.Password.Salt,
                 Role = entity.Role,
-                CreatedAt = entity.CreatedAt
+                CreatedAt = entity.CreatedAt,
+                LastUpdatedAt = entity.LastUpdatedAt
             };
     }
 }

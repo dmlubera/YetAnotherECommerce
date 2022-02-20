@@ -12,7 +12,9 @@ namespace YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Documents
                 LastName = entity.LastName,
                 Email = entity.Email,
                 Address = entity.Address,
-                IsRegistrationCompleted = entity.IsRegistrationCompleted
+                IsRegistrationCompleted = entity.IsRegistrationCompleted,
+                CreatedAt = entity.CreatedAt,
+                LastUpdatedAt = entity.LastUpdatedAt
             };
 
         public static User AsEntity(this UserDocument document)
@@ -21,6 +23,8 @@ namespace YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Documents
                 document.LastName,
                 document.Email,
                 document.Address,
-                document.IsRegistrationCompleted);
+                document.IsRegistrationCompleted,
+                document.CreatedAt,
+                document.LastUpdatedAt);
     }
 }
