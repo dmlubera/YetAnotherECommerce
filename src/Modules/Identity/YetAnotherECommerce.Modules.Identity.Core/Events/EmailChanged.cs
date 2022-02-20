@@ -3,15 +3,7 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Events
 {
-    public class EmailChanged : IEvent
-    {
-        public Guid UserId { get; set; }
-        public string Email { get; set; }
-
-        public EmailChanged(Guid userId, string email)
-        {
-            UserId = userId;
-            Email = email;
-        }
-    }
+    public record EmailChanged(
+        Guid UserId,
+        string Email) : IEvent;
 }

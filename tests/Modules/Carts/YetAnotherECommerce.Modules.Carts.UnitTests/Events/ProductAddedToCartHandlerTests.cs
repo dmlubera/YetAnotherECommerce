@@ -26,11 +26,11 @@ namespace YetAnotherECommerce.Modules.Carts.UnitTests.Events
         public async Task WhenCartExist_ThenShouldAddItem()
         {
             var @event = new ProductAddedToCart(
-                customerId: Guid.NewGuid(),
-                productId: Guid.NewGuid(),
-                name: "High performance ultrabook",
-                unitPrice: 10,
-                quantity: 10);
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                "High performance ultrabook",
+                10,
+                10);
             var cart = new Cart();
             _cacheMock
                 .Setup(x => x.Get<Cart>(It.IsAny<string>()))
