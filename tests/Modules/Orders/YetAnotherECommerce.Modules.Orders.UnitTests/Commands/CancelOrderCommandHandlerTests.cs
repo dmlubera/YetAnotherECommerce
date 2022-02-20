@@ -3,8 +3,6 @@ using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Commands;
@@ -55,6 +53,7 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
         {
             var command = new CancelOrderCommand(Guid.NewGuid(), Guid.NewGuid());
             var order = new Order(command.CustomerId, new List<OrderItem>());
+            order.AcceptOrder();
             _orderRepositoryMock
                 .Setup(x => x.GetForCustomerByIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .ReturnsAsync(order);

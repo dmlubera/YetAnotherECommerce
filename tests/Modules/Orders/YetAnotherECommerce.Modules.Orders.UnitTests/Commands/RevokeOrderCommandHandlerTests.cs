@@ -53,6 +53,7 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
         {
             var command = new RevokeOrderCommand(Guid.NewGuid());
             var order = new Order(Guid.NewGuid(), new List<OrderItem>());
+            order.AcceptOrder();
             _orderRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(order);

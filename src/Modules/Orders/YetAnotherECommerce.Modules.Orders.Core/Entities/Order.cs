@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using YetAnotherECommerce.Modules.Orders.Core.DomainEvents;
+using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Entities
@@ -11,6 +12,8 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
         public Guid CustomerId { get; private set; }
         public OrderStatus Status { get; private set; }
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
+
+        protected Order() { }
 
         public Order(Guid id, Guid customerId, OrderStatus status, List<OrderItem> orderItems)
         {
@@ -32,24 +35,36 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Entities
 
         public void AcceptOrder()
         {
+            if (Status != OrderStatus.Created)
+                throw new AcceptationNotAllowedException(Status);
+
             Status = OrderStatus.Accepted;
             AddEvent(new OrderAccepted(this, Status));
         }
 
         public void CancelOrder()
         {
+            if (Status != OrderStatus.Created && Status != OrderStatus.Accepted)
+                throw new CancellationNotAllowedException(Status);
+
             Status = OrderStatus.Canceled;
             AddEvent(new OrderCanceled(this, Status));
         }
 
         public void CompleteOrder()
         {
+            if (Status != OrderStatus.Accepted)
+                throw new CompletionNotAllowedException(Status);
+
             Status = OrderStatus.Completed;
             AddEvent(new OrderCompleted(this, Status));
         }
 
         public void RejectOrder()
         {
+            if (Status != OrderStatus.Accepted)
+                throw new RejectionNotAllowedException(Status);
+
             Status = OrderStatus.Rejected;
             AddEvent(new OrderRejected(this, Status));
         }
