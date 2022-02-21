@@ -53,7 +53,7 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Queries
             var result = await _handler.HandleAsync(query);
 
             result.ShouldNotBeNull();
-            result.Name.ShouldBe(product.Name);
+            result.Name.ShouldBe(product.Name.Value);
             result.Description.ShouldBe(product.Description);
             result.Price.ShouldBe(product.Price.Value);
             result.Quantity.ShouldBe(product.Quantity.Value);

@@ -12,5 +12,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Documents
         public string Password { get; set; }
         public Address Address { get; set; }
         public bool IsRegistrationCompleted { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? LastUpdatedAt { get; set; }
     }
 }

@@ -1,9 +1,8 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Commands;
@@ -19,13 +18,16 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
     {
         private readonly Mock<IOrderRepository> _orderRepositoryMock;
         private readonly Mock<IMessageBroker> _messageBrokerMock;
+        private readonly Mock<ILogger<CancelOrderComandHandler>> _loggerMock;
         private readonly CancelOrderComandHandler _handler;
 
         public CancelOrderCommandHandlerTests()
         {
             _orderRepositoryMock = new Mock<IOrderRepository>();
             _messageBrokerMock = new Mock<IMessageBroker>();
-            _handler = new CancelOrderComandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object);
+            _loggerMock = new Mock<ILogger<CancelOrderComandHandler>>();
+            _handler = new CancelOrderComandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
@@ -51,6 +53,7 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
         {
             var command = new CancelOrderCommand(Guid.NewGuid(), Guid.NewGuid());
             var order = new Order(command.CustomerId, new List<OrderItem>());
+            order.AcceptOrder();
             _orderRepositoryMock
                 .Setup(x => x.GetForCustomerByIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .ReturnsAsync(order);

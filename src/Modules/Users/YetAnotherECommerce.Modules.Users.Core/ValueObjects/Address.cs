@@ -1,22 +1,15 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
 {
-    public class Address : IEquatable<Address>
+    public class Address : ValueObject
     {
         public string Street { get; private set; }
         public string City { get; private set; }
         public string ZipCode { get; private set; }
         public string Country { get; private set; }
-
-        public bool Equals(Address other)
-        {
-            return Street == other.Street
-                && City == other.City
-                && ZipCode == other.ZipCode
-                && Country == other.Country;
-        }
 
         private Address(string street, string city, string zipCode, string country)
         {
@@ -42,5 +35,13 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
 
         public override string ToString()
             => $"{Street}, {ZipCode} {City}, {Country}";
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Street;
+            yield return City;
+            yield return ZipCode;
+            yield return Country;
+        }
     }
 }

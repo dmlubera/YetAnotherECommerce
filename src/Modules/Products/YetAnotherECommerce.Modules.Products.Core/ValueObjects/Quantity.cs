@@ -1,17 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 {
-    public class Quantity : IEquatable<Quantity>
+    public class Quantity : ValueObject
     {
-        public int Value { get; }
+        public int Value { get; private set; }
 
-        public Quantity(int value)
+        private Quantity(int value)
         {
             Value = value;
         }
-        
+
         public static Quantity Create(int value)
         {
             if (value < 0)
@@ -19,10 +20,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 
             return new Quantity(value);
         }
-
-        public bool Equals(Quantity other)
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            return Value == other.Value;
+            yield return Value;
         }
 
         public static implicit operator int(Quantity quantity) => quantity.Value;

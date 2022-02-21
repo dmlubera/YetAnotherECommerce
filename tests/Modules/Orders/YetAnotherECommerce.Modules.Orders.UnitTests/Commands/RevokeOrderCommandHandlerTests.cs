@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,16 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
     {
         private readonly Mock<IOrderRepository> _orderRepositoryMock;
         private readonly Mock<IMessageBroker> _messageBrokerMock;
+        private readonly Mock<ILogger<RevokeOrderCommandHandler>> _loggerMock;
         private readonly RevokeOrderCommandHandler _handler;
 
         public RevokeOrderCommandHandlerTests()
         {
             _orderRepositoryMock = new Mock<IOrderRepository>();
             _messageBrokerMock = new Mock<IMessageBroker>();
-            _handler = new RevokeOrderCommandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object);
+            _loggerMock = new Mock<ILogger<RevokeOrderCommandHandler>>();
+            _handler = new RevokeOrderCommandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
@@ -49,6 +53,7 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands
         {
             var command = new RevokeOrderCommand(Guid.NewGuid());
             var order = new Order(Guid.NewGuid(), new List<OrderItem>());
+            order.AcceptOrder();
             _orderRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(order);

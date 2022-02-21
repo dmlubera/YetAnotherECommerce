@@ -1,13 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 {
-    public class Price : IEquatable<Price>
+    public class Price : ValueObject
     {
-        public decimal Value { get; set; }
+        public decimal Value { get; private set; }
 
-        public Price(decimal value)
+        private Price(decimal value)
         {
             Value = value;
         }
@@ -19,10 +20,10 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects
 
             return new Price(value);
         }
-
-        bool IEquatable<Price>.Equals(Price other)
+        
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            return Value == other.Value;
+            yield return Value;
         }
 
         public static implicit operator decimal(Price price) => price.Value;

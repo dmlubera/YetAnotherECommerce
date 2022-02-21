@@ -34,8 +34,8 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
             var productsWithQuantity = new Dictionary<Guid, int>();
             foreach(var item in @event.Products)
             {
-                orderItems.Add(new OrderItem(item.ProductId, item.Name, item.UnitPrice, item.Quanitity));
-                productsWithQuantity.Add(item.ProductId, item.Quanitity);
+                orderItems.Add(new OrderItem(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
+                productsWithQuantity.Add(item.ProductId, item.Quantity);
             }
             var order = new Order(@event.CustomerId, orderItems);
 

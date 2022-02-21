@@ -11,7 +11,9 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Documents
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                Quantity = product.Quantity
+                Quantity = product.Quantity,
+                CreatedAt = product.CreatedAt,
+                LastUpdatedAt = product.LastUpdatedAt
             };
 
         public static Product AsEntity(this ProductDocument document)
@@ -19,6 +21,8 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Documents
                 document.Name,
                 document.Description,
                 document.Price,
-                document.Quantity);
+                document.Quantity,
+                document.CreatedAt,
+                document.LastUpdatedAt);
     }
 }

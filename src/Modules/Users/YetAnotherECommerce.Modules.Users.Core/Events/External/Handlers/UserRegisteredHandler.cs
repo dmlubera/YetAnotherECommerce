@@ -16,7 +16,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers
 
         public async Task HandleAsync(UserRegistered @event)
         {
-            var user = new User(@event.Id, @event.Email, @event.Password);
+            var user = new User(@event.Id, @event.Email);
 
             await _userRepository.AddAsync(user);
         }

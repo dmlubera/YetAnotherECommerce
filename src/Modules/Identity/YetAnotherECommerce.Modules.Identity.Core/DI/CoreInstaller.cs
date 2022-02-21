@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
+using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
@@ -13,7 +15,9 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DI
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddSingleton<IEncrypter, Encrypter>();
             
             return services;
         }

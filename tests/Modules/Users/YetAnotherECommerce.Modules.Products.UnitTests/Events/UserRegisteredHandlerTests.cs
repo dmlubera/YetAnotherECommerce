@@ -23,7 +23,7 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Events
         [Fact]
         public async Task WhenUserRegistered_ThenShouldAddUserToUsersDatabase()
         {
-            var @event = new UserRegistered(Guid.NewGuid(), "user@yetanotherecommerce.com", "super$ecret");
+            var @event = new UserRegistered(Guid.NewGuid(), "user@yetanotherecommerce.com");
 
             await _handler.HandleAsync(@event);
 

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,15 @@ namespace YetAnotherECommerce.Modules.Carts.UnitTests.Services
     {
         private readonly Mock<ICache> _cacheMock;
         private readonly Mock<IMessageBroker> _messageBrokerMock;
+        private readonly Mock<ILogger<CartService>> _loggerMock;
         private readonly CartService _cartService;
 
         public CartServiceTests()
         {
             _cacheMock = new Mock<ICache>();
             _messageBrokerMock = new Mock<IMessageBroker>();
-            _cartService = new CartService(_cacheMock.Object, _messageBrokerMock.Object);
+            _loggerMock = new Mock<ILogger<CartService>>();
+            _cartService = new CartService(_cacheMock.Object, _messageBrokerMock.Object, _loggerMock.Object);
         }
 
         [Fact]

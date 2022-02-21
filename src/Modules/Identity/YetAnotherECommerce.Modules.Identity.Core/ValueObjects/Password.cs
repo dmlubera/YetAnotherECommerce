@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Collections.Generic;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
 {
-    public class Password
+    public class Password : ValueObject
     {
         public string Hash { get; private set; }
         public string Salt { get; private set; }
@@ -16,39 +14,24 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
         public Password(string hash, string salt)
             => (Hash, Salt) = (hash, salt);
 
-        public static Password Create(string password)
+        public static Password Create(string hash, string salt)
         {
-            if (!HasValidFormat(password))
-                throw new InvalidPasswordFormatException();
+            if (string.IsNullOrWhiteSpace(hash))
+                throw new InvalidPasswordHashException();
 
-            var salt = GenerateSalt();
-            var hash = GenerateHash(password, salt);
+            if (string.IsNullOrWhiteSpace(salt))
+                throw new InvalidPasswordSaltException();
 
             return new Password(hash, salt);
         }
 
-        private static string GenerateSalt()
-        {
-            var bytes = new byte[128 / 8];
-            using var rng = new RNGCryptoServiceProvider();
-            rng.GetNonZeroBytes(bytes);
-
-            return Convert.ToBase64String(bytes);
-        }
-
-        private static string GenerateHash(string password, string salt)
-            => Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: Encoding.ASCII.GetBytes(salt),
-                KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8
-                ));
-
-        public static bool IsValid(Password password, string givenPassword)
-            => password.Hash == GenerateHash(givenPassword, password.Salt);
-
         public static bool HasValidFormat(string password)
             => !string.IsNullOrWhiteSpace(password);
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Hash;
+            yield return Salt;
+        }
     }
 }
