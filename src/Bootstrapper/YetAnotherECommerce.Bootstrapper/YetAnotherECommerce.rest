@@ -118,3 +118,15 @@ Authorization: Bearer {{accessToken}}
 ### Cancel order
 POST {{ordersModuleUrl}}/orders/{{orderId}}/cancel
 Authorization: Bearer {{accessToken}}
+
+### Browse all orders
+GET {{ordersModuleUrl}}/orders
+Authorization: Bearer {{accessToken}}
+
+### Complete order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/complete
+Authorization: Bearer {{accessToken}}
+
+### Revoke order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/revoke
+Authorization: Bearer {{accessToken}}
