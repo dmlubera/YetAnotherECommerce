@@ -4,7 +4,7 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 namespace YetAnotherECommerce.Modules.Products.Core.Events
 {
     public record ProductAddedToCart(
-        Guid CustomerdId,
+        Guid CustomerId,
         Guid ProductId,
         string Name,
         decimal UnitPrice,

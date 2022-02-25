@@ -19,7 +19,7 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
             return new(value);
         }
 
-        public static implicit operator string(FirstName firstName) => firstName.Value;
+        public static implicit operator string(FirstName firstName) => firstName?.Value;
 
         public static implicit operator FirstName(string firstName) => new(firstName);
 

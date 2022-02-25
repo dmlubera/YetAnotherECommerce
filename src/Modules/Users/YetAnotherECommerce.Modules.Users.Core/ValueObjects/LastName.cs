@@ -19,9 +19,9 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
             return new(value);
         }
 
-        public static implicit operator string(LastName firstName) => firstName.Value;
+        public static implicit operator string(LastName lastName) => lastName?.Value;
 
-        public static implicit operator LastName(string firstName) => new(firstName);
+        public static implicit operator LastName(string lastName) => new(lastName);
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

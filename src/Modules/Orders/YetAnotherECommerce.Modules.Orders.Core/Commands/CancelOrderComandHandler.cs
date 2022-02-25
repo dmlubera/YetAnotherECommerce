@@ -25,7 +25,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands
 
         public async Task HandleAsync(CancelOrderCommand command)
         {
-            var order = await _orderRepository.GetForCustomerByIdAsync(command.OrderId, command.CustomerId);
+            var order = await _orderRepository.GetForCustomerByIdAsync(command.CustomerId, command.OrderId);
 
             if (order is null)
                 throw new NoSuchOrderExistsForCustomerException(command.OrderId, command.CustomerId);
