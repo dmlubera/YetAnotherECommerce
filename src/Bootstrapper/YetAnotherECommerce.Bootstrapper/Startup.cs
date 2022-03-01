@@ -5,15 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using YetAnotherECommerce.Modules.Carts.Api.DI;
-using YetAnotherECommerce.Modules.Identity.Api.DI;
+using System.Collections.Generic;
+using System.Reflection;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Orders.Api.DI;
 using YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Products.Api.DI;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Users.Api.DI;
 using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
@@ -21,8 +19,15 @@ namespace YetAnotherECommerce.Bootstrapper
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) 
-            => Configuration = configuration;
+        private readonly IList<Assembly> _assemblies;
+        private readonly IList<IModule> _modules;
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            _assemblies = ModuleLoader.LoadAssemblies();
+            _modules = ModuleLoader.LoadModules(_assemblies);
+        }
 
         public IConfiguration Configuration { get; }
 
@@ -33,11 +38,12 @@ namespace YetAnotherECommerce.Bootstrapper
             services.Configure<ProductsModuleMongoSettings>(Configuration.GetSection(nameof(ProductsModuleMongoSettings)));
             services.Configure<OrdersModuleMongoSettings>(Configuration.GetSection(nameof(OrdersModuleMongoSettings)));
             services.Configure<MessagingOptions>(Configuration.GetSection("Messaging"));
-            services.AddIdentityModule();
-            services.AddUsersModule();
-            services.AddProductsModule();
-            services.AddCartsModule();
-            services.AddOrdersModule();
+
+            foreach (var module in _modules)
+            {
+                module.Register(services);
+            }
+            
             services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddHttpContextAccessor();
@@ -53,6 +59,11 @@ namespace YetAnotherECommerce.Bootstrapper
             }
 
             app.UseInfrastructure();
+
+            foreach(var module in _modules)
+            {
+                module.Use(app);
+            }
 
             app.UseRouting();
 

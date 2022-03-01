@@ -1,21 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using System.Runtime.CompilerServices;
+using System;
 using System.Text;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.DI;
+using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.Auth;
 
-[assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
-namespace YetAnotherECommerce.Modules.Identity.Api.DI
+namespace YetAnotherECommerce.Modules.Identity.Api
 {
-    internal static class IdentityModuleInstaller
+    internal class IdentityModule : IModule
     {
-        public static IServiceCollection AddIdentityModule(this IServiceCollection services)
+        public const string BasePath = "identity-module";
+        public string Name { get; } = "Identity";
+        public string Path => BasePath;
+
+        public void Register(IServiceCollection services)
         {
             services.AddTransient<IMongoClient>(sp =>
             {
@@ -48,8 +53,10 @@ namespace YetAnotherECommerce.Modules.Identity.Api.DI
                     ValidateLifetime = authSettings.ValidateLifetime
                 };
             });
+        }
 
-            return services;
+        public void Use(IApplicationBuilder app)
+        {
         }
     }
 }
