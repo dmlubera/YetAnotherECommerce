@@ -59,6 +59,16 @@ namespace YetAnotherECommerce.Modules.Products.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("update-price")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdatePriceAsync([FromBody] UpdatePriceRequest request)
+        {
+            var command = new UpdatePriceCommand(request.ProductId, request.Price);
+            await _commandDispatcher.DispatchAsync(command);
+
+            return Ok();
+        }
+
         [HttpPost("add-to-cart")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> AddToCartAsync([FromBody] AddProductToCartRequest request)

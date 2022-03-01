@@ -20,6 +20,9 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Entities
             var existedItem = _items.FirstOrDefault(x => x.ProductId == item.ProductId);
             if (existedItem is not null)
             {
+                if (existedItem.UnitPrice != item.UnitPrice)
+                    existedItem.UpdatePrice(item.UnitPrice);
+
                 existedItem.IncreaseQuantity(item.Quantity);
             }
             else

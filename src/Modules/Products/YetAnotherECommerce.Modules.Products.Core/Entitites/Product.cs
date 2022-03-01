@@ -46,5 +46,13 @@ namespace YetAnotherECommerce.Modules.Products.Core.Entitites
 
             AddEvent(new QuantityUpdated(this, quantity));
         }
+
+        public void UpdatePrice(decimal price)
+        {
+            Price = Price.Create(price);
+            LastUpdatedAt = DateTime.UtcNow;
+
+            AddEvent(new PriceUpdated(this, price));
+        }
     }
 }
