@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Helpers;
+using YetAnotherECommerce.Modules.Identity.Core.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Tests.Shared;
 using YetAnotherECommerce.Tests.Shared.Helpers;
@@ -72,12 +72,12 @@ namespace YetAnotherECommerce.Modules.Identity.E2ETests
 
         #region Arrange
         private readonly HttpClient _httpClient;
-        private readonly MongoDbFixture<IdentityModuleMongoSettings, UserDocument> _dbFixture;
+        private readonly MongoDbFixture<IdentityModuleSettings, UserDocument> _dbFixture;
 
         public SignInTests(TestApplicationFactory factory)
         {
             _httpClient = factory.CreateClient();
-            _dbFixture = new MongoDbFixture<IdentityModuleMongoSettings, UserDocument>("Users");
+            _dbFixture = new MongoDbFixture<IdentityModuleSettings, UserDocument>("Users");
         }
 
         public void Dispose()

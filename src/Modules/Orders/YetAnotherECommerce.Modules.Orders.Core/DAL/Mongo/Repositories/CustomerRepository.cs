@@ -3,9 +3,9 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
+using YetAnotherECommerce.Modules.Orders.Core.Settings;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
 {
@@ -13,7 +13,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
     {
         private readonly IMongoDatabase _mongoDatabase;
 
-        public CustomerRepository(IMongoClient client, IOptions<OrdersModuleMongoSettings> settings)
+        public CustomerRepository(IMongoClient client, IOptions<OrdersModuleSettings> settings)
             => _mongoDatabase = client.GetDatabase(settings.Value.DatabaseName);
 
         public async Task<Customer> GetByIdAsync(Guid id)

@@ -7,13 +7,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
-using YetAnotherECommerce.Modules.Users.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Bootstrapper
 {
@@ -33,18 +28,12 @@ namespace YetAnotherECommerce.Bootstrapper
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IdentityModuleMongoSettings>(Configuration.GetSection(nameof(IdentityModuleMongoSettings)));
-            services.Configure<UsersModuleMongoSettings>(Configuration.GetSection(nameof(UsersModuleMongoSettings)));
-            services.Configure<ProductsModuleMongoSettings>(Configuration.GetSection(nameof(ProductsModuleMongoSettings)));
-            services.Configure<OrdersModuleMongoSettings>(Configuration.GetSection(nameof(OrdersModuleMongoSettings)));
-            services.Configure<MessagingOptions>(Configuration.GetSection("Messaging"));
-
             foreach (var module in _modules)
             {
-                module.Register(services);
+                module.Register(services, Configuration);
             }
             
-            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies(), Configuration);
 
             services.AddHttpContextAccessor();
 

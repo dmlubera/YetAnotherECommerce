@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Modules.Carts.Core.DI;
 using YetAnotherECommerce.Shared.Abstractions.Modules;
@@ -11,7 +12,7 @@ namespace YetAnotherECommerce.Modules.Carts.Api
         public string Name { get; } = "Carts";
         public string Path => BasePath;
 
-        public void Register(IServiceCollection services)
+        public void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.AddCore();
         }

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Documents;
-using YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
+using YetAnotherECommerce.Modules.Orders.Core.Settings;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
 {
@@ -16,7 +16,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
     {
         private readonly IMongoDatabase _mongoDatabase;
 
-        public OrderRepository(IMongoClient mongoClient, IOptions<OrdersModuleMongoSettings> settings)
+        public OrderRepository(IMongoClient mongoClient, IOptions<OrdersModuleSettings> settings)
             => _mongoDatabase = mongoClient.GetDatabase(settings.Value.DatabaseName);
 
         public async Task<IReadOnlyList<Order>> BrowseAsync()

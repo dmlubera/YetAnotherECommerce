@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace YetAnotherECommerce.Shared.Abstractions.Modules
@@ -8,7 +9,7 @@ namespace YetAnotherECommerce.Shared.Abstractions.Modules
         string Name { get; }
         string Path { get; }
 
-        void Register(IServiceCollection services);
+        void Register(IServiceCollection services, IConfiguration configuration);
         void Use(IApplicationBuilder app);
     }
 }

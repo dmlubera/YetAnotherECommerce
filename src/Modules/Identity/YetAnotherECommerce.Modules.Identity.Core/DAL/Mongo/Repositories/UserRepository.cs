@@ -5,9 +5,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.Settings;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories
 {
@@ -15,7 +15,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories
     {
         private readonly IMongoDatabase _database;
 
-        public UserRepository(IMongoClient client, IOptions<IdentityModuleMongoSettings> settings)
+        public UserRepository(IMongoClient client, IOptions<IdentityModuleSettings> settings)
         {
             _database = client.GetDatabase(settings.Value.DatabaseName);
         }

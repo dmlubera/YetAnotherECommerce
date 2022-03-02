@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,8 +29,15 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
 {
     internal static class SharedInfrastructureInstaller
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies,
+            IConfiguration configuration)
         {
+            services.AddTransient<IMongoClient>(sp =>
+            {
+                var connectionString = configuration.GetValue<string>("MongoDbSettings:ConnectionString");
+                return new MongoClient(connectionString);
+            });
+
             services.AddScoped<ExceptionHandlerMiddleware>();
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
             
@@ -38,9 +47,9 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                     manager.FeatureProviders.Add(new InternalControllerFeautreProvider());
                 });
 
+            services.Configure<MessagingOptions>(configuration.GetSection("Messaging"));
+
             services.AddMemoryCache();
-
-
             services.AddTransient<ICache, InMemoryCache>();
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
             services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
