@@ -41,6 +41,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             services.AddScoped<ExceptionHandlerMiddleware>();
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
             
+            services.AddHttpContextAccessor();
             services.AddControllers()
                 .ConfigureApplicationPartManager(manager =>
                 {
@@ -65,11 +66,12 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             AddMessageRegistry(services, assemblies);
             services.AddSingleton<IMessageClient, MessageClient>();
             services.AddSingleton<IMessageBroker, InMemoryMessageBroker>();
-
             services.AddSingleton<IMessageChannel, MessageChannel>();
             services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
             services.AddHostedService<BackroundMessageDispatcher>();
 
+            services.AddAutoMapper(assemblies);
+            
             return services;
         }
 
