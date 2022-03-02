@@ -12,7 +12,8 @@
 @adminPassword = super$ecret
 @customerEmail = customer@yetanotherecommerce.com
 @customerPassword = super$ecret
-@accessToken = {{sign_in.response.body.$.accessToken}}
+@customerAccessToken = {{sign_in_customer.response.body.$.accessToken}}
+@adminAccessToken = {{sign_in_admin.response.body.$.accessToken}}
 
 ### Sign-up
 POST  {{identityModuleUrl}}/sign-up
@@ -24,14 +25,25 @@ Content-Type: application/json
     "role": "customer"
 }
 
-### Sign-in
-# @name sign_in
+### Sign-in customer
+# @name sign_in_customer
 POST {{identityModuleUrl}}/sign-in
 Content-Type: application/json
 
 {
     "email": "{{customerEmail}}",
     "password": "{{customerPassword}}"
+}
+
+### Sign-in admin
+# @name sign_in_admin
+
+POST {{identityModuleUrl}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
 }
 
 ################################################
@@ -41,7 +53,7 @@ Content-Type: application/json
 ### Complete registration
 POST {{usersModuleUrl}}/users
 Content-Type: application/json
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 {
     "firstName": "Carl",
@@ -59,7 +71,7 @@ Authorization: Bearer {{accessToken}}
 
 ### Add product
 POST {{productsModuleUrl}}/products
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{adminAccessToken}}
 Content-Type: application/json
 
 {
@@ -70,15 +82,15 @@ Content-Type: application/json
 
 ### Get products
 GET {{productsModuleUrl}}/products/
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Get product details
 GET {{productsModuleUrl}}/products/{{productId}}
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Update price
 POST {{productsModuleUrl}}/products/update-price
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{adminAccessToken}}
 Content-Type: application/json
 
 {
@@ -88,7 +100,7 @@ Content-Type: application/json
 
 ### Add to cart
 POST {{productsModuleUrl}}/products/add-to-cart
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 Content-Type: application/json
 
 {
@@ -102,15 +114,15 @@ Content-Type: application/json
 
 ### Get cart
 GET {{cartsModuleUrl}}/carts
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Place order
 POST {{cartsModuleUrl}}/carts
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Clear cart
 DELETE {{cartsModuleUrl}}/carts
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ################################################
 ################## Orders ######################
@@ -119,24 +131,24 @@ Authorization: Bearer {{accessToken}}
 
 ### Browse my orders
 GET {{ordersModuleUrl}}/orders/my-orders
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Get order details
 GET {{ordersModuleUrl}}/orders/my-orders/{{orderId}}
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Cancel order
 POST {{ordersModuleUrl}}/orders/{{orderId}}/cancel
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{customerAccessToken}}
 
 ### Browse all orders
 GET {{ordersModuleUrl}}/orders
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{adminAccessToken}}
 
 ### Complete order
 POST {{ordersModuleUrl}}/orders/{{orderId}}/complete
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{adminAccessToken}}
 
 ### Revoke order
 POST {{ordersModuleUrl}}/orders/{{orderId}}/revoke
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{adminAccessToken}}
