@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Threading.Tasks;
+using YetAnotherECommerce.Shared.Infrastructure.Modules;
 
 namespace YetAnotherECommerce.Bootstrapper
 {
@@ -16,6 +17,7 @@ namespace YetAnotherECommerce.Bootstrapper
                 {
                     webBuilder.UseStartup<Startup>();
                 })
+                .ConfigureModules()
                 .UseSerilog((context, configuration) =>
                 {
                     configuration.Enrich.FromLogContext()

@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="module.orders.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="module.orders.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\YetAnotherECommerce.Modules.Orders.Core\YetAnotherECommerce.Modules.Orders.Core.csproj" />
   </ItemGroup>
 

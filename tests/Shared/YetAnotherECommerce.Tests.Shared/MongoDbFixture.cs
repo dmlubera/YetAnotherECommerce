@@ -2,13 +2,14 @@
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Abstractions.Mongo;
 using YetAnotherECommerce.Tests.Shared.Helpers;
 using YetAnotherECommerce.Tests.Shared.Initializers;
 
 namespace YetAnotherECommerce.Tests.Shared
 {
-    public class MongoDbFixture<TMongoSettings, TEntity> : IDisposable where TMongoSettings : IMongoSettings, new() where TEntity : IDocument
+    public class MongoDbFixture<TModuleSettings, TEntity> : IDisposable where TModuleSettings : IModuleSettings, new() where TEntity : IDocument
     {
         private readonly IMongoClient _client;
         private readonly IMongoCollection<TEntity> _collection;
@@ -18,9 +19,10 @@ namespace YetAnotherECommerce.Tests.Shared
 
         public MongoDbFixture(string collectionName)
         {
-            var options = OptionsHelper.GetOptions<TMongoSettings>();
-            _client = new MongoClient(options.ConnectionString);
-            _databaseName = options.DatabaseName;
+            var connectionString = OptionsHelper.GetConnectionString();
+            var moduleOptions = OptionsHelper.GetOptions<TModuleSettings>();
+            _client = new MongoClient(connectionString);
+            _databaseName = moduleOptions.DatabaseName;
             _database = _client.GetDatabase(_databaseName);
             _collection = _database.GetCollection<TEntity>(collectionName);
         }

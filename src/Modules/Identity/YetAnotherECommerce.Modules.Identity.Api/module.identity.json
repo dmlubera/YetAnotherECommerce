@@ -1,0 +1,10 @@
+﻿{
+  "IdentityModuleSettings": {
+    "DatabaseName": "IdentityDb"
+  },
+  "AuthSettings": {
+    "Issuer": "YetAnotherECommerce",
+    "IssuerSigningKey": "FWA1PHt4rf1dJgTV7QkqcYVjkyim0KUrUfbBo0Y4mpGVw4xNOpF0rywwinCruKyw",
+    "Expiry": "00:30:00"
+  }
+}

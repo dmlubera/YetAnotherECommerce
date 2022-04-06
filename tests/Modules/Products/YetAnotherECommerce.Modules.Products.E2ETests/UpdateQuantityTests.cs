@@ -6,10 +6,10 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Documents;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Modules.Identity.Core.Settings;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Documents;
-using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Settings;
+using YetAnotherECommerce.Modules.Products.Core.Settings;
 using YetAnotherECommerce.Tests.Shared;
 using YetAnotherECommerce.Tests.Shared.Helpers;
 using YetAnotherECommerce.Tests.Shared.Initializers;
@@ -99,14 +99,14 @@ namespace YetAnotherECommerce.Modules.Products.E2ETests
 
         #region Arrange
         private readonly HttpClient _httpClient;
-        private readonly MongoDbFixture<IdentityModuleMongoSettings, UserDocument> _identityDbFixture;
-        private readonly MongoDbFixture<ProductsModuleMongoSettings, ProductDocument> _productsDbFixture;
+        private readonly MongoDbFixture<IdentityModuleSettings, UserDocument> _identityDbFixture;
+        private readonly MongoDbFixture<ProductsModuleSettings, ProductDocument> _productsDbFixture;
 
         public UpdateQuantityTests(TestApplicationFactory factory)
         {
             _httpClient = factory.CreateClient();
-            _identityDbFixture = new MongoDbFixture<IdentityModuleMongoSettings, UserDocument>("Users");
-            _productsDbFixture = new MongoDbFixture<ProductsModuleMongoSettings, ProductDocument>("Products");
+            _identityDbFixture = new MongoDbFixture<IdentityModuleSettings, UserDocument>("Users");
+            _productsDbFixture = new MongoDbFixture<ProductsModuleSettings, ProductDocument>("Products");
             _identityDbFixture.InitializeAsync(new IdentityDbSeeder());
             _productsDbFixture.InitializeAsync(new ProductsDbSeeder());
         }

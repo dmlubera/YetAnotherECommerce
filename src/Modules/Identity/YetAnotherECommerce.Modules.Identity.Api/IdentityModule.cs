@@ -1,35 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Driver;
-using System.Runtime.CompilerServices;
 using System.Text;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Settings;
 using YetAnotherECommerce.Modules.Identity.Core.DI;
+using YetAnotherECommerce.Modules.Identity.Core.Settings;
+using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.Auth;
 
-[assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
-namespace YetAnotherECommerce.Modules.Identity.Api.DI
+namespace YetAnotherECommerce.Modules.Identity.Api
 {
-    internal static class IdentityModuleInstaller
+    internal class IdentityModule : IModule
     {
-        public static IServiceCollection AddIdentityModule(this IServiceCollection services)
-        {
-            services.AddTransient<IMongoClient>(sp =>
-            {
-                var mongoSettings = sp.GetRequiredService<IOptions<IdentityModuleMongoSettings>>().Value;
-                return new MongoClient(mongoSettings.ConnectionString);
-            });
-            services.AddCore();
+        public const string BasePath = "identity-module";
+        public string Name { get; } = "Identity";
+        public string Path => BasePath;
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        public void Register(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<IdentityModuleSettings>(configuration.GetSection(nameof(IdentityModuleSettings)));
             var authSettings = new AuthSettings();
             configuration.GetSection(nameof(AuthSettings)).Bind(authSettings);
-
             services.AddSingleton(authSettings);
+
+            services.AddCore();
+
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,8 +44,10 @@ namespace YetAnotherECommerce.Modules.Identity.Api.DI
                     ValidateLifetime = authSettings.ValidateLifetime
                 };
             });
-
-            return services;
+        }
+        
+        public void Use(IApplicationBuilder app)
+        {
         }
     }
 }

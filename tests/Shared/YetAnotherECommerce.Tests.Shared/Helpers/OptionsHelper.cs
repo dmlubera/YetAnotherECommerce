@@ -14,6 +14,9 @@ namespace YetAnotherECommerce.Tests.Shared.Helpers
             return options;
         }
 
+        public static string GetConnectionString()
+            => GetConfigurationRoot().GetValue<string>("MongoSettings");
+
         private static IConfigurationRoot GetConfigurationRoot()
         {
             return new ConfigurationBuilder()
