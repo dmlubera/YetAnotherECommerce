@@ -4,24 +4,38 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using YetAnotherECommerce.Modules.Identity.Api.Extensions;
-using YetAnotherECommerce.Modules.Users.Api.Extensions;
-using YetAnotherECommerce.Shared.Infrastructure.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using YetAnotherECommerce.Shared.Abstractions.Modules;
+using YetAnotherECommerce.Shared.Infrastructure.DI;
 
 namespace YetAnotherECommerce.Bootstrapper
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) 
-            => Configuration = configuration;
+        private readonly IList<Assembly> _assemblies;
+        private readonly IList<IModule> _modules;
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            _assemblies = ModuleLoader.LoadAssemblies();
+            _modules = ModuleLoader.LoadModules(_assemblies);
+        }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInfrastructure();
-            services.AddIdentityModule();
-            services.AddUsersModule();
+            foreach (var module in _modules)
+            {
+                module.Register(services, Configuration);
+            }
+            
+            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies(), Configuration);
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -31,7 +45,17 @@ namespace YetAnotherECommerce.Bootstrapper
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseInfrastructure();
+
+            foreach(var module in _modules)
+            {
+                module.Use(app);
+            }
+
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

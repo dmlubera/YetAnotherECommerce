@@ -1,0 +1,23 @@
+@moduleUrl = http://localhost:5000/orders-module
+@accessToken = 
+@orderId = 
+
+### Browse
+GET {{moduleUrl}}/orders
+Authorization: Bearer {{accessToken}}
+
+### Browse my orders
+GET {{moduleUrl}}/orders/my-orders
+Authorization: Bearer {{accessToken}}
+
+### Cancel order
+POST {{moduleUrl}}/orders/{{orderId}}/cancel
+Authorization: Bearer {{accessToken}}
+
+### Complete order
+POST {{moduleUrl}}/orders/{{orderId}}/complete
+Authorization: Bearer {{accessToken}}
+
+### Revoke order
+POST {{moduleUrl}}/orders/{{orderId}}/revoke
+Authorization: Bearer {{accessToken}}

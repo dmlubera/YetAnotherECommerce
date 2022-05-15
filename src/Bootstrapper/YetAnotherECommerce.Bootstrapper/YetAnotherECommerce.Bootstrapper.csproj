@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Carts\YetAnotherECommerce.Modules.Carts.Api\YetAnotherECommerce.Modules.Carts.Api.csproj" />
     <ProjectReference Include="..\..\Modules\Identity\YetAnotherECommerce.Modules.Identity.Api\YetAnotherECommerce.Modules.Identity.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Orders\YetAnotherECommerce.Modules.Orders.Api\YetAnotherECommerce.Modules.Orders.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Products\YetAnotherECommerce.Modules.Products.Api\YetAnotherECommerce.Modules.Products.Api.csproj" />
     <ProjectReference Include="..\..\Modules\Users\YetAnotherECommerce.Modules.Users.Api\YetAnotherECommerce.Modules.Users.Api.csproj" />
   </ItemGroup>
 

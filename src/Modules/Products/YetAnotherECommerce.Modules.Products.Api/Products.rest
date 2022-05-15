@@ -1,0 +1,40 @@
+@moduleUrl = http://localhost:5000/products-module
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NWM4MmNkNy02Y2JiLTRlM2ItYjFmZS1lZDUxZGRhMTA1NGIiLCJ1bmlxdWVfbmFtZSI6Ijg1YzgyY2Q3LTZjYmItNGUzYi1iMWZlLWVkNTFkZGExMDU0YiIsImp0aSI6IjQwNTNiMGJlLTkxZDMtNDcyNi05OTBmLTQ5ODc1YjBlMWZiNyIsImlhdCI6IjE2MzQ2NjkyMDciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjdXN0b21lciIsIm5iZiI6MTYzNDY2OTIwNywiZXhwIjoxNjM0NjcxMDA3LCJpc3MiOiJZZXRBbm90aGVyRUNvbW1lcmNlIn0.XSeMqeFEK-XCvYVCYpWlTaWFtsVEcResH_r6dKvLsGo
+@productId = 
+
+### Get all products
+GET {{moduleUrl}}/products
+
+### Add product
+POST {{moduleUrl}}/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "name": "Apple iPhone 13 Pro",
+    "price": 3999.99,
+    "quantity": 100
+}
+
+### Add product to cart
+POST {{moduleUrl}}/products/add-to-cart
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity": 5
+}
+
+### Update product quantity
+POST {{moduleUrl}}/products/update-quantity
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity": 10
+}
+
+### Delete product
+DELETE {{moduleUrl}}/products/{{productId}}

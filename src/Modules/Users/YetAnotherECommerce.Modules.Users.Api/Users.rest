@@ -1,0 +1,16 @@
+@moduleUrl = http://localhost:5000/users-module
+@accessToken = 
+
+### Complete registration
+POST {{moduleUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "firstName": "Test",
+    "lastName": "Test",
+    "street": "Test 123",
+    "city": "Test",
+    "zipCode": "123-45",
+    "country": "Test"
+}

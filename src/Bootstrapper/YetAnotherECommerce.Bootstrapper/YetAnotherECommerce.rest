@@ -1,0 +1,154 @@
+@identityModuleUrl = http://localhost:5000/identity-module
+@usersModuleUrl = http://localhost:5000/users-module
+@productsModuleUrl = http://localhost:5000/products-module
+@cartsModuleUrl = http://localhost:5000/carts-module
+@ordersModuleUrl = http://localhost:5000/orders-module
+
+
+################################################
+################## Identity ####################
+################################################
+@adminEmail = admin@yetanotherecommerce.com
+@adminPassword = super$ecret
+@customerEmail = customer@yetanotherecommerce.com
+@customerPassword = super$ecret
+@customerAccessToken = {{sign_in_customer.response.body.$.accessToken}}
+@adminAccessToken = {{sign_in_admin.response.body.$.accessToken}}
+
+### Sign-up
+POST  {{identityModuleUrl}}/sign-up
+Content-Type: application/json
+
+{
+    "email": "{{customerEmail}}",
+    "password": "{{customerPassword}}",
+    "role": "customer"
+}
+
+### Sign-in customer
+# @name sign_in_customer
+POST {{identityModuleUrl}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{customerEmail}}",
+    "password": "{{customerPassword}}"
+}
+
+### Sign-in admin
+# @name sign_in_admin
+
+POST {{identityModuleUrl}}/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
+}
+
+################################################
+################### Users ######################
+################################################
+
+### Complete registration
+POST {{usersModuleUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{customerAccessToken}}
+
+{
+    "firstName": "Carl",
+    "lastName": "Johnson",
+    "street": "Grove Street",
+    "city": "Los Santos",
+    "zipCode": "555-1111",
+    "country": "GTA"
+}
+
+################################################
+################## Products ####################
+################################################
+@productId = 
+
+### Add product
+POST {{productsModuleUrl}}/products
+Authorization: Bearer {{adminAccessToken}}
+Content-Type: application/json
+
+{
+    "name": "High performance ultrabook",
+    "price": 9999.99,
+    "quantity": 100
+}
+
+### Get products
+GET {{productsModuleUrl}}/products/
+Authorization: Bearer {{customerAccessToken}}
+
+### Get product details
+GET {{productsModuleUrl}}/products/{{productId}}
+Authorization: Bearer {{customerAccessToken}}
+
+### Update price
+POST {{productsModuleUrl}}/products/update-price
+Authorization: Bearer {{adminAccessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "price":  1000
+}
+
+### Add to cart
+POST {{productsModuleUrl}}/products/add-to-cart
+Authorization: Bearer {{customerAccessToken}}
+Content-Type: application/json
+
+{
+    "productId": "{{productId}}",
+    "quantity":  10
+}
+
+################################################
+################### Carts ######################
+################################################
+
+### Get cart
+GET {{cartsModuleUrl}}/carts
+Authorization: Bearer {{customerAccessToken}}
+
+### Place order
+POST {{cartsModuleUrl}}/carts
+Authorization: Bearer {{customerAccessToken}}
+
+### Clear cart
+DELETE {{cartsModuleUrl}}/carts
+Authorization: Bearer {{customerAccessToken}}
+
+################################################
+################## Orders ######################
+################################################
+@orderId = 
+
+### Browse my orders
+GET {{ordersModuleUrl}}/orders/my-orders
+Authorization: Bearer {{customerAccessToken}}
+
+### Get order details
+GET {{ordersModuleUrl}}/orders/my-orders/{{orderId}}
+Authorization: Bearer {{customerAccessToken}}
+
+### Cancel order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/cancel
+Authorization: Bearer {{customerAccessToken}}
+
+### Browse all orders
+GET {{ordersModuleUrl}}/orders
+Authorization: Bearer {{adminAccessToken}}
+
+### Complete order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/complete
+Authorization: Bearer {{adminAccessToken}}
+
+### Revoke order
+POST {{ordersModuleUrl}}/orders/{{orderId}}/revoke
+Authorization: Bearer {{adminAccessToken}}
