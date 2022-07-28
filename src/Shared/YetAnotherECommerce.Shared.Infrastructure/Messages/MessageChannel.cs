@@ -5,10 +5,10 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
 {
     public class MessageChannel : IMessageChannel
     {
-        private readonly Channel<IMessage> _messages = Channel.CreateUnbounded<IMessage>();
+        private readonly Channel<IMessageEnvelope> _messages = Channel.CreateUnbounded<IMessageEnvelope>();
 
-        public ChannelReader<IMessage> Reader => _messages.Reader;
+        public ChannelReader<IMessageEnvelope> Reader => _messages.Reader;
 
-        public ChannelWriter<IMessage> Writer => _messages.Writer;
+        public ChannelWriter<IMessageEnvelope> Writer => _messages.Writer;
     }
 }
