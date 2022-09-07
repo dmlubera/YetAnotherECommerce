@@ -19,6 +19,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Auth;
 using YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks;
 using YetAnotherECommerce.Shared.Infrastructure.Cache;
 using YetAnotherECommerce.Shared.Infrastructure.Commands;
+using YetAnotherECommerce.Shared.Infrastructure.Correlation;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
@@ -70,6 +71,9 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
             services.AddHostedService<BackroundMessageDispatcher>();
 
+            services.AddSingleton<ICorrelationContext, CorrelationContext>();
+            services.AddScoped<CorrelationMiddleware>();
+
             services.AddAutoMapper(assemblies);
             
             return services;
@@ -77,6 +81,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         {
+            app.UseMiddleware<CorrelationMiddleware>();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             return app;

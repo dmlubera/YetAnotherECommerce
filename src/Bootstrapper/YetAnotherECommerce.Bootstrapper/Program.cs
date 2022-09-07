@@ -21,9 +21,9 @@ namespace YetAnotherECommerce.Bootstrapper
                 .UseSerilog((context, configuration) =>
                 {
                     configuration.Enrich.FromLogContext()
-                        .Enrich.WithCorrelationId()
                         .WriteTo.Console(outputTemplate:
                         "[{Timestamp:HH:mm:ss} {Level:u3} CorrelationId: {CorrelationId}] {Message:lj}{NewLine}{Exception}")
+                        .WriteTo.Seq(context.Configuration.GetSection("Seq:Url").Value)
                         .ReadFrom.Configuration(context.Configuration);
                 });
     }

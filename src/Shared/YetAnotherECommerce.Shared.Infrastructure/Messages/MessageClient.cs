@@ -1,33 +1,39 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
+using YetAnotherECommerce.Shared.Infrastructure.Correlation;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Messages
 {
     internal sealed class MessageClient : IMessageClient
     {
         private readonly IMessageRegistry _messageRegistry;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public MessageClient(IMessageRegistry messageRegistry)
+        public MessageClient(IMessageRegistry messageRegistry, IServiceScopeFactory serviceScopeFactory)
         {
             _messageRegistry = messageRegistry;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public async Task PublishAsync(IMessage message)
+        public async Task PublishAsync(IMessageEnvelope messageEnvelope)
         {
+            using var scope = _serviceScopeFactory.CreateScope();
+
             var registrations = _messageRegistry
-                .GetRegistrations(message.GetType().Name)
-                .Where(x => x.Type != message.GetType());
+                .GetRegistrations(messageEnvelope.Payload.GetType().Name)
+                .Where(x => x.Type != messageEnvelope.Payload.GetType());
 
             var tasks = new List<Task>();
 
             foreach(var registration in registrations)
             {
-                var translatedMessage = Translate(message, registration.Type);
+                var translatedMessage = Translate(messageEnvelope.Payload, registration.Type);
                 tasks.Add(registration.Action((IMessage)translatedMessage));
             }
 
