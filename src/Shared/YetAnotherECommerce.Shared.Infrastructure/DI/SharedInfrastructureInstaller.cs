@@ -33,6 +33,8 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies,
             IConfiguration configuration)
         {
+            services.AddApplicationInsightsTelemetry();
+
             services.AddTransient<IMongoClient>(sp =>
             {
                 var connectionString = configuration.GetValue<string>("MongoDbSettings:ConnectionString");
