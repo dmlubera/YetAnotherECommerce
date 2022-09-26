@@ -1,5 +1,9 @@
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -16,6 +20,13 @@ namespace YetAnotherECommerce.Bootstrapper
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, configuration) =>
+                {
+                    var keyVaultUrl = configuration.Build()["KeyVaultSettings:Url"];
+
+                    var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+                    configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
