@@ -14,10 +14,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
+        private readonly string _collectionName;
         private readonly IMongoDatabase _mongoDatabase;
 
         public OrderRepository(IMongoClient mongoClient, IOptions<OrdersModuleSettings> settings)
-            => _mongoDatabase = mongoClient.GetDatabase(settings.Value.DatabaseName);
+        {
+            _mongoDatabase = mongoClient.GetDatabase(settings.Value.DatabaseName);
+            _collectionName = settings.Value.CollectionName;
+        }
 
         public async Task<IReadOnlyList<Order>> BrowseAsync()
         {
@@ -37,14 +41,14 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
         {
             var document = await Orders.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
-            return document.AsEntity();
+            return document?.AsEntity();
         }
 
         public async Task<Order> GetForCustomerByIdAsync(Guid customerId, Guid orderId)
         {
             var document = await Orders.AsQueryable().FirstOrDefaultAsync(x => x.CustomerId == customerId && x.Id == orderId);
 
-            return document.AsEntity();
+            return document?.AsEntity();
         }
 
         public async Task AddAsync(Order order)
@@ -53,6 +57,6 @@ namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Mongo.Repositories
         public async Task UpdateAsync(Order order)
             => await Orders.ReplaceOneAsync(x => x.Id == order.Id, order.AsDocument());
 
-        private IMongoCollection<OrderDocument> Orders => _mongoDatabase.GetCollection<OrderDocument>("Orders");
+        private IMongoCollection<OrderDocument> Orders => _mongoDatabase.GetCollection<OrderDocument>(_collectionName);
     }
 }

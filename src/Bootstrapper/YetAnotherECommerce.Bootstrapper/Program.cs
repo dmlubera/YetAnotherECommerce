@@ -24,8 +24,11 @@ namespace YetAnotherECommerce.Bootstrapper
                 {
                     var keyVaultUrl = configuration.Build()["KeyVaultSettings:Url"];
 
-                    var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
-                    configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+                    if (!string.IsNullOrEmpty(keyVaultUrl))
+                    {
+                        var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+                        configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

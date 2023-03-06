@@ -13,6 +13,7 @@ namespace YetAnotherECommerce.Tests.Shared
     {
         private readonly IMongoClient _client;
         private readonly IMongoCollection<TEntity> _collection;
+        private readonly string _collectioName;
         private readonly string _databaseName;
         private readonly IMongoDatabase _database;
         protected bool _disposed = false;
@@ -24,11 +25,14 @@ namespace YetAnotherECommerce.Tests.Shared
             _client = new MongoClient(connectionString);
             _databaseName = moduleOptions.DatabaseName;
             _database = _client.GetDatabase(_databaseName);
-            _collection = _database.GetCollection<TEntity>(collectionName);
+            _collectioName = moduleOptions.CollectionName;
+            _collection = _database.GetCollection<TEntity>(_collectioName);
         }
 
         public void InitializeAsync(IMongoDbSeeder seeder)
-            => seeder.Seed(_database).GetAwaiter().GetResult();
+        {
+            seeder.Seed(_database, _collectioName).GetAwaiter().GetResult();
+        }
 
         public async Task<TEntity> GetAsync(Guid id)
             => await _collection.Find(x => x.Id == id).SingleOrDefaultAsync();
@@ -45,7 +49,7 @@ namespace YetAnotherECommerce.Tests.Shared
                 return;
 
             if (disposing)
-                _client.DropDatabase(_databaseName);
+                _database.DropCollection(_collectioName);
 
             _disposed = true;
         }

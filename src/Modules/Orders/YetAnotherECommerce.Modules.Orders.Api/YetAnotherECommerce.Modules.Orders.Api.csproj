@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <None Remove="module.orders.json" />
+    <None Remove="module.orders.Test.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="module.orders.Test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="module.orders.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

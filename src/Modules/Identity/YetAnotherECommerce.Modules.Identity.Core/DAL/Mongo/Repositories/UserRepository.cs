@@ -13,11 +13,13 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private readonly string _collectionName;
         private readonly IMongoDatabase _database;
 
         public UserRepository(IMongoClient client, IOptions<IdentityModuleSettings> settings)
         {
             _database = client.GetDatabase(settings.Value.DatabaseName);
+            _collectionName = settings.Value.CollectionName;
         }
 
         public async Task AddAsync(User user)
@@ -41,6 +43,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Mongo.Repositories
         public async Task UpdateAsync(User user)
             => await Users.ReplaceOneAsync(x => x.Id == user.Id, user.AsDocument());
 
-        private IMongoCollection<UserDocument> Users => _database.GetCollection<UserDocument>("Users");
+        private IMongoCollection<UserDocument> Users => _database.GetCollection<UserDocument>(_collectionName);
     }
 }

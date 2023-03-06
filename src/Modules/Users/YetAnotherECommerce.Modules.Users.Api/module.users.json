@@ -1,5 +1,6 @@
 ﻿{
   "UsersModuleSettings": {
-    "DatabaseName": "UsersDb"
+    "CollectionName": "Users",
+    "DatabaseName": "YetAnotherECommerceDb"
   }
 }

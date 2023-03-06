@@ -1,7 +1,7 @@
 ﻿{
   "IdentityModuleSettings": {
-    "CollectionName": "Identity",
-    "DatabaseName": "YetAnotherECommerceDb"
+    "CollectionName": "Identity-Test",
+    "DatabaseName": "YetAnotherECommerceDb-Test"
   },
   "AuthSettings": {
     "Issuer": "YetAnotherECommerce",

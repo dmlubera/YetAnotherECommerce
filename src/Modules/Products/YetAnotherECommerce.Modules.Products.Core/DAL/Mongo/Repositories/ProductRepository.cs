@@ -14,11 +14,13 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly string _collectionName;
         private readonly IMongoDatabase _database;
 
         public ProductRepository(IMongoClient client, IOptions<ProductsModuleSettings> settings)
         {
             _database = client.GetDatabase(settings.Value.DatabaseName);
+            _collectionName = settings.Value.CollectionName;
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
@@ -66,6 +68,6 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories
             await Products.BulkWriteAsync(updates);
         }
 
-        private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>("Products");
+        private IMongoCollection<ProductDocument> Products => _database.GetCollection<ProductDocument>(_collectionName);
     }
 }
