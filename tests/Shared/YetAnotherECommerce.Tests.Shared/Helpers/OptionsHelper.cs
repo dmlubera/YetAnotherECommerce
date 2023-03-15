@@ -1,6 +1,6 @@
-﻿using AutoMapper.Internal;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Linq;
 
 namespace YetAnotherECommerce.Tests.Shared.Helpers
 {
@@ -30,7 +30,7 @@ namespace YetAnotherECommerce.Tests.Shared.Helpers
 
         private static IConfigurationBuilder AddModulesConfigurations(this IConfigurationBuilder builder)
         {
-            Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "module.*.Test.json", SearchOption.AllDirectories).ForAll(x => builder.AddJsonFile(x, optional: true));
+            Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "module.*.Test.json", SearchOption.AllDirectories).ToList().ForEach(x => builder.AddJsonFile(x, optional: true));
 
             return builder;
         }
