@@ -2,9 +2,11 @@
 using YetAnotherECommerce.Modules.Products.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers
 {
+    [ServiceBusSubscription("productsmodule")]
     public class OrderRevokedHandler : IEventHandler<OrderRevoked>
     {
         private readonly IProductRepository _productRepository;

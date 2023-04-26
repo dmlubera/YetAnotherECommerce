@@ -1,14 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="module.products.json" />
+    <None Remove="module.products.Test.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="module.products.Test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="module.products.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -34,8 +34,6 @@ namespace YetAnotherECommerce.Bootstrapper
             }
             
             services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies(), Configuration);
-
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

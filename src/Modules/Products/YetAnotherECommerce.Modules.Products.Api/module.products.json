@@ -1,5 +1,6 @@
 ﻿{
   "ProductsModuleSettings": {
-    "DatabaseName": "ProductsDb"
+    "CollectionName":  "Products",
+    "DatabaseName": "YetAnotherECommerceDb"
   }
 }

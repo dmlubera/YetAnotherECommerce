@@ -1,5 +1,6 @@
 ﻿{
   "OrdersModuleSettings": {
-    "DatabaseName": "OrdersDb"
+    "CollectionName": "Orders",
+    "DatabaseName": "YetAnotherECommerceDb"
   }
 }

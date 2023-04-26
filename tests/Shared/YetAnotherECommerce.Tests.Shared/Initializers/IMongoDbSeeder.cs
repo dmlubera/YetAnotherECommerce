@@ -5,6 +5,6 @@ namespace YetAnotherECommerce.Tests.Shared.Initializers
 {
     public interface IMongoDbSeeder
     {
-        public Task Seed(IMongoDatabase database);
+        public Task Seed(IMongoDatabase database, string collectioName);
     }
 }

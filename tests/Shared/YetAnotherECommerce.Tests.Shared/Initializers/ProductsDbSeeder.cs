@@ -7,9 +7,9 @@ namespace YetAnotherECommerce.Tests.Shared.Initializers
 {
     public class ProductsDbSeeder : IMongoDbSeeder
     {
-        public async Task Seed(IMongoDatabase database)
+        public async Task Seed(IMongoDatabase database, string collectionName)
         {
-            var products = database.GetCollection<ProductDocument>("Products");
+            var products = database.GetCollection<ProductDocument>(collectionName);
             var product = new ProductDocument
             {
                 Id = Guid.NewGuid(),

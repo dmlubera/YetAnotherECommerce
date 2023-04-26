@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Azure.Messaging.ServiceBus;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -33,6 +36,8 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies,
             IConfiguration configuration)
         {
+            services.AddApplicationInsightsTelemetry(configuration);
+
             services.AddTransient<IMongoClient>(sp =>
             {
                 var connectionString = configuration.GetValue<string>("MongoDbSettings:ConnectionString");
@@ -41,7 +46,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
 
             services.AddScoped<ExceptionHandlerMiddleware>();
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
-            
+
             services.AddHttpContextAccessor();
             services.AddControllers()
                 .ConfigureApplicationPartManager(manager =>
@@ -49,7 +54,8 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                     manager.FeatureProviders.Add(new InternalControllerFeautreProvider());
                 });
 
-            services.Configure<MessagingOptions>(configuration.GetSection("Messaging"));
+            var messagingOptions = new MessagingOptions();
+            configuration.GetSection("Messaging").Bind(messagingOptions);
 
             services.AddMemoryCache();
             services.AddTransient<ICache, InMemoryCache>();
@@ -75,7 +81,10 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             services.AddScoped<CorrelationMiddleware>();
 
             services.AddAutoMapper(assemblies);
-            
+
+            if (messagingOptions.UseAzureServiceBus)
+                AddAzureServiceBus(services, configuration, assemblies);
+
             return services;
         }
 
@@ -84,11 +93,13 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
             app.UseMiddleware<CorrelationMiddleware>();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
+            app.ApplicationServices.GetService<IEventBus>()?.SetupAsync().GetAwaiter().GetResult();
+
             return app;
         }
 
         private static void AddMessageRegistry(IServiceCollection services, IEnumerable<Assembly> assemblies)
-        { 
+        {
             var registry = new MessageRegistry();
             var types = assemblies
                 .Where(x => x.FullName.StartsWith("YetAnotherECommerce"))
@@ -112,6 +123,50 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
 
                 return registry;
             });
+        }
+
+        private static void AddAzureServiceBus(IServiceCollection services, IConfiguration configuration, IEnumerable<Assembly> assemblies)
+        {
+            services.AddSingleton(implementationFactory => new ServiceBusClient(configuration.GetSection("ServiceBusSettings:ConnectionString").Value));
+
+            var types = assemblies
+                .Where(x => x.FullName.StartsWith("YetAnotherECommerce"))
+                .SelectMany(x => x.GetTypes())
+                .ToArray();
+
+            var eventHandlers = types.Where(x => x.IsClass
+                                                 && x.GetInterfaces()
+                                                     .Where(i => i.IsGenericType)
+                                                     .Any(i => i.GetGenericTypeDefinition() == typeof(IEventHandler<>)))
+                                     .ToArray();
+
+            foreach (var eventHandler in eventHandlers)
+            {
+                if (eventHandler.GetCustomAttribute(typeof(ServiceBusSubscriptionAttribute)) is ServiceBusSubscriptionAttribute attr)
+                {
+                    var topicName = eventHandler.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEventHandler<>)).GetGenericArguments().FirstOrDefault()?.Name;
+                    var subscriptioName = attr.Name;
+
+                    services.AddSingleton(implementationFactory =>
+                    {
+                        var serviceBusClient = implementationFactory.GetRequiredService<ServiceBusClient>();
+
+                        return serviceBusClient.CreateSender(topicName);
+                    });
+
+                    services.AddSingleton(implementationFactory =>
+                    {
+                        var serviceBusClient = implementationFactory.GetRequiredService<ServiceBusClient>();
+
+                        return serviceBusClient.CreateProcessor(topicName, subscriptioName, new ServiceBusProcessorOptions
+                        {
+                            AutoCompleteMessages = false
+                        });
+                    });
+                }
+            }
+
+            services.AddSingleton<IEventBus, EventBus>();
         }
     }
 }

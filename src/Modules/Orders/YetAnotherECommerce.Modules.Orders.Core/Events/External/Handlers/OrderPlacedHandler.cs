@@ -10,6 +10,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
 {
+    [ServiceBusSubscription("ordersmodule")]
     public class OrderPlacedHandler : IEventHandler<OrderPlaced>
     {
         private readonly IOrderRepository _orderRepository;
