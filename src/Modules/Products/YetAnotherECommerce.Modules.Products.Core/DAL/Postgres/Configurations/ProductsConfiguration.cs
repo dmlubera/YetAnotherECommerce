@@ -6,7 +6,7 @@ using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres.Configurations
 {
-    internal class ProductsConfigurationn : IEntityTypeConfiguration<Product>
+    internal class ProductsConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
