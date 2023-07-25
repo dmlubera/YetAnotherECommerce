@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using YetAnotherECommerce.Modules.Products.Core.DAL.Mongo.Repositories;
+using YetAnotherECommerce.Modules.Products.Core.DAL.Postgres;
+using YetAnotherECommerce.Modules.Products.Core.DAL.Postgres.Repositories;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
@@ -14,7 +16,8 @@ namespace YetAnotherECommerce.Modules.Products.Core.DI
         {
             services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
             services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductRepository, PostgresProductsRepository>();
+            services.AddDbContext<ProductsDbContext>(x => x.UseNpgsql("Host=localhost;Database=YetAnotherECommerce;Username=postgres;Password=root"));
 
             return services;
         }
