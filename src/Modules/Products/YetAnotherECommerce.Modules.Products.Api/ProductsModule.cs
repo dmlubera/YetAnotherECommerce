@@ -16,7 +16,7 @@ namespace YetAnotherECommerce.Modules.Products.Api
         public void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ProductsModuleSettings>(configuration.GetSection(nameof(ProductsModuleSettings)));
-            services.AddCore();
+            services.AddCore(configuration);
         }
 
         public void Use(IApplicationBuilder app)

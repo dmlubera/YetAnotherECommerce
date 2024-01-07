@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +12,13 @@
 
   <ItemGroup>
     <None Remove="module.users.json" />
+    <None Remove="module.users.Test.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="module.users.Test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="module.users.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -6,7 +6,6 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers
 {
-
     public class UserRegisteredHandler : IEventHandler<UserRegistered>
     {
         private readonly IUserRepository _userRepository;

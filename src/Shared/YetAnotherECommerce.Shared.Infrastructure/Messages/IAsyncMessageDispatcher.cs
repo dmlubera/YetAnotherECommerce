@@ -5,6 +5,6 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
 {
     public interface IAsyncMessageDispatcher
     {
-        Task PublishAsync<TMessage>(TMessage message) where TMessage : class, IMessage;
+        Task PublishAsync<TMessage>(TMessage message) where TMessage : class, IMessageEnvelope;
     }
 }

@@ -5,7 +5,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
 {
     public interface IMessageChannel
     {
-        public ChannelReader<IMessage> Reader { get; }
-        public ChannelWriter<IMessage> Writer { get; }
+        public ChannelReader<IMessageEnvelope> Reader { get; }
+        public ChannelWriter<IMessageEnvelope> Writer { get; }
     }
 }

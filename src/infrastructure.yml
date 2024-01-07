@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  cosmosdb-emulator:
+    container_name: cosmosdb-emulator
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:mongodb
+    tty: true
+    environment:
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=TRUE
+      - AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=127.0.0.1
+      - AZURE_COSMOS_EMULATOR_ENABLE_MONGODB_ENDPOINT=4.0
+    ports:
+      - 8081:8081
+      - 10251:10251
+      - 10252:10252
+      - 10253:10253
+      - 10254:10254
+      - 10255:10255
+
+  seq:
+    container_name: seq
+    image: datalust/seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:80

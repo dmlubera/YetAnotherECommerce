@@ -24,7 +24,7 @@ namespace YetAnotherECommerce.Modules.Identity.Api
             configuration.GetSection(nameof(AuthSettings)).Bind(authSettings);
             services.AddSingleton(authSettings);
 
-            services.AddCore();
+            services.AddCore(configuration);
 
             services.AddAuthentication(opts =>
             {

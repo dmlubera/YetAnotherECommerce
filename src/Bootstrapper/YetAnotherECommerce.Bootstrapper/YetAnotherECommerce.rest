@@ -10,7 +10,7 @@
 ################################################
 @adminEmail = admin@yetanotherecommerce.com
 @adminPassword = super$ecret
-@customerEmail = customer@yetanotherecommerce.com
+@customerEmail = customer22@yetanotherecommerce.com
 @customerPassword = super$ecret
 @customerAccessToken = {{sign_in_customer.response.body.$.accessToken}}
 @adminAccessToken = {{sign_in_admin.response.body.$.accessToken}}
@@ -23,6 +23,16 @@ Content-Type: application/json
     "email": "{{customerEmail}}",
     "password": "{{customerPassword}}",
     "role": "customer"
+}
+
+### Sign-up
+POST  {{identityModuleUrl}}/sign-up
+Content-Type: application/json
+
+{
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}",
+    "role": "admin"
 }
 
 ### Sign-in customer
@@ -67,7 +77,7 @@ Authorization: Bearer {{customerAccessToken}}
 ################################################
 ################## Products ####################
 ################################################
-@productId = 
+@productId =
 
 ### Add product
 POST {{productsModuleUrl}}/products
