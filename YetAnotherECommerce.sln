@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D97ADB8E-B2A2-4CD7-8A79-A11D24718113}"
 EndProject
@@ -70,14 +70,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Carts", "Carts", "{7B07FD67-8EA8-4B77-8429-5BB4DAB9A8E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Carts.UnitTests", "tests\Modules\Carts\YetAnotherECommerce.Modules.Carts.UnitTests\YetAnotherECommerce.Modules.Carts.UnitTests.csproj", "{8922D38D-4353-4079-9940-1F661DD755D2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{84CEFB21-91EB-44E2-8BD6-B402A6B9DF18}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.E2ETests", "tests\Modules\Identity\YetAnotherECommerce.Modules.Identity.E2ETests\YetAnotherECommerce.Modules.Identity.E2ETests.csproj", "{E094284A-2A66-43F6-8593-4A400685DA60}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Tests.Shared", "tests\Shared\YetAnotherECommerce.Tests.Shared\YetAnotherECommerce.Tests.Shared.csproj", "{58678482-47AB-46D9-B7C4-17DCAADEE6B1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Modules.Products.E2ETests", "tests\Modules\Products\YetAnotherECommerce.Modules.Products.E2ETests\YetAnotherECommerce.Modules.Products.E2ETests.csproj", "{8484406B-AA87-449A-8D3E-CC6F71AC290B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,18 +149,6 @@ Global
 		{8922D38D-4353-4079-9940-1F661DD755D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8922D38D-4353-4079-9940-1F661DD755D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8922D38D-4353-4079-9940-1F661DD755D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E094284A-2A66-43F6-8593-4A400685DA60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E094284A-2A66-43F6-8593-4A400685DA60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E094284A-2A66-43F6-8593-4A400685DA60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E094284A-2A66-43F6-8593-4A400685DA60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58678482-47AB-46D9-B7C4-17DCAADEE6B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58678482-47AB-46D9-B7C4-17DCAADEE6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58678482-47AB-46D9-B7C4-17DCAADEE6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58678482-47AB-46D9-B7C4-17DCAADEE6B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8484406B-AA87-449A-8D3E-CC6F71AC290B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8484406B-AA87-449A-8D3E-CC6F71AC290B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8484406B-AA87-449A-8D3E-CC6F71AC290B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8484406B-AA87-449A-8D3E-CC6F71AC290B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -206,10 +186,6 @@ Global
 		{A6885F5A-45BC-4B23-A865-FD9811F3670E} = {5A6CA0A6-8E21-40A5-9155-9DC7C0677712}
 		{7B07FD67-8EA8-4B77-8429-5BB4DAB9A8E8} = {10381D27-084B-474E-8A7C-40DFBD08DA57}
 		{8922D38D-4353-4079-9940-1F661DD755D2} = {7B07FD67-8EA8-4B77-8429-5BB4DAB9A8E8}
-		{84CEFB21-91EB-44E2-8BD6-B402A6B9DF18} = {53982C5F-E220-4BC1-9900-3C92151B12DE}
-		{E094284A-2A66-43F6-8593-4A400685DA60} = {E24E98D7-2041-437C-96F1-362B42875378}
-		{58678482-47AB-46D9-B7C4-17DCAADEE6B1} = {84CEFB21-91EB-44E2-8BD6-B402A6B9DF18}
-		{8484406B-AA87-449A-8D3E-CC6F71AC290B} = {0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {781452E1-07B7-4B57-B526-70AA1377597C}

@@ -5,6 +5,6 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
 {
     public interface IMessageClient
     {
-        Task PublishAsync(IMessage message);
+        Task PublishAsync(IMessageEnvelope message);
     }
 }

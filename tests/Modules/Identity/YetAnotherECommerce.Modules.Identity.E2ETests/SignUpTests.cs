@@ -39,10 +39,9 @@ namespace YetAnotherECommerce.Modules.Identity.E2ETests
                 password: "super$ecret",
                 role: "customer");
 
-            await Act(command);
+            var httpResponse = await Act(command);
 
             var document = await _dbFixture.GetAsync((UserDocument userDocument) => userDocument.Email == command.Email);
-
             document.ShouldNotBeNull();
         }
 

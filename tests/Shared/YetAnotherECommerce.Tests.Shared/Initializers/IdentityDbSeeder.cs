@@ -9,13 +9,13 @@ namespace YetAnotherECommerce.Tests.Shared.Initializers
 {
     public class IdentityDbSeeder : IMongoDbSeeder
     {
-        public async Task Seed(IMongoDatabase database)
+        public async Task Seed(IMongoDatabase database, string collectionName)
         {
             var encrypter = new Encrypter();
             var salt = encrypter.GetSalt();
             var hash = encrypter.GetHash("super$ecret", salt);
             var password = Password.Create(hash, salt);
-            var usersCollection = database.GetCollection<UserDocument>("Users");
+            var usersCollection = database.GetCollection<UserDocument>(collectionName);
             var customer = User.Create(Email.Create("customer@yetanotherecommerce.com"), password, "customer");
             var admin = User.Create(Email.Create("admin@yetanotherecommerce.com"), password, "admin");
 

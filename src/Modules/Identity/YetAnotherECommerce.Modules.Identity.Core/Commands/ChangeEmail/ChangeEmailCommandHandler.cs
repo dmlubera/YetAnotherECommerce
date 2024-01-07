@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
-using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
