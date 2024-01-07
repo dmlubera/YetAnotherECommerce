@@ -9,7 +9,6 @@ using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers
 {
-    [ServiceBusSubscription("ordersmodule")]
     public class OrderCreatedHandler : IEventHandler<OrderCreated>
     {
         private readonly IProductRepository _productRepository;

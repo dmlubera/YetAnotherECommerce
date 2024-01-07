@@ -1,5 +1,4 @@
-﻿using Azure.Messaging.ServiceBus;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -18,19 +17,16 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
         private readonly IAsyncMessageDispatcher _asyncMessageDispatcher;
         private readonly ICorrelationContext _correlationContext;
         private readonly MessagingOptions _messagingOptions;
-        private readonly IEnumerable<ServiceBusSender> _serviceBusSender;
 
         public InMemoryMessageBroker(IMessageClient messageClient,
             IAsyncMessageDispatcher asyncMessageDispatcher,
             ICorrelationContext correlationContext,
-            IOptions<MessagingOptions> messagingOptions,
-            IEnumerable<ServiceBusSender> serviceBusSender)
+            IOptions<MessagingOptions> messagingOptions)
         {
             _messageClient = messageClient;
             _asyncMessageDispatcher = asyncMessageDispatcher;
             _correlationContext = correlationContext;
             _messagingOptions = messagingOptions.Value;
-            _serviceBusSender = serviceBusSender;
         }
 
         public async Task PublishAsync(IMessage message)
@@ -44,17 +40,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages
             };
             var messageEnvelope = new MessageEnvelope(metadata, message);
 
-            //TODO: Refactor with config to choose message broker mode
-            if (_messagingOptions.UseAzureServiceBus && _serviceBusSender.FirstOrDefault(x => x.EntityPath.Equals(message.GetType().Name, StringComparison.InvariantCultureIgnoreCase)) is { } sender)
-            {
-                await sender.SendMessageAsync(new ServiceBusMessage
-                {
-                    Body = new BinaryData(SerializeMessageAsBytes(messageEnvelope)),
-                    CorrelationId = _correlationContext.CorrelationId,
-                    Subject = sender.EntityPath
-                });
-            }
-            else if (_messagingOptions.UseAsyncDispatcher)
+            if (_messagingOptions.UseAsyncDispatcher)
             {
                 await _asyncMessageDispatcher.PublishAsync(messageEnvelope);
             }
