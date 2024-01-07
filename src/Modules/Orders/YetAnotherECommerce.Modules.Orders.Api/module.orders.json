@@ -1,6 +1,5 @@
 ﻿{
   "OrdersModuleSettings": {
-    "CollectionName": "Orders",
-    "DatabaseName": "YetAnotherECommerceDb"
+    "DatabaseConnectionString": "Host=localhost;Database=YetAnotherECommerce;Username=postgres;Password=root"
   }
 }

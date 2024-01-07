@@ -1,6 +1,5 @@
 ﻿{
   "ProductsModuleSettings": {
-    "CollectionName":  "Products",
-    "DatabaseName": "YetAnotherECommerceDb"
+    "DatabaseConnectionString": "Host=localhost;Database=YetAnotherECommerce;Username=postgres;Password=root"
   }
 }

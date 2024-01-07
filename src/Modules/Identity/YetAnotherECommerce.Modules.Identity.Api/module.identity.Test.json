@@ -1,7 +1,6 @@
 ﻿{
   "IdentityModuleSettings": {
-    "CollectionName": "Identity-Test",
-    "DatabaseName": "YetAnotherECommerceDb-Test"
+    "DatabaseConnectionString": "Host=localhost;Database=YetAnotherECommerce;Username=postgres;Password=root"
   },
   "AuthSettings": {
     "Issuer": "YetAnotherECommerce",

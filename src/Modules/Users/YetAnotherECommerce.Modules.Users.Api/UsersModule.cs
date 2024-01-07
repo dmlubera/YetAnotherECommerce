@@ -16,7 +16,7 @@ namespace YetAnotherECommerce.Modules.Users.Api
         public void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<UsersModuleSettings>(configuration.GetSection(nameof(UsersModuleSettings)));
-            services.AddCore();
+            services.AddCore(configuration);
         }
 
         public void Use(IApplicationBuilder app)
