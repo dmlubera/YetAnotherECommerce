@@ -42,8 +42,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI
                     manager.FeatureProviders.Add(new InternalControllerFeautreProvider());
                 });
 
-            var messagingOptions = new MessagingOptions();
-            configuration.GetSection("Messaging").Bind(messagingOptions);
+            services.Configure<MessagingOptions>(configuration.GetSection("Messaging"));
 
             services.AddMemoryCache();
             services.AddTransient<ICache, InMemoryCache>();
