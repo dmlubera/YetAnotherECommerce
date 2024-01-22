@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Identity.IntegrationTests")]
+[assembly: InternalsVisibleTo("YetAnotherECommerce.Tests.Acceptance")]
 namespace YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres
 {
     internal class IdentityDbContext : DbContext
