@@ -27,8 +27,8 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
         {
             var request = new SignInRequest
             {
-                Email = TestCustomerCredentials.Email,
-                Password = TestCustomerCredentials.Password
+                Email = PredefinedUserCredentials.Email,
+                Password = PredefinedUserCredentials.Password
             };
 
             var response = await Act(request);
@@ -43,7 +43,7 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
         {
             var request = new SignInRequest
             {
-                Email = TestCustomerCredentials.Email,
+                Email = PredefinedUserCredentials.Email,
                 Password = _faker.Internet.Password()
             };
 
