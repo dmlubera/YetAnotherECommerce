@@ -20,7 +20,6 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
         {
             _dbContainer = new PostgreSqlBuilder()
                 .WithImage("postgres:latest")
-                //.WithDockerEndpoint("tcp://localhost:2375") // Added to allow running on docker running directly on WSL2
                 .WithDatabase("YetAnotherECommerce")
                 .WithUsername("postgres")
                 .WithPassword("postgres")
