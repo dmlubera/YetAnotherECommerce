@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres.Repositories;
 using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
-using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
@@ -20,7 +19,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.DI
             services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, PostgresUserRepository>();
-            services.AddSingleton<IEncrypter, Encrypter>();
             services.AddDbContext<IdentityDbContext>(x => x.UseNpgsql(configuration.GetSection("IdentityModuleSettings:DatabaseConnectionString").Value));
             
             return services;

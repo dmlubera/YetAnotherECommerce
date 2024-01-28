@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAntotherECommerce.Tests.Acceptance;
 
@@ -35,12 +34,8 @@ namespace YetAnotherECommerce.Tests.Acceptance.Hooks
             var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
             dbContext.Database.Migrate();
-            
-            var encryper = scope.ServiceProvider.GetRequiredService<IEncrypter>();
-            var salt = encryper.GetSalt();
-            var hash = encryper.GetHash(PredefinedUserCredentials.Password, salt);
 
-            var user = User.Create(PredefinedUserCredentials.Email, Password.Create(hash, salt), Role.Admin);
+            var user = User.Create(PredefinedUserCredentials.Email, Password.Create(PredefinedUserCredentials.Password), Role.Admin);
             dbContext.Add(user);
             dbContext.SaveChanges();
         }

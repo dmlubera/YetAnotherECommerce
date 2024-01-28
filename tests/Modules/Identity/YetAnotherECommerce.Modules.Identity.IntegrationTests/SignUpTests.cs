@@ -43,7 +43,7 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
         [Fact]
         public async Task WhenEmailAlreadyExists_ShouldReturnBadRequest()
         {
-            var user = new User(Guid.NewGuid(), _faker.Internet.Email(), string.Empty, string.Empty, "Customer", DateTime.UtcNow, DateTime.UtcNow);
+            var user = new User(Guid.NewGuid(), _faker.Internet.Email(), string.Empty, "Customer", DateTime.UtcNow, DateTime.UtcNow);
             IdentityDbContext.Users.Add(user);
             await IdentityDbContext.SaveChangesAsync();
 

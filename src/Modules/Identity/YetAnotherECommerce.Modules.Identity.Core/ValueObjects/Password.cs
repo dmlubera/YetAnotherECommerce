@@ -7,31 +7,30 @@ namespace YetAnotherECommerce.Modules.Identity.Core.ValueObjects
     public class Password : ValueObject
     {
         public string Hash { get; private set; }
-        public string Salt { get; private set; }
 
         protected Password() { }
 
-        public Password(string hash, string salt)
-            => (Hash, Salt) = (hash, salt);
+        public Password(string hash) => Hash = hash;
 
-        public static Password Create(string hash, string salt)
+        public static Password Create(string password)
         {
-            if (string.IsNullOrWhiteSpace(hash))
-                throw new InvalidPasswordHashException();
+            if (string.IsNullOrWhiteSpace(password))
+                throw new InvalidPasswordFormatException();
 
-            if (string.IsNullOrWhiteSpace(salt))
-                throw new InvalidPasswordSaltException();
-
-            return new Password(hash, salt);
+            return new Password(BCrypt.Net.BCrypt.EnhancedHashPassword(password));
         }
 
-        public static bool HasValidFormat(string password)
-            => !string.IsNullOrWhiteSpace(password);
+        public bool IsValid(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new InvalidPasswordFormatException();
+
+            return BCrypt.Net.BCrypt.EnhancedVerify(password, Hash);
+        }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Hash;
-            yield return Salt;
         }
     }
 }

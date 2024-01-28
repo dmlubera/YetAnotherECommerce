@@ -32,7 +32,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands
         public async Task WhenUserServiceReturnsUser_ThenShouldAddUserToDatabaseAndPublishEvent()
         {
             var command = SignUpCommandFixture.Create();
-            var user = User.Create(Email.Create(command.Email), Password.Create("hash", "salt"), "admin");
+            var user = User.Create(Email.Create(command.Email), Password.Create("password"), "admin");
             _userServiceMock
                 .Setup(x => x.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(user);

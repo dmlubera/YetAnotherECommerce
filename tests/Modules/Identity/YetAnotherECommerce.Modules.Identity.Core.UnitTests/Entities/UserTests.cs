@@ -15,13 +15,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Entities
         public void Create_WhenRoleIsValid_ThenShouldInitializeUserEntity(string role)
         {
             var email = Email.Create("test@yetanotherecommerce.com");
-            var password = Password.Create("hash", "salt");
+            var password = Password.Create("password");
 
             var user = User.Create(email, password, role);
 
             user.Email.Value.ShouldBe(email);
             user.Password.Hash.ShouldBe(password.Hash);
-            user.Password.Salt.ShouldBe(password.Salt);
             user.Role.ShouldBe(role);
         }
 
@@ -32,7 +31,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Entities
         public void Create_WhenRoleIsInvalid_ThenShouldThrowAnException(string role)
         {
             var email = Email.Create("test@yetanotherecommerce.com");
-            var password = Password.Create("hash", "salt");
+            var password = Password.Create("password");
             var expectedException = new RoleNotExistException(role);
 
             var exception = Assert.Throws<RoleNotExistException>(() => User.Create(email, password, role));
@@ -56,13 +55,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Entities
         [Fact]
         public void ChangePassowrd_WhenPasswordIsValid_ThenShouldUpdate()
         {
-            var password = Password.Create("hash", "salt");
+            var password = Password.Create("password");
             var user = Mock.Of<User>();
 
             user.ChangePassword(password);
 
             user.Password.Hash.ShouldBe(password.Hash);
-            user.Password.Salt.ShouldBe(password.Salt);
         }
     }
 }

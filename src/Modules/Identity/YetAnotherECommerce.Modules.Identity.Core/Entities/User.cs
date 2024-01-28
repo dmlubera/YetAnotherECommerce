@@ -16,11 +16,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.Entities
 
         protected User() { }
 
-        public User(Guid id, string email, string hash, string salt, string role, DateTime? createdAt, DateTime? lastUpdatedAt)
+        public User(Guid id, string email, string hash, string role, DateTime? createdAt, DateTime? lastUpdatedAt)
         {
             Id = id;
             Email = new Email(email);
-            Password = new Password(hash, salt);
+            Password = new Password(hash);
             Role = role;
             CreatedAt = createdAt;
             LastUpdatedAt = lastUpdatedAt;

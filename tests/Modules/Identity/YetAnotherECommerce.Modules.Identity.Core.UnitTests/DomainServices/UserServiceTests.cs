@@ -6,7 +6,6 @@ using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
-using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 
@@ -15,14 +14,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
     public class UserServiceTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly Mock<IEncrypter> _encrypterMock;
         private readonly UserService _userService;
 
         public UserServiceTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
-            _encrypterMock = new Mock<IEncrypter>();
-            _userService = new UserService(_userRepositoryMock.Object, _encrypterMock.Object);
+            _userService = new UserService(_userRepositoryMock.Object);
         }
 
 
@@ -78,12 +75,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
             _userRepositoryMock
                 .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
-            _encrypterMock
-                .Setup(x => x.GetSalt())
-                .Returns("salt");
-            _encrypterMock
-                .Setup(x => x.GetHash(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("hash");
 
             var result = await _userService.CreateUserAsync(email, "super$ecret", "admin");
 
@@ -115,9 +106,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangePasswordAsync_WhenGivenPaswordHasInvalidFormat_ThenShouldThrowAnException(string password)
         {
             var expectedException = new InvalidPasswordFormatException();
+            var userMock = Mock.Of<User>();
             _userRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(Mock.Of<User>());
+                .ReturnsAsync(Mock.Of<User>(x => x.Password == Password.Create("password")));
 
             var result =
                 await Assert.ThrowsAsync<InvalidPasswordFormatException>(() => _userService.ChangePasswordAsync(Guid.NewGuid(), password));
@@ -131,14 +123,11 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangePasswordAsync_WhenGivenPasswordIsExactlyTheSameAsCurrentOne_ThenShouldThrowAnException()
         {
             var password = "super$ecret";
-            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create(password), "admin");
             var expectedException = new ProvidedPasswordIsExactlyTheSameAsTheCurrentOne();
             _userRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(user);
-            _encrypterMock
-                .Setup(x => x.IsEqual(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
 
             var result =
                 await Assert.ThrowsAsync<ProvidedPasswordIsExactlyTheSameAsTheCurrentOne>(() => _userService.ChangePasswordAsync(Guid.NewGuid(), password));
@@ -152,19 +141,10 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangePassowrdAsync_WhenProvidedPasswordHasValidFormat_ThenShouldUpdateEntityInDatabase()
         {
             var newPassword = "super$ecret";
-            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("password"), "admin");
             _userRepositoryMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(user);
-            _encrypterMock
-                .Setup(x => x.IsEqual(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(false);
-            _encrypterMock
-                .Setup(x => x.GetSalt())
-                .Returns("salt");
-            _encrypterMock
-                .Setup(x => x.GetHash(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("hash");
 
             await _userService.ChangePasswordAsync(user.Id, newPassword);
 
@@ -227,7 +207,7 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.DomainServices
         public async Task ChangeEmailAsync_WhenDataIsValid_ThenShouldUpdateEmailAndSaveChangesToDatabase()
         {
             var newEmail = "test@yetanotherecommerce.com";
-            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("hash", "salt"), "admin");
+            var user = User.Create(Email.Create("admin@yetanotherecommerce.com"), Password.Create("passowrd"), "admin");
             _userRepositoryMock
                 .Setup(x => x.CheckIfEmailIsInUseAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.Helpers;
 using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
@@ -36,11 +35,8 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
         public async Task InitializeDatabase()
         {
             var scope = _factory.Services.CreateScope();
-            var encrypter = scope.ServiceProvider.GetRequiredService<IEncrypter>();
-            var salt = encrypter.GetSalt();
-            var hash = encrypter.GetHash(PredefinedUserCredentials.Password, salt);
 
-            var testCustomer = User.Create(PredefinedUserCredentials.Email, Password.Create(hash, salt), Role.Customer);
+            var testCustomer = User.Create(PredefinedUserCredentials.Email, Password.Create(PredefinedUserCredentials.Password), Role.Customer);
             IdentityDbContext.Add(testCustomer);
             await IdentityDbContext.SaveChangesAsync();
         }
