@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
 using Xunit;
 using YetAnotherECommerce.Bootstrapper;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
+using YetAnotherECommerce.Modules.Identity.Core.DAL;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
 {

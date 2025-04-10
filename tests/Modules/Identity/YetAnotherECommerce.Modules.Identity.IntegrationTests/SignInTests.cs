@@ -8,48 +8,48 @@ using System.Net.Http.Json;
 using Shouldly;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
 
-namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
+namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
+
+public class SignInTests(IdentityModuleWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
-    public class SignInTests : IntegrationTestBase
+    private readonly Faker _faker = new();
+
+    private async Task<HttpResponseMessage> Act(SignInRequest request)
+        => await HttpClient.PostAsJsonAsync("/identity-module/sign-in", request);
+
+    [Fact]
+    public async Task WhenCredentialsAreValid_ShouldReturnToken()
     {
-        private readonly Faker _faker = new();
-
-        public SignInTests(IdentityModuleWebApplicationFactory factory)
-            : base(factory)
+        // Arrange
+        var request = new SignInRequest
         {
-        }
+            Email = PredefinedUserCredentials.Email,
+            Password = PredefinedUserCredentials.Password
+        };
 
-        private async Task<HttpResponseMessage> Act(SignInRequest request)
-            => await HttpClient.PostAsJsonAsync("/identity-module/sign-in", request);
+        // Act
+        var response = await Act(request);
 
-        [Fact]
-        public async Task WhenCredntialsAreValid_ShouldReturnToken()
+        // Assert
+        response.IsSuccessStatusCode.ShouldBeTrue();
+        var token = await response.Content.ReadFromJsonAsync<JsonWebToken>();
+        token.ShouldNotBeNull().AccessToken.ShouldNotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public async Task WhenCredentialsAreInvalid_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var request = new SignInRequest
         {
-            var request = new SignInRequest
-            {
-                Email = PredefinedUserCredentials.Email,
-                Password = PredefinedUserCredentials.Password
-            };
+            Email = PredefinedUserCredentials.Email,
+            Password = _faker.Internet.Password()
+        };
 
-            var response = await Act(request);
+        // Act
+        var response = await Act(request);
 
-            response.IsSuccessStatusCode.ShouldBeTrue();
-            var token = await response.Content.ReadFromJsonAsync<JsonWebToken>();
-            token.ShouldNotBeNull().AccessToken.ShouldNotBeNullOrWhiteSpace();
-        }
-
-        [Fact]
-        public async Task WhenCredentialsAreInvalid_ShouldReturnBadRequest()
-        {
-            var request = new SignInRequest
-            {
-                Email = PredefinedUserCredentials.Email,
-                Password = _faker.Internet.Password()
-            };
-
-            var response = await Act(request);
-
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-        }
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 }

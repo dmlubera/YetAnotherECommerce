@@ -3,25 +3,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres.Repositories;
-using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
-using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using Microsoft.AspNetCore.Identity;
+using YetAnotherECommerce.Modules.Identity.Core.DAL;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Identity.Api")]
-namespace YetAnotherECommerce.Modules.Identity.Core.DI
+namespace YetAnotherECommerce.Modules.Identity.Core.DI;
+
+internal static class CoreInstaller
 {
-    internal static class CoreInstaller
+    public static void AddCore(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUserRepository, PostgresUserRepository>();
-            services.AddDbContext<IdentityDbContext>(x => x.UseNpgsql(configuration.GetSection("IdentityModuleSettings:DatabaseConnectionString").Value));
-            
-            return services;
-        }
+        services.AddIdentityCore<User>()
+            .AddEntityFrameworkStores<IdentityDbContext>();
+        services.AddDbContext<IdentityDbContext>(x => x.UseNpgsql(configuration.GetSection("IdentityModuleSettings:DatabaseConnectionString").Value));
+        
+        services.AddScoped<UserManager<User>>();
+        services.AddScoped<SignInManager<User>>();
+        services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

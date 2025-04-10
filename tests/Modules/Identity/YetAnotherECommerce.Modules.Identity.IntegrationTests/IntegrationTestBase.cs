@@ -1,45 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using YetAnotherECommerce.Modules.Identity.Core.DAL.Postgres;
+using YetAnotherECommerce.Modules.Identity.Core.DAL;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.ValueObjects;
-using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
+namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
+
+public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebApplicationFactory>
 {
-    public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebApplicationFactory>
+    internal readonly IdentityDbContext IdentityDbContext;
+    internal readonly HttpClient HttpClient;
+    internal readonly (string Email, string Password) PredefinedUserCredentials = ("testcustomer@test.com", "Super$ecret1");
+
+    private readonly IdentityModuleWebApplicationFactory _factory;
+
+    protected IntegrationTestBase(IdentityModuleWebApplicationFactory factory)
     {
-        internal readonly ICommandDispatcher CommandDispatcher;
-        internal readonly IdentityDbContext IdentityDbContext;
-        internal readonly HttpClient HttpClient;
-        internal readonly (string Email, string Password) PredefinedUserCredentials = ("test-customer@test.com", "Super$ecret");
+        _factory =  factory;
+        var scope = _factory.Services.CreateScope();
 
-        private readonly IdentityModuleWebApplicationFactory _factory;
+        IdentityDbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+        IdentityDbContext.Database.Migrate();
+        InitializeDatabase().GetAwaiter().GetResult();
 
-        public IntegrationTestBase(IdentityModuleWebApplicationFactory factory)
-        {
-            _factory =  factory;
-            var scope = _factory.Services.CreateScope();
-
-            CommandDispatcher = scope.ServiceProvider.GetRequiredService<ICommandDispatcher>();
-            IdentityDbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-            IdentityDbContext.Database.Migrate();
-            InitializeDatabase().GetAwaiter().GetResult();
-
-            HttpClient = _factory.CreateClient();
-        }
-
-        public async Task InitializeDatabase()
-        {
-            var scope = _factory.Services.CreateScope();
-
-            var testCustomer = User.Create(PredefinedUserCredentials.Email, Password.Create(PredefinedUserCredentials.Password), Role.Customer);
-            IdentityDbContext.Add(testCustomer);
-            await IdentityDbContext.SaveChangesAsync();
-        }
-
+        HttpClient = _factory.CreateClient();
     }
+
+    private async Task InitializeDatabase()
+    {
+        var scope = _factory.Services.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var testCustomer = new User
+        {
+            Email = PredefinedUserCredentials.Email,
+            UserName = PredefinedUserCredentials.Email,
+            Role = Role.Customer
+        };
+        await userManager.CreateAsync(testCustomer, PredefinedUserCredentials.Password);
+    }
+
 }

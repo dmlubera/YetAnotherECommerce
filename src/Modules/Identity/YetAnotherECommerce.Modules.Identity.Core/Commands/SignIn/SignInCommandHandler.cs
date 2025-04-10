@@ -1,34 +1,25 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
-using YetAnotherECommerce.Modules.Identity.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn
+namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
+
+public class SignInCommandHandler(IAuthManager authManager, ICache cache, UserManager<User> userManager) : ICommandHandler<SignInCommand>
 {
-    public class SignInCommandHandler : ICommandHandler<SignInCommand>
+    public async Task HandleAsync(SignInCommand command)
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IAuthManager _authManager;
-        private readonly ICache _cache;
-
-        public SignInCommandHandler(IUserRepository userRepository, IAuthManager authManager, ICache cache)
+        var user = await userManager.FindByEmailAsync(command.Email) ?? throw new InvalidCredentialsException();
+        var isCorrectPassword = await userManager.CheckPasswordAsync(user, command.Password);
+        if (!isCorrectPassword)
         {
-            _userRepository = userRepository;
-            _authManager = authManager;
-            _cache = cache;
+            throw new InvalidCredentialsException();
         }
-
-        public async Task HandleAsync(SignInCommand command)
-        {
-            var user = await _userRepository.GetByEmailAsync(command.Email);
-
-            if (user is null || !user.Password.IsValid(command.Password))
-                throw new InvalidCredentialsException();
-
-            var jwtToken = _authManager.GenerateJwtToken(user.Id, user.Role);
-            _cache.Set(command.CacheKey, jwtToken);
-        }
+            
+        var jwtToken = authManager.GenerateJwtToken(user.Id, user.Role);
+        cache.Set(command.CacheKey, jwtToken);
     }
 }

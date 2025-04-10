@@ -1,32 +1,33 @@
 ﻿using System.Threading.Tasks;
-using YetAnotherECommerce.Modules.Identity.Core.DomainServices;
+using Microsoft.AspNetCore.Identity;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
-using YetAnotherECommerce.Modules.Identity.Core.Repositories;
+using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp
+namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
+
+public class SignUpCommandHandler(UserManager<User> userManager, IMessageBroker messageBroker) : ICommandHandler<SignUpCommand>
 {
-    public class SignUpCommandHandler : ICommandHandler<SignUpCommand>
+    public async Task HandleAsync(SignUpCommand command)
     {
-        private readonly IUserRepository _repository;
-        private readonly IUserService _userService;
-        private readonly IMessageBroker _messageBroker;
-
-        public SignUpCommandHandler(IUserRepository repository, IUserService userService, IMessageBroker messageBroker)
+        var existingUser = await userManager.FindByEmailAsync(command.Email);
+        if (existingUser != null)
         {
-            _repository = repository;
-            _userService = userService;
-            _messageBroker = messageBroker;
+            throw new EmailInUseException();
         }
-
-        public async Task HandleAsync(SignUpCommand command)
+        
+        var user = new User
         {
-            var user = await _userService.CreateUserAsync(command.Email, command.Password, command.Role);
-
-            await _repository.AddAsync(user);
-
-            await _messageBroker.PublishAsync(new UserRegistered(user.Id.Value, user.Email));
+            Email = command.Email,
+            UserName = command.Email,
+            Role = command.Role
+        };
+        var result = await userManager.CreateAsync(user, command.Password);
+        if (result.Succeeded)
+        {
+            await messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
         }
     }
 }
