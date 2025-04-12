@@ -1,19 +1,6 @@
 ﻿using System;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword
-{
-    public class ChangePasswordCommand : ICommand
-    {
-        public Guid UserId { get; set; }
-        public string Password { get; set; }
+namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
 
-        private ChangePasswordCommand() { }
-
-        public ChangePasswordCommand(Guid userId, string password)
-        {
-            UserId = userId;
-            Password = password;
-        }
-    }
-}
+public record ChangePasswordCommand(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;

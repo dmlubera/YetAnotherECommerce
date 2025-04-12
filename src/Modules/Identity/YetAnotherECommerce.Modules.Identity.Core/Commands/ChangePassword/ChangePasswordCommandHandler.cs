@@ -1,13 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
 
-public class ChangePasswordCommandHandler : ICommandHandler<ChangePasswordCommand>
+public class ChangePasswordCommandHandler(UserManager<User> userManager) : ICommandHandler<ChangePasswordCommand>
 {
-    public Task HandleAsync(ChangePasswordCommand command)
+    public async Task HandleAsync(ChangePasswordCommand command)
     {
-        throw new NotImplementedException();
+        var user = await userManager.FindByIdAsync(command.UserId.ToString());
+        if (user == null)
+        {
+            throw new UserNotExistException(command.UserId);
+        }
+        
+        await userManager.ChangePasswordAsync(user, command.CurrentPassword, command.NewPassword);
     }
 }

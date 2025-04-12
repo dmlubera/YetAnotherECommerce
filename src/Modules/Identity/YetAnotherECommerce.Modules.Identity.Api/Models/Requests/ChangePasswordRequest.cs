@@ -1,7 +1,3 @@
-﻿namespace YetAnotherECommerce.Modules.Identity.Api.Models.Requests
-{
-    public class ChangePasswordRequest
-    {
-        public string Password { get; set; }
-    }
-}
+﻿namespace YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
+
+public record ChangePasswordRequest(string CurrentPassword, string NewPassword);

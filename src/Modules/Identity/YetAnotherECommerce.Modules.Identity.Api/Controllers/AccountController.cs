@@ -9,20 +9,13 @@ using YetAnotherECommerce.Shared.Abstractions.Commands;
 namespace YetAnotherECommerce.Modules.Identity.Api.Controllers;
 
 [Route("identity-module/account")]
-internal class AccountController: ControllerBase
+internal class AccountController(ICommandDispatcher commandDispatcher) : ControllerBase
 {
-    private readonly ICommandDispatcher _commandDispatcher;
-
-    public AccountController(ICommandDispatcher commandDispatcher)
-        => _commandDispatcher = commandDispatcher;
-
     [Authorize]
     [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassswordAsync([FromBody] ChangePasswordRequest request)
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
     {
-        var userId = Guid.Parse(User.Identity.Name);
-        await _commandDispatcher.DispatchAsync(new ChangePasswordCommand(userId, request.Password));
-
+        await commandDispatcher.DispatchAsync(new ChangePasswordCommand(Guid.Parse(User.Identity.Name), request.CurrentPassword, request.NewPassword));
         return Ok();
     }
 }
