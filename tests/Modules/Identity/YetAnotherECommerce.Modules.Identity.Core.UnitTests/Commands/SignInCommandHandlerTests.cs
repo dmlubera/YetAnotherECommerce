@@ -6,6 +6,7 @@ using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
+using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 
@@ -24,7 +25,8 @@ public class SignInCommandHandlerTests
     }
 
     [Theory, AutoData]
-    public async Task WhenUserWithGivenEmailDoesNotExist_ThenShouldThrowAnException(SignInCommand command)
+    public async Task WhenUserWithGivenEmailDoesNotExist_ThenShouldThrowAnException(
+        [FixtureCustomization] SignInCommand command)
     {
         // Arrange
         var expectedException = new InvalidCredentialsException();
@@ -40,7 +42,8 @@ public class SignInCommandHandlerTests
     }
 
     [Theory, AutoData]
-    public async Task WhenUserExistButPasswordIsInvalid_ThenShouldThrowAnException(SignInCommand command)
+    public async Task WhenUserExistButPasswordIsInvalid_ThenShouldThrowAnException(
+        [FixtureCustomization] SignInCommand command)
     {
         // Arrange
         var expectedException = new InvalidCredentialsException();
@@ -57,7 +60,8 @@ public class SignInCommandHandlerTests
     }
         
     [Theory, AutoData]
-    public async Task WhenCredentialsAreValid_ThenShouldReturnToken(SignInCommand command)
+    public async Task WhenCredentialsAreValid_ThenShouldReturnToken(
+        [FixtureCustomization] SignInCommand command)
     {
         // Arrange
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());

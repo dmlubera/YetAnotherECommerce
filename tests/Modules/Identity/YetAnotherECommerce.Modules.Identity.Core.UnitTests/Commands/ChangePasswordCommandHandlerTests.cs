@@ -5,6 +5,7 @@ using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
+using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 
@@ -19,7 +20,8 @@ public class ChangePasswordCommandHandlerTests
     }
 
     [Theory, AutoData]
-    public async Task WhenUserDoesNotExist_ThenShouldThrowException(ChangePasswordCommand command)
+    public async Task WhenUserDoesNotExist_ThenShouldThrowException(
+        [FixtureCustomization] ChangePasswordCommand command)
     {
         // Arrange
         _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(() => null);
