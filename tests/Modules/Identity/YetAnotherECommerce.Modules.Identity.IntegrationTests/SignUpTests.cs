@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
-using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
+using YetAnotherECommerce.Modules.Identity.Api.Endpoints.SignUp;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
 
@@ -21,12 +21,7 @@ public class SignUpTests(IdentityModuleWebApplicationFactory factory) : Integrat
     public async Task WhenRequestIsValid_ShouldCreateUser()
     {
         // Arrange
-        var request = new SignUpRequest
-        {
-            Email = _faker.Internet.Email(),
-            Password = _faker.Internet.Password(),
-            Role = "customer"
-        };
+        var request = new SignUpRequest(_faker.Internet.Email(), _faker.Internet.Password(), "customer");
 
         // Act
         var response = await Act(request);
@@ -39,12 +34,7 @@ public class SignUpTests(IdentityModuleWebApplicationFactory factory) : Integrat
     public async Task WhenEmailAlreadyExists_ShouldReturnBadRequest()
     {
         // Arrange
-        var request = new SignUpRequest
-        {
-            Email = PredefinedUserCredentials.Email,
-            Password = "super$ecret",
-            Role = "customer"
-        };
+        var request = new SignUpRequest(PredefinedUserCredentials.Email, _faker.Internet.Password(), "customer");
 
         // Act
         var response = await Act(request);

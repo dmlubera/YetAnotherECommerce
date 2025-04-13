@@ -1,11 +1,11 @@
-﻿using Bogus;
+﻿using System.Net;
 using System.Net.Http;
-using System.Net;
-using System.Threading.Tasks;
-using Xunit;
-using YetAnotherECommerce.Modules.Identity.Api.Models.Requests;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
+using Bogus;
 using Shouldly;
+using Xunit;
+using YetAnotherECommerce.Modules.Identity.Api.Endpoints.SignIn;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
@@ -21,11 +21,7 @@ public class SignInTests(IdentityModuleWebApplicationFactory factory) : Integrat
     public async Task WhenCredentialsAreValid_ShouldReturnToken()
     {
         // Arrange
-        var request = new SignInRequest
-        {
-            Email = PredefinedUserCredentials.Email,
-            Password = PredefinedUserCredentials.Password
-        };
+        var request = new SignInRequest(PredefinedUserCredentials.Email, PredefinedUserCredentials.Password);
 
         // Act
         var response = await Act(request);
@@ -40,12 +36,8 @@ public class SignInTests(IdentityModuleWebApplicationFactory factory) : Integrat
     public async Task WhenCredentialsAreInvalid_ShouldReturnBadRequest()
     {
         // Arrange
-        var request = new SignInRequest
-        {
-            Email = PredefinedUserCredentials.Email,
-            Password = _faker.Internet.Password()
-        };
-
+        var request = new SignInRequest(PredefinedUserCredentials.Email, _faker.Internet.Password());
+        
         // Act
         var response = await Act(request);
 

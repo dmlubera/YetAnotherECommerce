@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using FastEndpoints;
 using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
 
@@ -28,6 +29,8 @@ namespace YetAnotherECommerce.Bootstrapper
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddFastEndpoints();
+            
             foreach (var module in _modules)
             {
                 module.Register(services, Configuration);
@@ -57,6 +60,7 @@ namespace YetAnotherECommerce.Bootstrapper
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapFastEndpoints();
                 endpoints.MapControllers();
                 endpoints.MapGet("/", ctx => ctx.Response.WriteAsync("YetAnotherECommerce API!"));
             });
