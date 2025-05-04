@@ -27,7 +27,7 @@ public class SignInTests(IdentityModuleWebApplicationFactory factory) : Integrat
         var response = await Act(request);
 
         // Assert
-        response.IsSuccessStatusCode.ShouldBeTrue();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var token = await response.Content.ReadFromJsonAsync<JsonWebToken>();
         token.ShouldNotBeNull().AccessToken.ShouldNotBeNullOrWhiteSpace();
     }

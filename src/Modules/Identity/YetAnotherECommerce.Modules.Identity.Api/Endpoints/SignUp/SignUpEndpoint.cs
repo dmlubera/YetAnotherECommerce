@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Http;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
@@ -18,7 +19,9 @@ public class SignUpEndpoint(ICommandDispatcher commandDispatcher) : Endpoint<Sig
     public override async Task HandleAsync(SignUpRequest req, CancellationToken ct)
     {
         var command = new SignUpCommand(req.Email, req.Password, req.Role);
-        await commandDispatcher.DispatchAsync(command);
-        await SendOkAsync(ct);
+        var result = await commandDispatcher.DispatchAsync(command);
+        await result.Match(
+            onSuccess: () => SendResultAsync(TypedResults.Created()),
+            onError: error => SendResultAsync(TypedResults.BadRequest(error)));
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
+using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
 
@@ -20,7 +22,7 @@ public class ChangePasswordCommandHandlerTests
     }
 
     [Theory, AutoData]
-    public async Task WhenUserDoesNotExist_ThenShouldThrowException(
+    public async Task WhenUserDoesNotExist_ThenThrowException(
         [FixtureCustomization] ChangePasswordCommand command)
     {
         // Arrange
@@ -34,5 +36,45 @@ public class ChangePasswordCommandHandlerTests
         result.ShouldNotBeNull();
         result.ErrorCode.ShouldBe(expectedException.ErrorCode);
         result.Message.ShouldBe(expectedException.Message);
+    }
+    
+    [Theory, AutoData]
+    public async Task WhenUserManagerReturnedError_ThenReturnFailedResult(
+        [FixtureCustomization] ChangePasswordCommand command)
+    {
+        // Arrange
+        _userManagerMock
+            .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync(new User());
+        _userManagerMock
+            .Setup(x => x.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Failed());
+        
+        // Act
+        var result = await _sut.HandleAsync(command);
+
+        // Assert
+        result.IsSucceeded.ShouldBeFalse();
+        result.Error.ShouldBeOfType<ChangePasswordFailedError>();
+    }
+    
+    [Theory, AutoData]
+    public async Task WhenChangingPasswordSucceeded_ThenReturnSucceededResult(
+        [FixtureCustomization] ChangePasswordCommand command)
+    {
+        // Arrange
+        _userManagerMock
+            .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync(new User());
+        _userManagerMock
+            .Setup(x => x.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Success);
+        
+        // Act
+        var result = await _sut.HandleAsync(command);
+
+        // Assert
+        result.IsSucceeded.ShouldBeTrue();
+        result.Error.ShouldBeNull();
     }
 }

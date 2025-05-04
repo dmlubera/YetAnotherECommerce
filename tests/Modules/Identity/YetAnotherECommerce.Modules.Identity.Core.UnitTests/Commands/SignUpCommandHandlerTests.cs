@@ -2,6 +2,7 @@
 using AutoFixture.Xunit2;
 using Microsoft.AspNetCore.Identity;
 using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
@@ -23,7 +24,41 @@ public class SignUpCommandHandlerTests
     }
 
     [Theory, AutoData]
-    public async Task WhenUserSuccessfullyCreate_ThenShouldPublishEvent(
+    public async Task WhenUserWithGivenEmailAlreadyExists_ThenReturnFailedResult(
+        [FixtureCustomization] SignUpCommand command)
+    {
+        // Arrange
+        _userManagerMock
+            .Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(new User());
+        
+        // Act
+        var result = await _handler.HandleAsync(command);
+        
+        // Assert
+        result.IsSucceeded.ShouldBeFalse();
+        result.Error.ShouldBeOfType<SignUpFailedError>();
+    }
+    
+    [Theory, AutoData]
+    public async Task WhenUserManagerReturnedError_ThenReturnFailedResult(
+        [FixtureCustomization] SignUpCommand command)
+    {
+        // Arrange
+        _userManagerMock
+            .Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Failed());
+        
+        // Act
+        var result = await _handler.HandleAsync(command);
+        
+        // Assert
+        result.IsSucceeded.ShouldBeFalse();
+        result.Error.ShouldBeOfType<SignUpFailedError>();
+    }
+
+    [Theory, AutoData]
+    public async Task WhenUserSuccessfullyCreated_ThenPublishEventAndReturnSucceededResult(
         [FixtureCustomization] SignUpCommand command)
     {
         // Arrange
@@ -32,9 +67,11 @@ public class SignUpCommandHandlerTests
             .ReturnsAsync(IdentityResult.Success);
 
         // Act
-        await _handler.HandleAsync(command);
+        var result = await _handler.HandleAsync(command);
 
         // Assert
         _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<UserRegistered>()));
+        result.IsSucceeded.ShouldBeTrue();
+        result.Error.ShouldBeNull();
     }
 }

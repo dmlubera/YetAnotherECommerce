@@ -24,22 +24,14 @@ Content-Type: application/json
 }
 
 ### 
-@jwt = {{signIn.response.body.$.accessToken}}
-
-### Change email
-POST {{moduleUrl}}/account/change-email
-Authorization: Bearer {{jwt}}
-Content-Type: application/json
-
-{
-    "email": "newemailaddress@yetanotherecommerce.com"
-}
+@auth_token = {{signIn.response.body.$.accessToken}}
 
 ### Change password
 POST {{moduleUrl}}/account/change-password
-Authorization: Bearer {{jwt}}
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-    "password": "new$uper$ecret"
+    "currentPassword": "{{password}}",
+    "newPassword": "newSuper$ecret123"
 }

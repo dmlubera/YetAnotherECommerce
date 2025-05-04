@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Http;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.ChangePassword;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
@@ -18,7 +19,7 @@ public class ChangePasswordEndpoint(ICommandDispatcher commandDispatcher) : Endp
     public override async Task HandleAsync(ChangePasswordRequest req, CancellationToken ct)
     {
         var command = new ChangePasswordCommand(Guid.Parse(User.Identity.Name), req.CurrentPassword, req.NewPassword);
-        await commandDispatcher.DispatchAsync(command);
-        await SendOkAsync(ct);
+        var result = await commandDispatcher.DispatchAsync(command);
+        await result.Match(onSuccess: () => SendOkAsync(ct), onError:  error => SendResultAsync(Results.BadRequest(error)));
     }
 }

@@ -5,62 +5,57 @@ using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.Exceptions;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
 using YetAnotherECommerce.Shared.Abstractions.Auth;
-using YetAnotherECommerce.Shared.Abstractions.Cache;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 
 public class SignInCommandHandlerTests
 {
     private readonly Mock<IAuthManager> _authManagerMock = new();
-    private readonly Mock<ICache> _cacheMock = new();
     private readonly Mock<FakeUserManager> _userManagerMock = new();
     private readonly SignInCommandHandler _handler;
 
     public SignInCommandHandlerTests()
     {
-        _handler = new SignInCommandHandler(_authManagerMock.Object, _cacheMock.Object, _userManagerMock.Object);
+        _handler = new SignInCommandHandler(_authManagerMock.Object, _userManagerMock.Object);
     }
 
     [Theory, AutoData]
-    public async Task WhenUserWithGivenEmailDoesNotExist_ThenShouldThrowAnException(
+    public async Task WhenUserWithGivenEmailDoesNotExist_ThenReturnFailedResult(
         [FixtureCustomization] SignInCommand command)
     {
         // Arrange
-        var expectedException = new InvalidCredentialsException();
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(() => null);
             
         // Act
-        var result = await Assert.ThrowsAsync<InvalidCredentialsException>(() => _handler.HandleAsync(command));
+        var result = await _handler.HandleAsync(command);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-        result.Message.ShouldBe(expectedException.Message);
+        result.IsSucceeded.ShouldBeFalse();
+        result.Error.ShouldBeOfType<InvalidCredentialsError>();
+        result.Value.ShouldBeNull();
     }
 
     [Theory, AutoData]
-    public async Task WhenUserExistButPasswordIsInvalid_ThenShouldThrowAnException(
+    public async Task WhenGivenPasswordIsNotValid_ThenReturnFailedResult(
         [FixtureCustomization] SignInCommand command)
     {
         // Arrange
-        var expectedException = new InvalidCredentialsException();
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
 
         // Act
-        var result = await Assert.ThrowsAsync<InvalidCredentialsException>(() => _handler.HandleAsync(command));
+        var result = await _handler.HandleAsync(command);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.ErrorCode.ShouldBe(expectedException.ErrorCode);
-        result.Message.ShouldBe(expectedException.Message);
+        result.IsSucceeded.ShouldBeFalse();
+        result.Error.ShouldBeOfType<InvalidCredentialsError>();
+        result.Value.ShouldBeNull();
     }
         
     [Theory, AutoData]
-    public async Task WhenCredentialsAreValid_ThenShouldReturnToken(
+    public async Task WhenCredentialsAreValid_ThenReturnSucceededResultWithAccessToken(
         [FixtureCustomization] SignInCommand command)
     {
         // Arrange
@@ -68,9 +63,11 @@ public class SignInCommandHandlerTests
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
 
         // Act
-        await _handler.HandleAsync(command);
+        var result = await _handler.HandleAsync(command);
 
         // Assert
-        _cacheMock.Verify(x => x.Set(It.IsAny<string>(), It.IsAny<JsonWebToken>()));
+        result.IsSucceeded.ShouldBeTrue();
+        result.Error.ShouldBeNull();
+        result.Value.ShouldBe(It.Is<JsonWebToken>(x => !string.IsNullOrWhiteSpace(x.AccessToken)));
     }
 }

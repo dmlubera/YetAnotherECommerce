@@ -21,20 +21,20 @@ public class SignUpTests(IdentityModuleWebApplicationFactory factory) : Integrat
     public async Task WhenRequestIsValid_ShouldCreateUser()
     {
         // Arrange
-        var request = new SignUpRequest(_faker.Internet.Email(), _faker.Internet.Password(), "customer");
+        var request = new SignUpRequest(_faker.Internet.Email(), _faker.Internet.Password(prefix: "$"), "customer");
 
         // Act
         var response = await Act(request);
             
         // Assert
-        response.IsSuccessStatusCode.ShouldBeTrue();
+        response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }
 
     [Fact]
     public async Task WhenEmailAlreadyExists_ShouldReturnBadRequest()
     {
         // Arrange
-        var request = new SignUpRequest(PredefinedUserCredentials.Email, _faker.Internet.Password(), "customer");
+        var request = new SignUpRequest(PredefinedUserCredentials.Email, _faker.Internet.Password(prefix: "$"), "customer");
 
         // Act
         var response = await Act(request);
