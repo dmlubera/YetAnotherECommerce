@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Auth
+namespace YetAnotherECommerce.Modules.Identity.Core.Settings
 {
     public class AuthSettings
     {

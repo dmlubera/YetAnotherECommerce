@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using YetAnotherECommerce.Modules.Identity.Core.DI;
 using YetAnotherECommerce.Modules.Identity.Core.Settings;
 using YetAnotherECommerce.Shared.Abstractions.Modules;
-using YetAnotherECommerce.Shared.Infrastructure.Auth;
 
 namespace YetAnotherECommerce.Modules.Identity.Api;
 

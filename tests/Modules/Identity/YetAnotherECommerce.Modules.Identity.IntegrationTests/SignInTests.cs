@@ -6,7 +6,7 @@ using Bogus;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Api.Endpoints.SignIn;
-using YetAnotherECommerce.Shared.Abstractions.Auth;
+using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
 

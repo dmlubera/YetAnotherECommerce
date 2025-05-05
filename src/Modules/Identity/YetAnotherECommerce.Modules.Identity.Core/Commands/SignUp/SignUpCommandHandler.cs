@@ -20,17 +20,17 @@ public class SignUpCommandHandler(UserManager<User> userManager, IMessageBroker 
         var user = new User
         {
             Email = command.Email,
-            UserName = command.Email,
-            Role = command.Role
+            UserName = command.Email
         };
         var result = await userManager.CreateAsync(user, command.Password);
         if (!result.Succeeded)
         {
             return SignUpResult.Failed();
         }
-        
-        await messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
-        return SignUpResult.Succeeded();
 
+        await userManager.AddToRoleAsync(user, command.Role);
+        await messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
+
+        return SignUpResult.Succeeded();
     }
 }

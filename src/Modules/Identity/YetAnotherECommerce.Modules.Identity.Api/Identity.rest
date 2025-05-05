@@ -1,6 +1,6 @@
 @moduleUrl = http://localhost:5000/identity-module
 @email = test@yetanotherecommerce.com
-@password = super$ecret
+@password = Super$ecret123
 @role = admin
 
 ### Sign-up
@@ -9,8 +9,7 @@ Content-Type: application/json
 
 {
     "email": "{{email}}",
-    "password": "{{password}}",
-    "role": "{{role}}"
+    "password": "{{password}}"
 }
 
 ### Sign-in

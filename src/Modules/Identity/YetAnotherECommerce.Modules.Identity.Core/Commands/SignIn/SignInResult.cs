@@ -1,4 +1,4 @@
-﻿using YetAnotherECommerce.Shared.Abstractions.Auth;
+﻿using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 using YetAnotherECommerce.Shared.Abstractions.Results;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;

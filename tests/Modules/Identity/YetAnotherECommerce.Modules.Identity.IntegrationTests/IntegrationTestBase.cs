@@ -37,9 +37,9 @@ public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebAppli
         {
             Email = PredefinedUserCredentials.Email,
             UserName = PredefinedUserCredentials.Email,
-            Role = Role.Customer
         };
         await userManager.CreateAsync(testCustomer, PredefinedUserCredentials.Password);
+        await userManager.AddToRoleAsync(testCustomer, Role.Customer);
     }
 
 }

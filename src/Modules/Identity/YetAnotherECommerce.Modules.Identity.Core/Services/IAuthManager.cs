@@ -1,6 +1,7 @@
 ﻿using System;
+using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Auth
+namespace YetAnotherECommerce.Modules.Identity.Core.Services
 {
     public interface IAuthManager
     {

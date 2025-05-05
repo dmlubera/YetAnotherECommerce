@@ -4,9 +4,10 @@ using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
+using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
+using YetAnotherECommerce.Modules.Identity.Core.Services;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
-using YetAnotherECommerce.Shared.Abstractions.Auth;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 
@@ -61,6 +62,7 @@ public class SignInCommandHandlerTests
         // Arrange
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+        _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync([Role.Customer]);
 
         // Act
         var result = await _handler.HandleAsync(command);
