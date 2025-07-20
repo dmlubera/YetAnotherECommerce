@@ -10,7 +10,7 @@ using YetAnotherECommerce.Modules.Identity.Api.Endpoints.SignUp;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
 
-public class SignUpTests(IdentityModuleWebApplicationFactory factory) : IntegrationTestBase(factory)
+public class SignUpTests(IdentityModuleWebApplicationFactory factory) : ApiTest(factory)
 {
     private readonly Faker _faker = new();
 

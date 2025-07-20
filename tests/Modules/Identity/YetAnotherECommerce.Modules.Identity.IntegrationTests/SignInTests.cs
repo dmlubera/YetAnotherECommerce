@@ -10,7 +10,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
 
-public class SignInTests(IdentityModuleWebApplicationFactory factory) : IntegrationTestBase(factory)
+public class SignInTests(IdentityModuleWebApplicationFactory factory) : ApiTest(factory)
 {
     private readonly Faker _faker = new();
 

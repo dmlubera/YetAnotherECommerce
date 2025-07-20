@@ -1,40 +1,26 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 using Xunit;
 using YetAnotherECommerce.Bootstrapper;
 using YetAnotherECommerce.Modules.Identity.Core.DAL;
+using YetAnotherECommerce.Modules.Identity.IntegrationTests.Extensions;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests
 {
     public class IdentityModuleWebApplicationFactory : WebApplicationFactory<Startup>, IAsyncLifetime
     {
-        private readonly PostgreSqlContainer _dbContainer;
-
-        public IdentityModuleWebApplicationFactory()
-        {
-            _dbContainer = new PostgreSqlBuilder()
-                .WithImage("postgres:latest")
-                .WithDatabase("YetAnotherECommerce")
-                .WithUsername("postgres")
-                .WithPassword("postgres")
-                .Build();
-        }
+        private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
+            .WithImage("postgres:latest")
+            .WithCleanUp(true)
+            .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
             => builder.ConfigureTestServices(services =>
             {
-                var descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<IdentityDbContext>));
-                if (descriptor is not null)
-                    services.Remove(descriptor);
-
-                services.AddDbContext<IdentityDbContext>(options => 
-                    options.UseNpgsql(_dbContainer.GetConnectionString()));
+                services.SetupDbContext<IdentityDbContext>(_dbContainer.GetConnectionString());
             });
 
         public async Task InitializeAsync() => await _dbContainer.StartAsync();

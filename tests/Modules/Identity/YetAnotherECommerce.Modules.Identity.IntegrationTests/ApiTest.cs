@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Core.DAL;
@@ -9,7 +8,8 @@ using YetAnotherECommerce.Modules.Identity.Core.Entities;
 
 namespace YetAnotherECommerce.Modules.Identity.IntegrationTests;
 
-public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebApplicationFactory>
+[Collection(nameof(ApiTestCollection))]
+public abstract class ApiTest : IAsyncLifetime
 {
     internal readonly IdentityDbContext IdentityDbContext;
     internal readonly HttpClient HttpClient;
@@ -17,15 +17,11 @@ public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebAppli
 
     private readonly IdentityModuleWebApplicationFactory _factory;
 
-    protected IntegrationTestBase(IdentityModuleWebApplicationFactory factory)
+    protected ApiTest(IdentityModuleWebApplicationFactory factory)
     {
         _factory =  factory;
         var scope = _factory.Services.CreateScope();
-
         IdentityDbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-        IdentityDbContext.Database.Migrate();
-        InitializeDatabase().GetAwaiter().GetResult();
-
         HttpClient = _factory.CreateClient();
     }
 
@@ -42,4 +38,7 @@ public abstract class IntegrationTestBase : IClassFixture<IdentityModuleWebAppli
         await userManager.AddToRoleAsync(testCustomer, Role.Customer);
     }
 
+    public async Task InitializeAsync() => await InitializeDatabase();
+
+    public Task DisposeAsync() => Task.CompletedTask;
 }
