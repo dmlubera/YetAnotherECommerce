@@ -2,4 +2,4 @@
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 
-public record SignUpCommand(string Email, string Password, string Role) : ICommand<SignUpResult>;
+public record SignUpCommand(string Email, string Password) : ICommand<SignUpResult>;

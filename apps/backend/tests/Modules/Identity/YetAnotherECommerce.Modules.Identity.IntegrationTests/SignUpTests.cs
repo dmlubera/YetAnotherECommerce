@@ -21,7 +21,7 @@ public class SignUpTests(IdentityModuleWebApplicationFactory factory) : ApiTest(
     public async Task WhenRequestIsValid_ShouldCreateUser()
     {
         // Arrange
-        var request = new SignUpRequest(_faker.Internet.Email(), _faker.Internet.Password(prefix: "$"), "customer");
+        var request = new SignUpRequest(_faker.Internet.Email(), _faker.Internet.Password(prefix: "$"));
 
         // Act
         var response = await Act(request);
@@ -34,7 +34,7 @@ public class SignUpTests(IdentityModuleWebApplicationFactory factory) : ApiTest(
     public async Task WhenEmailAlreadyExists_ShouldReturnBadRequest()
     {
         // Arrange
-        var request = new SignUpRequest(PredefinedUserCredentials.Email, _faker.Internet.Password(prefix: "$"), "customer");
+        var request = new SignUpRequest(PredefinedUserCredentials.Email, _faker.Internet.Password(prefix: "$"));
 
         // Act
         var response = await Act(request);

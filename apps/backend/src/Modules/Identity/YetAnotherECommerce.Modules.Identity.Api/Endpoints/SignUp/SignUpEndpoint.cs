@@ -18,7 +18,7 @@ public class SignUpEndpoint(ICommandDispatcher commandDispatcher) : Endpoint<Sig
 
     public override async Task HandleAsync(SignUpRequest req, CancellationToken ct)
     {
-        var command = new SignUpCommand(req.Email, req.Password, req.Role);
+        var command = new SignUpCommand(req.Email, req.Password);
         var result = await commandDispatcher.DispatchAsync(command);
         await result.Match(
             onSuccess: () => SendResultAsync(TypedResults.Created()),

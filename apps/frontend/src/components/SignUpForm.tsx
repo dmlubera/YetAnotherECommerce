@@ -11,6 +11,7 @@ import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import api from "../api/axios";
 
 const formSchema = z.object({
   email: z.email({
@@ -37,8 +38,13 @@ export default function SignUpForm() {
     mode: "onChange",
   });
 
-  function onSubmit(data: FormValues) {
-    console.log(data);
+  async function onSubmit(data: FormValues) {
+    try {
+      await api.post("/identity-module/sign-up", data);
+      console.log('Account successfully created');
+    } catch (error: any) {
+      console.log(error.response?.data);
+    }
   }
 
   return (

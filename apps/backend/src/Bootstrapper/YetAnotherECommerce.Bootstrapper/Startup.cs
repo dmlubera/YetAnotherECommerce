@@ -1,69 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using FastEndpoints;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using FastEndpoints;
 using YetAnotherECommerce.Shared.Abstractions.Modules;
 using YetAnotherECommerce.Shared.Infrastructure.DI;
 
-namespace YetAnotherECommerce.Bootstrapper
+namespace YetAnotherECommerce.Bootstrapper;
+
+public class Startup
 {
-    public class Startup
+    private readonly IList<Assembly> _assemblies;
+    private readonly IList<IModule> _modules;
+
+    public Startup(IConfiguration configuration)
     {
-        private readonly IList<Assembly> _assemblies;
-        private readonly IList<IModule> _modules;
+        Configuration = configuration;
+        _assemblies = ModuleLoader.LoadAssemblies();
+        _modules = ModuleLoader.LoadModules(_assemblies);
+    }
 
-        public Startup(IConfiguration configuration)
+    public IConfiguration Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddCors(options =>
         {
-            Configuration = configuration;
-            _assemblies = ModuleLoader.LoadAssemblies();
-            _modules = ModuleLoader.LoadModules(_assemblies);
-        }
-
-        public IConfiguration Configuration { get; }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddFastEndpoints();
+            options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:5173").AllowAnyHeader());
+        });
+        services.AddFastEndpoints();
             
-            foreach (var module in _modules)
-            {
-                module.Register(services, Configuration);
-            }
-            
-            services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies(), Configuration);
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        foreach (var module in _modules)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseInfrastructure();
-
-            foreach(var module in _modules)
-            {
-                module.Use(app);
-            }
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapFastEndpoints();
-                endpoints.MapControllers();
-                endpoints.MapGet("/", ctx => ctx.Response.WriteAsync("YetAnotherECommerce API!"));
-            });
+            module.Register(services, Configuration);
         }
+            
+        services.AddInfrastructure(AppDomain.CurrentDomain.GetAssemblies(), Configuration);
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseInfrastructure();
+
+        foreach(var module in _modules)
+        {
+            module.Use(app);
+        }
+
+        app.UseRouting();
+
+        app.UseCors();
+            
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapFastEndpoints();
+            endpoints.MapControllers();
+            endpoints.MapGet("/", ctx => ctx.Response.WriteAsync("YetAnotherECommerce API!"));
+        });
     }
 }

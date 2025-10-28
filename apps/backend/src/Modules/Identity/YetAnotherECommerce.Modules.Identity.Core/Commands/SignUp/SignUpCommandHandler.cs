@@ -28,7 +28,7 @@ public class SignUpCommandHandler(UserManager<User> userManager, IMessageBroker 
             return SignUpResult.Failed();
         }
 
-        await userManager.AddToRoleAsync(user, command.Role);
+        await userManager.AddToRoleAsync(user, "customer");
         await messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
 
         return SignUpResult.Succeeded();
