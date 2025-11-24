@@ -1,0 +1,42 @@
+services:
+  database:
+    image: postgres
+    container_name: database
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - yetanotherecommerce_net
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: yetanotherecommerce
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  backend:
+    build: ./apps/backend
+    container_name: backend
+    ports:
+      - 5001:5001
+    networks:
+      - yetanotherecommerce_net
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    build: ./apps/frontend
+    container_name: frontend
+    ports:
+      - 5173:80
+    networks:
+      - yetanotherecommerce_net
+
+networks:
+  yetanotherecommerce_net:
+    driver: bridge

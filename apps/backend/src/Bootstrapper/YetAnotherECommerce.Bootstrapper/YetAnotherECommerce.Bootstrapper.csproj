@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Modules\Carts\YetAnotherECommerce.Modules.Carts.Api\YetAnotherECommerce.Modules.Carts.Api.csproj" />
     <ProjectReference Include="..\..\Modules\Identity\YetAnotherECommerce.Modules.Identity.Api\YetAnotherECommerce.Modules.Identity.Api.csproj" />
     <ProjectReference Include="..\..\Modules\Orders\YetAnotherECommerce.Modules.Orders.Api\YetAnotherECommerce.Modules.Orders.Api.csproj" />
