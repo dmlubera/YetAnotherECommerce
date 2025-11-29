@@ -1,24 +1,25 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Core.DTOs;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Queries
+namespace YetAnotherECommerce.Modules.Products.Core.Queries;
+
+public class BrowseProductsQueryHandler(IProductRepository productRepository)
+    : IQueryHandler<BrowseProductsQuery, IReadOnlyList<ProductDto>>
 {
-    public class BrowseProductsQueryHandler : IQueryHandler<BrowseProductsQuery, IReadOnlyList<ProductDto>>
+    public async Task<IReadOnlyList<ProductDto>> HandleAsync(BrowseProductsQuery query)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
+        var products = await productRepository.GetAsync();
 
-        public BrowseProductsQueryHandler(IProductRepository productRepository, IMapper mapper)
+        return products.Select(x => new ProductDto
         {
-            _productRepository = productRepository;
-            _mapper = mapper;
-        }
-
-        public async Task<IReadOnlyList<ProductDto>> HandleAsync(BrowseProductsQuery query)
-            => _mapper.Map<IReadOnlyList<ProductDto>>(await _productRepository.GetAsync());
+            Id = x.Id,
+            Name = x.Name,
+            Price = x.Price,
+            Quantity = x.Quantity
+        }).ToList().AsReadOnly();
     }
 }

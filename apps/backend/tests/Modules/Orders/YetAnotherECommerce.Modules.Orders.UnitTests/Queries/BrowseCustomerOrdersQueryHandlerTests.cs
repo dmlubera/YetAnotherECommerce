@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Moq;
+using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Moq;
-using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.DTOs;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
@@ -11,29 +11,29 @@ using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Queries;
 
-public class BrowseQueryHandlerTests
+public class BrowseCustomerOrdersQueryHandlerTests
 {
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
-    private readonly BrowseQueryHandler _handler;
+    private readonly BrowseCustomerOrdersQueryHandler _handler;
 
-    public BrowseQueryHandlerTests()
+    public BrowseCustomerOrdersQueryHandlerTests()
     {
         _orderRepositoryMock = new Mock<IOrderRepository>();
-        _handler = new BrowseQueryHandler(_orderRepositoryMock.Object);
+        _handler = new BrowseCustomerOrdersQueryHandler(_orderRepositoryMock.Object);
     }
 
     [Fact]
-    public async Task WhenOrderExists_ThenShouldMapToDtos()
+    public async Task WhenOrderForCustomerExists_ThenShouldMapToDtos()
     {
         var customerId = Guid.NewGuid();
-        var query = new BrowseQuery();
+        var query = new BrowseCustomerOrdersQuery(Guid.NewGuid());
         var products = new List<Order>
         {
             new Order(customerId, new List<OrderItem>()),
             new Order(customerId, new List<OrderItem>())
         };
         _orderRepositoryMock
-            .Setup(x => x.BrowseAsync())
+            .Setup(x => x.BrowseByCustomerAsync(It.IsAny<Guid>()))
             .ReturnsAsync(products);
 
         var result = await _handler.HandleAsync(query);
@@ -44,11 +44,11 @@ public class BrowseQueryHandlerTests
     }
 
     [Fact]
-    public async Task WhenNoOrdersExist_ThenShouldReturnEmptyCollection()
+    public async Task WhenNoOrdersForCustomerExist_ThenShouldReturnEmptyCollection()
     {
-        var query = new BrowseQuery();
+        var query = new BrowseCustomerOrdersQuery(Guid.NewGuid());
         _orderRepositoryMock
-            .Setup(x => x.BrowseAsync())
+            .Setup(x => x.BrowseByCustomerAsync(It.IsAny<Guid>()))
             .ReturnsAsync([]);
 
         var result = await _handler.HandleAsync(query);

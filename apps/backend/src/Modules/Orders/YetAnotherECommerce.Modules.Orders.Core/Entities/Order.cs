@@ -1,85 +1,86 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using YetAnotherECommerce.Modules.Orders.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Entities
+namespace YetAnotherECommerce.Modules.Orders.Core.Entities;
+
+public class Order : AggregateRoot, IAuditable
 {
-    public class Order : AggregateRoot, IAuditable
+    private readonly List<OrderItem> _orderItems;
+    public Guid CustomerId { get; private set; }
+    public OrderStatus Status { get; private set; }
+    public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
+    public DateTime? CreatedAt { get; private set; }
+    public DateTime? LastUpdatedAt { get; private set; }
+    public decimal TotalPrice => _orderItems.Sum(x => x.Quantity * x.UnitPrice);
+
+    protected Order() { }
+
+    public Order(Guid id, Guid customerId, OrderStatus status, List<OrderItem> orderItems, DateTime? createdAt, DateTime? lastUpdatedAt)
     {
-        private readonly List<OrderItem> _orderItems;
-        public Guid CustomerId { get; private set; }
-        public OrderStatus Status { get; private set; }
-        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
-        public DateTime? CreatedAt { get; private set; }
-        public DateTime? LastUpdatedAt { get; private set; }
+        Id = id;
+        CustomerId = customerId;
+        Status = status;
+        _orderItems = orderItems;
+        CreatedAt = createdAt;
+        LastUpdatedAt = lastUpdatedAt;
+    }
 
-        protected Order() { }
+    public Order(Guid customerId, List<OrderItem> orderItems)
+    {
+        Id = Guid.NewGuid();
+        CustomerId = customerId;
+        _orderItems = orderItems;
+        Status = OrderStatus.Created;
+        CreatedAt = DateTime.UtcNow;
 
-        public Order(Guid id, Guid customerId, OrderStatus status, List<OrderItem> orderItems, DateTime? createdAt, DateTime? lastUpdatedAt)
-        {
-            Id = id;
-            CustomerId = customerId;
-            Status = status;
-            _orderItems = orderItems;
-            CreatedAt = createdAt;
-            LastUpdatedAt = lastUpdatedAt;
-        }
+        AddEvent(new OrderCreated(this));
+    }
 
-        public Order(Guid customerId, List<OrderItem> orderItems)
-        {
-            Id = Guid.NewGuid();
-            CustomerId = customerId;
-            _orderItems = orderItems;
-            Status = OrderStatus.Created;
-            CreatedAt = DateTime.UtcNow;
+    public void AcceptOrder()
+    {
+        if (Status != OrderStatus.Created)
+            throw new AcceptationNotAllowedException(Status);
 
-            AddEvent(new OrderCreated(this));
-        }
+        Status = OrderStatus.Accepted;
+        LastUpdatedAt = DateTime.UtcNow;
 
-        public void AcceptOrder()
-        {
-            if (Status != OrderStatus.Created)
-                throw new AcceptationNotAllowedException(Status);
+        AddEvent(new OrderAccepted(this, Status));
+    }
 
-            Status = OrderStatus.Accepted;
-            LastUpdatedAt = DateTime.UtcNow;
+    public void CancelOrder()
+    {
+        if (Status != OrderStatus.Created && Status != OrderStatus.Accepted)
+            throw new CancellationNotAllowedException(Status);
 
-            AddEvent(new OrderAccepted(this, Status));
-        }
+        Status = OrderStatus.Canceled;
+        LastUpdatedAt = DateTime.UtcNow;
 
-        public void CancelOrder()
-        {
-            if (Status != OrderStatus.Created && Status != OrderStatus.Accepted)
-                throw new CancellationNotAllowedException(Status);
+        AddEvent(new OrderCanceled(this, Status));
+    }
 
-            Status = OrderStatus.Canceled;
-            LastUpdatedAt = DateTime.UtcNow;
+    public void CompleteOrder()
+    {
+        if (Status != OrderStatus.Accepted)
+            throw new CompletionNotAllowedException(Status);
 
-            AddEvent(new OrderCanceled(this, Status));
-        }
+        Status = OrderStatus.Completed;
+        LastUpdatedAt = DateTime.UtcNow;
 
-        public void CompleteOrder()
-        {
-            if (Status != OrderStatus.Accepted)
-                throw new CompletionNotAllowedException(Status);
+        AddEvent(new OrderCompleted(this, Status));
+    }
 
-            Status = OrderStatus.Completed;
-            LastUpdatedAt = DateTime.UtcNow;
+    public void RejectOrder()
+    {
+        if (Status != OrderStatus.Accepted)
+            throw new RejectionNotAllowedException(Status);
 
-            AddEvent(new OrderCompleted(this, Status));
-        }
+        Status = OrderStatus.Rejected;
+        LastUpdatedAt = DateTime.UtcNow;
 
-        public void RejectOrder()
-        {
-            if (Status != OrderStatus.Accepted)
-                throw new RejectionNotAllowedException(Status);
-
-            Status = OrderStatus.Rejected;
-            LastUpdatedAt = DateTime.UtcNow;
-
-            AddEvent(new OrderRejected(this, Status));
-        }
+        AddEvent(new OrderRejected(this, Status));
     }
 }

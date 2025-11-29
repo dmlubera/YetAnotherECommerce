@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
@@ -63,8 +63,6 @@ internal static class SharedInfrastructureInstaller
 
         services.AddSingleton<ICorrelationContext, CorrelationContext>();
         services.AddScoped<CorrelationMiddleware>();
-
-        services.AddAutoMapper(assemblies);
 
         return services;
     }

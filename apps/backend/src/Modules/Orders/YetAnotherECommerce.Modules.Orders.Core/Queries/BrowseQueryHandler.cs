@@ -1,24 +1,23 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.DTOs;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Queries
+namespace YetAnotherECommerce.Modules.Orders.Core.Queries;
+
+public class BrowseQueryHandler(IOrderRepository orderRepository) : IQueryHandler<BrowseQuery, IReadOnlyList<OrderDto>>
 {
-    public class BrowseQueryHandler : IQueryHandler<BrowseQuery, IReadOnlyList<OrderDto>>
+    public async Task<IReadOnlyList<OrderDto>> HandleAsync(BrowseQuery query)
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IMapper _mapper;
+        var orders = await orderRepository.BrowseAsync();
 
-        public BrowseQueryHandler(IOrderRepository orderRepository, IMapper mapper)
+        return orders.Select(x => new OrderDto
         {
-            _orderRepository = orderRepository;
-            _mapper = mapper;
-        }
-
-        public async Task<IReadOnlyList<OrderDto>> HandleAsync(BrowseQuery query)
-            => _mapper.Map<IReadOnlyList<OrderDto>>(await _orderRepository.BrowseAsync());
+            Id = x.Id,
+            Status = x.Status.ToString(),
+            TotalPrice = x.TotalPrice
+        }).ToList().AsReadOnly();
     }
 }

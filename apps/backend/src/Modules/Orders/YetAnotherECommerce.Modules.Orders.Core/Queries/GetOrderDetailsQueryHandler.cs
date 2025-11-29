@@ -1,30 +1,27 @@
-﻿using AutoMapper;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.DTOs;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Queries
+namespace YetAnotherECommerce.Modules.Orders.Core.Queries;
+
+public class GetOrderDetailsQueryHandler(IOrderRepository orderRepository)
+    : IQueryHandler<GetOrderDetailsQuery, OrderDetailsDto>
 {
-    public class GetOrderDetailsQueryHandler : IQueryHandler<GetOrderDetailsQuery, OrderDetailsDto>
+    public async Task<OrderDetailsDto> HandleAsync(GetOrderDetailsQuery query)
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IMapper _mapper;
+        var order = await orderRepository.GetForCustomerByIdAsync(query.CustomerId, query.OrderId);
+        if (order is null)
+            throw new OrderDoesNotExistException(query.OrderId);
 
-        public GetOrderDetailsQueryHandler(IOrderRepository orderRepository, IMapper mapper)
+        return new OrderDetailsDto
         {
-            _orderRepository = orderRepository;
-            _mapper = mapper;
-        }
-
-        public async Task<OrderDetailsDto> HandleAsync(GetOrderDetailsQuery query)
-        {
-            var order = await _orderRepository.GetForCustomerByIdAsync(query.CustomerId, query.OrderId);
-            if (order is null)
-                throw new OrderDoesNotExistException(query.OrderId);
-
-            return _mapper.Map<OrderDetailsDto>(order);
-        }
+            Id = order.Id,
+            Status = order.Status.ToString(),
+            TotalPrice = order.TotalPrice,
+            OrderItems = order.OrderItems.ToList()
+        };
     }
 }
