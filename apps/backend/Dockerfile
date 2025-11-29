@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
 COPY *.sln ./
@@ -11,7 +11,7 @@ FROM build AS publish
 WORKDIR /app
 RUN dotnet publish src/Bootstrapper/YetAnotherECommerce.Bootstrapper -c Release --no-build -o release
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 ENV ASPNETCORE_HTTP_PORTS=5001
 EXPOSE 5001
 WORKDIR /app
