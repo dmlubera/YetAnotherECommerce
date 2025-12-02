@@ -1,22 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using YetAnotherECommerce.Modules.Products.Core.Entitites;
 
-namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres
+namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres;
+
+internal class ProductsDbContext(DbContextOptions<ProductsDbContext> options) : DbContext(options)
 {
-    internal class ProductsDbContext : DbContext
+    public DbSet<Product> Products { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public DbSet<Product> Products { get; set; }
+        base.OnModelCreating(modelBuilder);
 
-        public ProductsDbContext(DbContextOptions<ProductsDbContext> options)
-            : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasDefaultSchema("products");
-            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        }
+        modelBuilder.HasDefaultSchema("products");
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }

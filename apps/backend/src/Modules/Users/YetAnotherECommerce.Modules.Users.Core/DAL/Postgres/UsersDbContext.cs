@@ -1,22 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
 
-namespace YetAnotherECommerce.Modules.Users.Core.DAL.Postgres
+namespace YetAnotherECommerce.Modules.Users.Core.DAL.Postgres;
+
+internal class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options)
 {
-    internal class UsersDbContext : DbContext
+    public DbSet<User> Users { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public DbSet<User> Users { get; set; }
+        base.OnModelCreating(modelBuilder);
 
-        public UsersDbContext(DbContextOptions<UsersDbContext> options)
-            : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasDefaultSchema("users");
-            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        }
+        modelBuilder.HasDefaultSchema("users");
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }
