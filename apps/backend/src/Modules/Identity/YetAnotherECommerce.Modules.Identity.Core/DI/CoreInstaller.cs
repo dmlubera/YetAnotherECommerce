@@ -20,7 +20,7 @@ internal static class CoreInstaller
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<IdentityDbContext>();
-        services.AddDbContext<IdentityDbContext>(x => x.UseNpgsql(configuration.GetSection("IdentityModuleSettings:DatabaseConnectionString").Value));
+        services.AddDbContext<IdentityDbContext>(x => x.UseNpgsql(configuration.GetConnectionString("Default")));
 
         services.AddScoped<IAuthManager, AuthManager>();
         services.AddScoped<UserManager<User>>();

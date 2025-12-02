@@ -9,18 +9,17 @@ using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Products.Api")]
-namespace YetAnotherECommerce.Modules.Products.Core.DI
-{
-    internal static class CoreInstaller
-    {
-        public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
-            services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddTransient<IProductRepository, PostgresProductsRepository>();
-            services.AddDbContext<ProductsDbContext>(x => x.UseNpgsql(configuration.GetSection("ProductsModuleSettings:DatabaseConnectionString").Value));
+namespace YetAnotherECommerce.Modules.Products.Core.DI;
 
-            return services;
-        }
+internal static class CoreInstaller
+{
+    public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
+        services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddTransient<IProductRepository, PostgresProductsRepository>();
+        services.AddDbContext<ProductsDbContext>(x => x.UseNpgsql(configuration.GetConnectionString("Default")));
+
+        return services;
     }
 }

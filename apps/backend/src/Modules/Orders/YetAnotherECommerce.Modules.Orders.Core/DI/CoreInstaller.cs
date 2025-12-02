@@ -9,20 +9,19 @@ using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Modules.Orders.Api")]
-namespace YetAnotherECommerce.Modules.Orders.Core.DI
+namespace YetAnotherECommerce.Modules.Orders.Core.DI;
+
+internal static class CoreInstaller 
 {
-    internal static class CoreInstaller 
+    public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
-            services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddTransient<IOrderRepository, PostgresOrdersRepository>();
-            services.AddTransient<ICustomerRepository, PostgresCustomersRepository>();
+        services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
+        services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddTransient<IOrderRepository, PostgresOrdersRepository>();
+        services.AddTransient<ICustomerRepository, PostgresCustomersRepository>();
 
-            services.AddDbContext<OrdersDbContext>(x => x.UseNpgsql(configuration.GetSection("OrdersModuleSettings:DatabaseConnectionString").Value));
+        services.AddDbContext<OrdersDbContext>(x => x.UseNpgsql(configuration.GetConnectionString("Default")));
 
-            return services;
-        }
+        return services;
     }
 }

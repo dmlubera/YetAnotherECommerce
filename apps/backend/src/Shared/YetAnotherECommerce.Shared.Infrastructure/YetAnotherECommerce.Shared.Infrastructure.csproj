@@ -23,4 +23,8 @@
     <ProjectReference Include="..\YetAnotherECommerce.Shared.Abstractions\YetAnotherECommerce.Shared.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\" />
+  </ItemGroup>
+
 </Project>

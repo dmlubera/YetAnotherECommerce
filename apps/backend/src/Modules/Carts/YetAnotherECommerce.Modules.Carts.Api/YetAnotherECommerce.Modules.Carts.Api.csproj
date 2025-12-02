@@ -9,12 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="module.carts.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\YetAnotherECommerce.Modules.Carts.Core\YetAnotherECommerce.Modules.Carts.Core.csproj" />
   </ItemGroup>
 

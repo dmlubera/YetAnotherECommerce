@@ -1,7 +1,6 @@
 @moduleUrl = http://localhost:5000/identity-module
 @email = test@yetanotherecommerce.com
 @password = Super$ecret123
-@role = admin
 
 ### Sign-up
 POST {{moduleUrl}}/sign-up
