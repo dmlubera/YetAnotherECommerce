@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,10 +7,14 @@ namespace YetAnotherECommerce.Modules.Identity.IntegrationTests.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void SetupDbContext<T>(this IServiceCollection services, string connectionString) where T : DbContext
+    public static void SetupDbContext<T>(this IServiceCollection services, string connectionString, Action<DbContext, bool>? seed = null) where T : DbContext
     {
         services.RemoveDbContext<T>();
-        services.AddDbContext<T>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<T>(options => 
+            options
+                .UseNpgsql(connectionString)
+                .UseSeeding(seed ?? ((_, _) => {}) )
+            );
         services.EnsureDbCreated<T>();
     }
     
