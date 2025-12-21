@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Commands;
@@ -21,14 +21,7 @@ internal class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDis
         var handler = scope.ServiceProvider.GetRequiredService(handlerType);
 
         return await ((Task<TResult>)handlerType
-            .GetMethod(nameof(ICommandHandler<ICommand<TResult>, TResult>.HandleAsync))
+            .GetMethod(nameof(ICommandHandler<,>.HandleAsync))
             ?.Invoke(handler, [command]))!;
-    }
-
-    public async Task<TResult> DispatchAsync<TCommand, TResult>(TCommand command) where TCommand : ICommand<TResult>
-    {
-        using var scope = serviceProvider.CreateScope();
-        var handler = scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
-        return await handler.HandleAsync(command); 
     }
 }

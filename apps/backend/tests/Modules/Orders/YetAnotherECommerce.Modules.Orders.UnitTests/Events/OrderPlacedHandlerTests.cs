@@ -10,6 +10,7 @@ using YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
+using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Events
@@ -51,10 +52,10 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Events
         [Fact]
         public async Task WhenCustomerExist_ThenShouldAddOrderAndPublishIntegrationEvent()
         {
-            var @event = new OrderPlaced(Guid.NewGuid(), new List<ProductDto>()
+            var @event = new OrderPlaced(Guid.NewGuid(), new List<ProductDto>
             {
-                new ProductDto(Guid.NewGuid(), "ProductName", 10, 1),
-                new ProductDto(Guid.NewGuid(), "ProductName", 12, 4),
+                new (Guid.NewGuid(), "ProductName", 10, 1),
+                new (Guid.NewGuid(), "ProductName", 12, 4)
             });
             var customer = new Customer(Guid.NewGuid(), "John", "Doe", "johndoe@yetanotherecommerce.com", "Groove Street");
             _customerRepositoryMock

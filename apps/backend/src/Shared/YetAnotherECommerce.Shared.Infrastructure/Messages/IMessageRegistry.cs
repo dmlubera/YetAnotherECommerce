@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
+﻿using System.Collections.Generic;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Messages
+namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
+
+public interface IMessageRegistry
 {
-    public interface IMessageRegistry
-    {
-        IEnumerable<MessageRegistration> GetRegistrations(string key);
-        void AddRegistration(Type type, Func<IMessage, Task> action);
-    }
+    IEnumerable<MessageRegistration> GetRegistrations(string key);
 }

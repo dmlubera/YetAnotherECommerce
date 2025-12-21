@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using Bogus;
-using YetAnotherECommerce.Modules.Identity.Core.Commands.SignIn;
 using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;

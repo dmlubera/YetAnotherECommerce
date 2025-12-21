@@ -1,6 +1,6 @@
 ﻿using Shouldly;
 using Xunit;
-using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 

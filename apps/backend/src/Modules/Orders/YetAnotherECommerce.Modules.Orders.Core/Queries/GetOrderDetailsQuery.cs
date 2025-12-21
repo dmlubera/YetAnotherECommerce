@@ -2,17 +2,6 @@
 using YetAnotherECommerce.Modules.Orders.Core.DTOs;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Queries
-{
-    public class GetOrderDetailsQuery : IQuery<OrderDetailsDto>
-    {
-        public Guid CustomerId { get; set; }
-        public Guid OrderId { get; set; }
+namespace YetAnotherECommerce.Modules.Orders.Core.Queries;
 
-        public GetOrderDetailsQuery(Guid customerId, Guid orderId)
-        {
-            CustomerId = customerId;
-            OrderId = orderId;
-        }
-    }
-}
+public record GetOrderDetailsQuery(Guid CustomerId, Guid OrderId) : IQuery<OrderDetailsDto>;

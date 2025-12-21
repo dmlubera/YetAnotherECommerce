@@ -11,6 +11,7 @@ using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks;

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Events
+namespace YetAnotherECommerce.Shared.Abstractions.Events;
+
+public interface IEventHandler <in TEvent> where TEvent : class, IEvent
 {
-    public interface IEventHandler <in TEvent> where TEvent : class, IEvent
-    {
-        Task HandleAsync(TEvent @event);
-    }
+    Task HandleAsync(TEvent @event);
 }

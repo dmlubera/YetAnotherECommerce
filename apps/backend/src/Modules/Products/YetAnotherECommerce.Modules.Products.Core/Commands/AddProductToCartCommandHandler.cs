@@ -4,6 +4,7 @@ using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
+using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Commands

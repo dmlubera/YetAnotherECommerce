@@ -1,6 +1,3 @@
-﻿namespace YetAnotherECommerce.Shared.Abstractions.Messages
-{
-    public interface IMessage
-    {
-    }
-}
+﻿namespace YetAnotherECommerce.Shared.Abstractions.Messages;
+
+public interface IMessage;

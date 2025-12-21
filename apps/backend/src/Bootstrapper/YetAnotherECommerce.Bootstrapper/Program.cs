@@ -16,7 +16,7 @@ public class Program
             {
                 webBuilder.UseStartup<Startup>();
             })
-            .UseSerilog((context, services, configuration) =>
+            .UseSerilog((context, _, configuration) =>
             {
                 configuration.Enrich.FromLogContext()
                     .WriteTo.Console(outputTemplate:

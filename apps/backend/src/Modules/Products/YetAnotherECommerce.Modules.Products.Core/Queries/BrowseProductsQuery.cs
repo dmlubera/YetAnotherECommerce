@@ -2,9 +2,6 @@
 using YetAnotherECommerce.Modules.Products.Core.DTOs;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Queries
-{
-    public class BrowseProductsQuery : IQuery<IReadOnlyList<ProductDto>>
-    {
-    }
-}
+namespace YetAnotherECommerce.Modules.Products.Core.Queries;
+
+public record BrowseProductsQuery : IQuery<IReadOnlyList<ProductDto>>;

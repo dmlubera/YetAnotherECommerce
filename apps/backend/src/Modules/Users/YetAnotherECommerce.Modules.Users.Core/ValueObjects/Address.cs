@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using YetAnotherECommerce.Modules.Products.Core.Exceptions;
+using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects

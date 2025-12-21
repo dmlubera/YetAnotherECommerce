@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Messages
+namespace YetAnotherECommerce.Shared.Abstractions.Messages;
+
+public interface IMessageBroker
 {
-    public interface IMessageBroker
-    {
-        Task PublishAsync(IMessage message);
-    }
+    Task PublishAsync(IMessage message);
 }

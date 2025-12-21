@@ -1,36 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks
+namespace YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks;
+
+internal class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEventDispatcher
 {
-    internal class DomainEventDispatcher : IDomainEventDispatcher
+    public async Task DispatchAsync(params IDomainEvent[] events)
     {
-        private readonly IServiceProvider _serviceProvider;
+        if (events is null || !events.Any())
+            return;
 
-        public DomainEventDispatcher(IServiceProvider serviceProvider)
-            => _serviceProvider = serviceProvider;
+        using var scope = serviceProvider.CreateScope();
 
-        public async Task DispatchAsync(params IDomainEvent[] events)
+        foreach (var @event in events)
         {
-            if (events is null || !events.Any())
-                return;
+            var handlerType = typeof(IDomainEventHandler<>).MakeGenericType(@event.GetType());
+            var handlers = scope.ServiceProvider.GetServices(handlerType);
 
-            using var scope = _serviceProvider.CreateScope();
+            var tasks = handlers.Select(x =>
+                (Task)handlerType.GetMethod(nameof(IDomainEventHandler<>.HandleAsync))
+                    ?.Invoke(x, [@event]));
 
-            foreach (var @event in events)
-            {
-                var handlerType = typeof(IDomainEventHandler<>).MakeGenericType(@event.GetType());
-                var handlers = scope.ServiceProvider.GetServices(handlerType);
-
-                var tasks = handlers.Select(x =>
-                    (Task)handlerType.GetMethod(nameof(IDomainEventHandler<IDomainEvent>.HandleAsync))
-                            .Invoke(x, new[] { @event }));
-
-                await Task.WhenAll(tasks);
-            }
+            await Task.WhenAll(tasks);
         }
     }
 }

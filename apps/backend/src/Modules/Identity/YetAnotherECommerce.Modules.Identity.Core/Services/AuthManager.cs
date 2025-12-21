@@ -16,7 +16,7 @@ public class AuthManager(AuthSettings authSettings) : IAuthManager
         var utcNow = DateTime.UtcNow;
         var expires = utcNow.Add(authSettings.Expiry);
 
-        var claims = new List<Claim>()
+        var claims = new List<Claim>
         {
             new (JwtRegisteredClaimNames.Sub, userId.ToString()),
             new (JwtRegisteredClaimNames.UniqueName, userId.ToString()),

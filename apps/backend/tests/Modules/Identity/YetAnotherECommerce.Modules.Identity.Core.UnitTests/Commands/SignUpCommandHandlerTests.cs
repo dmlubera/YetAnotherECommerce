@@ -8,6 +8,7 @@ using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
+using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;

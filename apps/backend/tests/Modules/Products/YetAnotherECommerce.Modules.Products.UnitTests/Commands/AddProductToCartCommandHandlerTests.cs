@@ -9,6 +9,7 @@ using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Modules.Products.UnitTests.Fixtures.Entities;
+using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
@@ -82,8 +83,8 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
 
         private static AddProductToCartCommand CreateCommand()
             => new AddProductToCartCommand(
-                customerId: Guid.NewGuid(),
-                productId: Guid.NewGuid(),
-                quantity: 1);
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                1);
     }
 }

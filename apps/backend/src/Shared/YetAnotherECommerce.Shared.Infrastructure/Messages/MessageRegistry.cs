@@ -4,22 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Messages
+namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
+
+internal sealed class MessageRegistry : IMessageRegistry
 {
-    internal sealed class MessageRegistry : IMessageRegistry
+    private readonly List<MessageRegistration> _registrations = [];
+
+    public void AddRegistration(Type type, Func<IMessage, Task> action)
     {
-        private readonly List<MessageRegistration> registrations = new();
+        if (string.IsNullOrWhiteSpace(type.Namespace))
+            throw new InvalidOperationException("Missing namespace");
 
-        public void AddRegistration(Type type, Func<IMessage, Task> action)
-        {
-            if (string.IsNullOrWhiteSpace(type.Namespace))
-                throw new InvalidOperationException("Missing namespace");
-
-            var registration = new MessageRegistration(type, action);
-            registrations.Add(registration);
-        }
-
-        public IEnumerable<MessageRegistration> GetRegistrations(string key)
-            => registrations.Where(x => x.Key == key);
+        var registration = new MessageRegistration(type, action);
+        _registrations.Add(registration);
     }
+
+    public IEnumerable<MessageRegistration> GetRegistrations(string key)
+        => _registrations.Where(x => x.Key == key);
 }

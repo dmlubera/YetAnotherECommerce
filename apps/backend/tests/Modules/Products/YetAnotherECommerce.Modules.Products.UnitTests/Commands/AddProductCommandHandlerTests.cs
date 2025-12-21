@@ -58,8 +58,7 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
         [Fact]
         public async Task WhenGivenProductPriceIsInvalid_ThenShouldThrowAnException()
         {
-            var command = AddProductCommandFixture.Create();
-            command.Price = decimal.MinusOne;
+            var command = AddProductCommandFixture.Create() with { Price = decimal.MinusOne };
             var expectedException = new InvalidPriceException();
 
             _productRepositoryMock.Setup(x => x.CheckIfProductAlreadyExistsAsync(It.IsAny<string>()))
@@ -81,8 +80,7 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands
         [InlineData(null)]
         public async Task WhenGivenProductNameIsInvalid_ThenShouldThrowAnException(string invalidName)
         {
-            var command = AddProductCommandFixture.Create();
-            command.Name = invalidName;
+            var command = AddProductCommandFixture.Create() with { Name = invalidName };
             var expectedException = new InvalidProductNameException();
 
             _productRepositoryMock.Setup(x => x.CheckIfProductAlreadyExistsAsync(It.IsAny<string>()))

@@ -5,7 +5,4 @@ using YetAnotherECommerce.Shared.Abstractions.Queries;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Queries;
 
-public class BrowseCustomerOrdersQuery(Guid customerId) : IQuery<IReadOnlyList<OrderDto>>
-{
-    public Guid CustomerId { get; } = customerId;
-}
+public record BrowseCustomerOrdersQuery(Guid CustomerId) : IQuery<IReadOnlyList<OrderDto>>;

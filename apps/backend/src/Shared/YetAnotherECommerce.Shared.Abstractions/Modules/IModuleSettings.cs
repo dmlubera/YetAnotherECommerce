@@ -1,8 +1,7 @@
-﻿namespace YetAnotherECommerce.Shared.Abstractions.Modules
+﻿namespace YetAnotherECommerce.Shared.Abstractions.Modules;
+
+public interface IModuleSettings
 {
-    public interface IModuleSettings
-    {
-        string CollectionName { get; set; }
-        string DatabaseName { get; set; }
-    }
+    string CollectionName { get; set; }
+    string DatabaseName { get; set; }
 }
