@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 
@@ -7,20 +7,27 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
 public static class CqrsExtensions
 {
-    public static IServiceCollection RegisterCommandsFromAssembly(this IServiceCollection services, Assembly assembly)
-        => services
-            .Scan(x => x.FromAssemblies(assembly)
-                .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime())
-            .Scan(x => x.FromAssemblies(assembly)
-                .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<,>)))
+    extension(IServiceCollection services)
+    {
+        public void RegisterCommandsFromAssembly(Assembly assembly)
+        {
+            services
+                .Scan(x => x.FromAssemblies(assembly)
+                    .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime())
+                .Scan(x => x.FromAssemblies(assembly)
+                    .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<,>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime());
+        }
+
+        public void RegisterQueriesFromAssembly(Assembly assembly)
+        {
+            services.Scan(x => x.FromAssemblies(assembly)
+                .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
-
-    public static IServiceCollection RegisterQueriesFromAssembly(this IServiceCollection services, Assembly assembly)
-        => services.Scan(x => x.FromAssemblies(assembly)
-            .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime());
+        }
+    }
 }

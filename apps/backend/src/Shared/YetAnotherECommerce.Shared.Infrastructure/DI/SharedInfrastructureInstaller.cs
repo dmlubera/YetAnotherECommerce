@@ -28,7 +28,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.DI;
 
 internal static class SharedInfrastructureInstaller
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies,
+    public static void AddInfrastructure(this IServiceCollection services, IEnumerable<Assembly> assemblies,
         IConfiguration configuration)
     {
         services.AddScoped<ExceptionHandlerMiddleware>();
@@ -51,7 +51,7 @@ internal static class SharedInfrastructureInstaller
         services.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.Scan(x => x.FromAssemblies(assemblies)
-            .AddClasses(x => x.AssignableTo(typeof(IEventHandler<>)))
+            .AddClasses(f => f.AssignableTo(typeof(IEventHandler<>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime());
 
@@ -60,20 +60,16 @@ internal static class SharedInfrastructureInstaller
         services.AddSingleton<IMessageBroker, InMemoryMessageBroker>();
         services.AddSingleton<IMessageChannel, MessageChannel>();
         services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
-        services.AddHostedService<BackroundMessageDispatcher>();
+        services.AddHostedService<BackgroundMessageDispatcher>();
 
         services.AddSingleton<ICorrelationContext, CorrelationContext>();
         services.AddScoped<CorrelationMiddleware>();
-
-        return services;
     }
 
-    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
+    public static void UseInfrastructure(this IApplicationBuilder app)
     {
         app.UseMiddleware<CorrelationMiddleware>();
         app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-        return app;
     }
 
     private static void AddMessageRegistry(IServiceCollection services, IEnumerable<Assembly> assemblies)
@@ -87,16 +83,16 @@ internal static class SharedInfrastructureInstaller
 
         services.AddSingleton<IMessageRegistry>(sp =>
         {
-            var eventDsipatcher = sp.GetRequiredService<IEventDispatcher>();
-            var eventDispatcherType = eventDsipatcher.GetType();
+            var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+            var eventDispatcherType = eventDispatcher.GetType();
 
             foreach (var type in eventTypes)
             {
                 registry.AddRegistration(type, @event =>
                     (Task)eventDispatcherType
-                        .GetMethod(nameof(eventDsipatcher.PublishAsync))
+                        .GetMethod(nameof(eventDispatcher.PublishAsync))
                         ?.MakeGenericMethod(type)
-                        .Invoke(eventDsipatcher, new[] { @event }));
+                        .Invoke(eventDispatcher, [@event]));
             }
 
             return registry;

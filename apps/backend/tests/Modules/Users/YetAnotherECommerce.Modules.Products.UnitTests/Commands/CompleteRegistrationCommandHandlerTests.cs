@@ -1,8 +1,8 @@
-﻿using Bogus;
+﻿using System;
+using System.Threading.Tasks;
+using Bogus;
 using Moq;
 using Shouldly;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.Commands;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
@@ -11,7 +11,6 @@ using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
@@ -69,7 +68,7 @@ public class CompleteRegistrationCommandHandlerTests
     }
 
     private static CompleteRegistrationCommand CreateCommand()
-        => new CompleteRegistrationCommand(
+        => new(
             userId: Guid.NewGuid(),
             firstName: "Carl",
             lastName: "Johnson",

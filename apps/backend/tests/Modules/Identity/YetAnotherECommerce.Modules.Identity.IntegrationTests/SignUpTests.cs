@@ -1,10 +1,10 @@
-﻿using Bogus;
-using Shouldly;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Bogus;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Identity.Api.Endpoints.SignUp;
 

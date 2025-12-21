@@ -1,8 +1,8 @@
-﻿using Moq;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.DTOs;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
@@ -29,8 +29,8 @@ public class BrowseCustomerOrdersQueryHandlerTests
         var query = new BrowseCustomerOrdersQuery(Guid.NewGuid());
         var products = new List<Order>
         {
-            new Order(customerId, new List<OrderItem>()),
-            new Order(customerId, new List<OrderItem>())
+            new(customerId, []),
+            new(customerId, [])
         };
         _orderRepositoryMock
             .Setup(x => x.BrowseByCustomerAsync(It.IsAny<Guid>()))

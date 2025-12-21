@@ -6,17 +6,14 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 
 public class FirstName : ValueObject
 {
-    public string Value { get; private set; }
+    public string Value { get; }
 
     private FirstName(string value)
         => Value = value;
 
     public static FirstName Create(string value)
     {
-        if(string.IsNullOrWhiteSpace(value))
-            throw new InvalidFirstNameValueException();
-
-        return new(value);
+        return string.IsNullOrWhiteSpace(value) ? throw new InvalidFirstNameValueException() : new FirstName(value);
     }
 
     public static implicit operator string(FirstName firstName) => firstName?.Value;

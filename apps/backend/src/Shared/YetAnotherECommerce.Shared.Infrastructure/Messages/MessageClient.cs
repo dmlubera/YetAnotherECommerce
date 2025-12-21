@@ -31,12 +31,12 @@ internal sealed class MessageClient(IMessageRegistry messageRegistry, IServiceSc
         await Task.WhenAll(tasks);
     }
 
-    private object Translate(IMessage message, Type type)
+    private static object Translate(IMessage message, Type type)
         => Deserialize(Serialize(message), type);
 
-    private byte[] Serialize(object value)
+    private static byte[] Serialize(object value)
         => Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }));
 
-    private object Deserialize(byte[] value, Type type)
+    private static object Deserialize(byte[] value, Type type)
         => JsonSerializer.Deserialize(Encoding.UTF8.GetString(value), type, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 }

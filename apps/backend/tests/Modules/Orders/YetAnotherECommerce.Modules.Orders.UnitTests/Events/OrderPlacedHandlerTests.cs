@@ -1,8 +1,8 @@
-﻿using Moq;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
@@ -11,7 +11,6 @@ using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Events;
 

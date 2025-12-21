@@ -6,10 +6,10 @@ namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 
 public class Address : ValueObject
 {
-    public string Street { get; private set; }
-    public string City { get; private set; }
-    public string ZipCode { get; private set; }
-    public string Country { get; private set; }
+    public string Street { get; }
+    public string City { get; }
+    public string ZipCode { get; }
+    public string Country { get; }
 
     private Address(string street, string city, string zipCode, string country)
     {
@@ -27,10 +27,7 @@ public class Address : ValueObject
             throw new InvalidCityValueException();
         if (string.IsNullOrWhiteSpace(zipCode))
             throw new InvalidZipCodeValueException();
-        if (string.IsNullOrWhiteSpace(country))
-            throw new InvalidCountryValueException();
-
-        return new Address(street, city, zipCode, country);
+        return string.IsNullOrWhiteSpace(country) ? throw new InvalidCountryValueException() : new Address(street, city, zipCode, country);
     }
 
     public override string ToString()

@@ -32,7 +32,7 @@ public abstract class ApiTest : IAsyncLifetime
         var testCustomer = new User
         {
             Email = PredefinedUserCredentials.Email,
-            UserName = PredefinedUserCredentials.Email,
+            UserName = PredefinedUserCredentials.Email
         };
         await userManager.CreateAsync(testCustomer, PredefinedUserCredentials.Password);
         await userManager.AddToRoleAsync(testCustomer, Role.Customer);

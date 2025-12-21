@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.Events;
@@ -10,7 +10,6 @@ using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Modules.Products.UnitTests.Fixtures.Entities;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
@@ -82,7 +81,7 @@ public class AddProductToCartCommandHandlerTests
     }
 
     private static AddProductToCartCommand CreateCommand()
-        => new AddProductToCartCommand(
+        => new(
             Guid.NewGuid(),
             Guid.NewGuid(),
             1);

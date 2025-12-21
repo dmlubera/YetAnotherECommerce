@@ -1,7 +1,7 @@
-﻿using Moq;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.Entitites;

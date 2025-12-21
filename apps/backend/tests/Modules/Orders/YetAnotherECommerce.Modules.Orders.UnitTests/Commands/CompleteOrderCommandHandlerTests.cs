@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Commands;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
@@ -47,7 +46,7 @@ public class CompleteOrderCommandHandlerTests
     public async Task WhenOrderExist_ThenShouldUpdateOrderStatus()
     {
         var command = new CompleteOrderCommand(Guid.NewGuid());
-        var order = new Order(Guid.NewGuid(), new List<OrderItem>());
+        var order = new Order(Guid.NewGuid(), []);
         order.AcceptOrder();
         _orderRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))

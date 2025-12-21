@@ -13,7 +13,7 @@ public class Order : AggregateRoot, IAuditable
     public Guid CustomerId { get; private set; }
     public OrderStatus Status { get; private set; }
     public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
-    public DateTime? CreatedAt { get; private set; }
+    public DateTime? CreatedAt { get; }
     public DateTime? LastUpdatedAt { get; private set; }
     public decimal TotalPrice => _orderItems.Sum(x => x.Quantity * x.UnitPrice);
 

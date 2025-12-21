@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Commands;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
@@ -11,7 +10,6 @@ using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands;
 
@@ -53,7 +51,7 @@ public class CancelOrderCommandHandlerTests
     public async Task WhenOrderExist_ThenShouldThrowAnException()
     {
         var command = new CancelOrderCommand(Guid.NewGuid(), Guid.NewGuid());
-        var order = new Order(command.CustomerId, new List<OrderItem>());
+        var order = new Order(command.CustomerId, []);
         order.AcceptOrder();
         _orderRepositoryMock
             .Setup(x => x.GetForCustomerByIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))

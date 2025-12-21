@@ -1,5 +1,5 @@
-﻿using Bogus;
-using System;
+﻿using System;
+using Bogus;
 using YetAnotherECommerce.Modules.Products.Core.Entitites;
 using YetAnotherECommerce.Modules.Products.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;

@@ -29,8 +29,8 @@ public class BrowseQueryHandlerTests
         var query = new BrowseQuery();
         var products = new List<Order>
         {
-            new Order(customerId, new List<OrderItem>()),
-            new Order(customerId, new List<OrderItem>())
+            new(customerId, []),
+            new(customerId, [])
         };
         _orderRepositoryMock
             .Setup(x => x.BrowseAsync())

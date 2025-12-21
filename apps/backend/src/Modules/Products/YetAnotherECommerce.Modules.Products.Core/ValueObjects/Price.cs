@@ -6,7 +6,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects;
 
 public class Price : ValueObject
 {
-    public decimal Value { get; private set; }
+    public decimal Value { get; }
 
     private Price(decimal value)
     {
@@ -15,10 +15,7 @@ public class Price : ValueObject
 
     public static Price Create(decimal value)
     {
-        if (value < decimal.Zero)
-            throw new InvalidPriceException();
-
-        return new Price(value);
+        return value < decimal.Zero ? throw new InvalidPriceException() : new Price(value);
     }
         
     protected override IEnumerable<object> GetEqualityComponents()
@@ -28,5 +25,5 @@ public class Price : ValueObject
 
     public static implicit operator decimal(Price price) => price.Value;
 
-    public static implicit operator Price(decimal price) => new Price(price);
+    public static implicit operator Price(decimal price) => new(price);
 }

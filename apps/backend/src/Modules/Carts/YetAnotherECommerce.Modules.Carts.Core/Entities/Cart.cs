@@ -6,7 +6,7 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Entities;
 
 public class Cart
 {
-    private readonly List<CartItem> _items = new();
+    private readonly List<CartItem> _items = [];
     public decimal Total => _items.Sum(x => x.TotalPrice);
     public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using System;
+﻿using System;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Api;
 
@@ -29,12 +29,7 @@ internal class InternalControllerFeautreProvider : ControllerFeatureProvider
             return false;
         }
 
-        if (!typeInfo.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase) &&
-            !typeInfo.IsDefined(typeof(ControllerAttribute)))
-        {
-            return false;
-        }
-
-        return true;
+        return typeInfo.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase) ||
+               typeInfo.IsDefined(typeof(ControllerAttribute));
     }
 }

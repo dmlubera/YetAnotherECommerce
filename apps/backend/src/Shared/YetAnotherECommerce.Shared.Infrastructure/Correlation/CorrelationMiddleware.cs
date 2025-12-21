@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Serilog.Context;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Serilog.Context;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Correlation;
 

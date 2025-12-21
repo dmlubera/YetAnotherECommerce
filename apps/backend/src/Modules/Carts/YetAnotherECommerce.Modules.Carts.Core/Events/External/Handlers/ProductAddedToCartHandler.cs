@@ -11,9 +11,7 @@ public class ProductAddedToCartHandler(ICache cache) : IEventHandler<ProductAdde
     public async Task HandleAsync(ProductAddedToCart @event)
     {
         var cacheKey = $"{@event.CustomerId}-cart";
-        var cart = cache.Get<Cart>(cacheKey);
-        if (cart is null)
-            cart = new Cart();
+        var cart = cache.Get<Cart>(cacheKey) ?? new Cart();
 
         var cartItem = new CartItem(@event.ProductId, @event.Name, @event.Quantity, @event.UnitPrice);
         cart.AddItem(cartItem);

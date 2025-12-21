@@ -1,6 +1,6 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Moq;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;

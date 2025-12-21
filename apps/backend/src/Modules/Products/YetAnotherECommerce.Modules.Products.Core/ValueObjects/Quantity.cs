@@ -6,7 +6,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.ValueObjects;
 
 public class Quantity : ValueObject
 {
-    public int Value { get; private set; }
+    public int Value { get; }
 
     private Quantity(int value)
     {
@@ -15,10 +15,7 @@ public class Quantity : ValueObject
 
     public static Quantity Create(int value)
     {
-        if (value < 0)
-            throw new InvalidQuantityValueException();
-
-        return new Quantity(value);
+        return value < 0 ? throw new InvalidQuantityValueException() : new Quantity(value);
     }
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -27,5 +24,5 @@ public class Quantity : ValueObject
 
     public static implicit operator int(Quantity quantity) => quantity.Value;
 
-    public static implicit operator Quantity(int quntity) => new Quantity(quntity);
+    public static implicit operator Quantity(int quntity) => new(quntity);
 }

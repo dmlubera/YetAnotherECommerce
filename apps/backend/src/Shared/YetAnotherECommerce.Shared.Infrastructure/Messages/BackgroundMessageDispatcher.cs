@@ -1,26 +1,26 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using YetAnotherECommerce.Shared.Infrastructure.Correlation;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-public class BackroundMessageDispatcher(
+public class BackgroundMessageDispatcher(
     IMessageChannel messageChannel,
     IMessageClient messageClient,
     IServiceScopeFactory serviceScopeFactory,
-    ILogger<BackroundMessageDispatcher> logger,
+    ILogger<BackgroundMessageDispatcher> logger,
     ICorrelationContext correlationContext)
     : BackgroundService
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        await foreach(var message in messageChannel.Reader.ReadAllAsync())
+        await foreach(var message in messageChannel.Reader.ReadAllAsync(cancellationToken))
         {
             using var scope = serviceScopeFactory.CreateScope();
             correlationContext.CorrelationId = message.Metadata.SingleOrDefault().Value;

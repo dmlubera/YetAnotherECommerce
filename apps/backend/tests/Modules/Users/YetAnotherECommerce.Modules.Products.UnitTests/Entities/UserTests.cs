@@ -1,6 +1,6 @@
-﻿using Moq;
+﻿using System.Linq;
+using Moq;
 using Shouldly;
-using System.Linq;
 using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Users.Core.Entities;

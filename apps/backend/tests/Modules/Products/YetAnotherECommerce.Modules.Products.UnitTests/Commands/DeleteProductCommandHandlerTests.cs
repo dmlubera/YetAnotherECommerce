@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Moq;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;

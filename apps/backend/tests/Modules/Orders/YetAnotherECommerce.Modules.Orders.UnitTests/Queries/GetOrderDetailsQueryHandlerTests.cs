@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -43,7 +42,7 @@ public class GetOrderDetailsQueryHandlerTests
     public async Task WhenOrderWithGivenIdExist_ThenShouldMapToDto()
     {
         var query = new GetOrderDetailsQuery(Guid.NewGuid(), Guid.NewGuid());
-        var order = new Order(query.CustomerId, new List<OrderItem>());
+        var order = new Order(query.CustomerId, []);
         _orderRepositoryMock
             .Setup(x => x.GetForCustomerByIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .ReturnsAsync(order);

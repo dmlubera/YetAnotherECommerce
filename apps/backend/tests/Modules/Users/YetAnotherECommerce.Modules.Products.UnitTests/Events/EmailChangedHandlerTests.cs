@@ -1,7 +1,7 @@
-﻿using Moq;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
 using YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers;

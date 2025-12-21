@@ -1,8 +1,7 @@
-﻿using Moq;
-using Shouldly;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using Moq;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
@@ -45,7 +44,7 @@ public class OrderRejectedHandlerTests
     public async Task WhenOrderExist_ThenShouldUpdateStatus()
     {
         var @event = new OrderRejected(Guid.NewGuid());
-        var order = new Order(Guid.NewGuid(), new List<OrderItem>());
+        var order = new Order(Guid.NewGuid(), []);
         order.AcceptOrder();
         _orderRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))

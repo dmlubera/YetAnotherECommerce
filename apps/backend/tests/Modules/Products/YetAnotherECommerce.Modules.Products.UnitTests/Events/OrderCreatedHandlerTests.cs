@@ -35,9 +35,11 @@ public class OrderCreatedHandlerTests
     [Fact]
     public async Task WhenSomeOfOrderedProductsAreNotAvailable_ThenShouldThrowAnExceptionAndPublishIntegrationEvent()
     {
-        var orderedProducts = new Dictionary<Guid, int>();
-        orderedProducts.Add(Guid.NewGuid(), 1);
-        orderedProducts.Add(Guid.NewGuid(), 1);
+        var orderedProducts = new Dictionary<Guid, int>
+        {
+            { Guid.NewGuid(), 1 },
+            { Guid.NewGuid(), 1 }
+        };
         var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
         var products = new List<Product>
         {
@@ -64,8 +66,7 @@ public class OrderCreatedHandlerTests
             ProductFixture.Create()
         };
         products[0].UpdateQuantity(5);
-        var orderedProducts = new Dictionary<Guid, int>();
-        orderedProducts.Add(products[0].Id, 10);
+        var orderedProducts = new Dictionary<Guid, int> { { products[0].Id, 10 } };
         var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
         var expectedException = new ProductIsNotAvailableInOrderedQuantityException();
         _productRepositoryMock
@@ -88,8 +89,7 @@ public class OrderCreatedHandlerTests
             ProductFixture.Create()
         };
         var originalQuantity = products[0].Quantity.Value;
-        var orderedProducts = new Dictionary<Guid, int>();
-        orderedProducts.Add(products[0].Id, 1);
+        var orderedProducts = new Dictionary<Guid, int> { { products[0].Id, 1 } };
         var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
         _productRepositoryMock
             .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))

@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
 using YetAnotherECommerce.Modules.Carts.Core.Events;
 using YetAnotherECommerce.Modules.Carts.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
-using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.Core.Services;
 

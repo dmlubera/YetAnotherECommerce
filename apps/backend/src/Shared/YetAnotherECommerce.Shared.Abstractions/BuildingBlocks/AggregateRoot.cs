@@ -5,7 +5,7 @@ namespace YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
 public class AggregateRoot
 {
-    private readonly List<IDomainEvent> _events = new List<IDomainEvent>();
+    private readonly List<IDomainEvent> _events = [];
     public AggregateId Id { get; protected set; }
     public int Version { get; private set; }
     public IEnumerable<IDomainEvent> Events => _events;

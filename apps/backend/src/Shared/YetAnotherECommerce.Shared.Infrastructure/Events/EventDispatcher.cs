@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Events;

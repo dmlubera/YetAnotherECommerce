@@ -37,7 +37,7 @@ public class AddressTests
     [InlineData("   ")]
     public void Create_WhenZipCodeHasInvalidFormat_ThenShouldThrowAnException(string zipCode)
     {
-        AssertException<InvalidZipCodeValueException>(ValidStreet, ValidCity, zipCode, ValidCountry); ;
+        AssertException<InvalidZipCodeValueException>(ValidStreet, ValidCity, zipCode, ValidCountry);
     }
 
     [Theory]

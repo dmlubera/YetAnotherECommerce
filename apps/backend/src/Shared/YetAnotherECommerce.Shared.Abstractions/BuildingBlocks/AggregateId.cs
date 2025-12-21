@@ -41,5 +41,5 @@ public class AggregateId : IEquatable<AggregateId>
         => id.Value;
 
     public static implicit operator AggregateId(Guid id)
-        => new AggregateId(id);
+        => new(id);
 }

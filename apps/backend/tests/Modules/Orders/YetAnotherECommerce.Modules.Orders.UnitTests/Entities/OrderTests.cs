@@ -1,5 +1,5 @@
-﻿using Shouldly;
-using System;
+﻿using System;
+using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
