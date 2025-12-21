@@ -5,31 +5,22 @@ using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
+
+public class UpdatePriceCommandHandler(IProductRepository productRepository, IEventDispatcher eventDispatcher)
+    : ICommandHandler<UpdatePriceCommand>
 {
-    public class UpdatePriceCommandHandler : ICommandHandler<UpdatePriceCommand>
+    public async Task HandleAsync(UpdatePriceCommand command)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IEventDispatcher _eventDispatcher;
+        var product = await productRepository.GetByIdAsync(command.ProductId);
 
-        public UpdatePriceCommandHandler(IProductRepository productRepository, IEventDispatcher eventDispatcher)
-        {
-            _productRepository = productRepository;
-            _eventDispatcher = eventDispatcher;
-        }
+        if (product is null)
+            throw new ProductDoesNotExistException(command.ProductId);
 
-        public async Task HandleAsync(UpdatePriceCommand command)
-        {
-            var product = await _productRepository.GetByIdAsync(command.ProductId);
+        product.UpdatePrice(command.Price);
 
-            if (product is null)
-                throw new ProductDoesNotExistException(command.ProductId);
+        await productRepository.UpdateAsync(product);
 
-            product.UpdatePrice(command.Price);
-
-            await _productRepository.UpdateAsync(product);
-
-            await _eventDispatcher.PublishAsync(new PriceUpdated(command.ProductId, product.Price));
-        }
+        await eventDispatcher.PublishAsync(new PriceUpdated(command.ProductId, product.Price));
     }
 }

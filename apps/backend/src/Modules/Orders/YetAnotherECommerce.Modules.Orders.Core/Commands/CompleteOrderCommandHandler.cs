@@ -4,31 +4,24 @@ using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Commands
+namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
+
+public class CompleteOrderCommandHandler(
+    IOrderRepository orderRepository,
+    ILogger<CompleteOrderCommandHandler> logger)
+    : ICommandHandler<CompleteOrderCommand>
 {
-    public class CompleteOrderCommandHandler : ICommandHandler<CompleteOrderCommand>
+    public async Task HandleAsync(CompleteOrderCommand command)
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly ILogger<CompleteOrderCommandHandler> _logger;
+        var order = await orderRepository.GetByIdAsync(command.OrderId);
 
-        public CompleteOrderCommandHandler(IOrderRepository orderRepository, ILogger<CompleteOrderCommandHandler> logger)
-        {
-            _orderRepository = orderRepository;
-            _logger = logger;
-        }
+        if (order is null)
+            throw new OrderDoesNotExistException(command.OrderId);
 
-        public async Task HandleAsync(CompleteOrderCommand command)
-        {
-            var order = await _orderRepository.GetByIdAsync(command.OrderId);
+        order.CompleteOrder();
 
-            if (order is null)
-                throw new OrderDoesNotExistException(command.OrderId);
+        await orderRepository.UpdateAsync(order);
 
-            order.CompleteOrder();
-
-            await _orderRepository.UpdateAsync(order);
-
-            _logger.LogInformation($"Order with ID: {order.Id} has been completed.");
-        }
+        logger.LogInformation($"Order with ID: {order.Id} has been completed.");
     }
 }

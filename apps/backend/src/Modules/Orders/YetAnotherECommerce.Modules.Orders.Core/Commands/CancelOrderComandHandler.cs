@@ -8,37 +8,28 @@ using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Commands
+namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
+
+public class CancelOrderComandHandler(
+    IOrderRepository orderRepository,
+    IMessageBroker messageBroker,
+    ILogger<CancelOrderComandHandler> logger)
+    : ICommandHandler<CancelOrderCommand>
 {
-    public class CancelOrderComandHandler : ICommandHandler<CancelOrderCommand>
+    public async Task HandleAsync(CancelOrderCommand command)
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IMessageBroker _messageBroker;
-        private readonly ILogger<CancelOrderComandHandler> _logger;
+        var order = await orderRepository.GetForCustomerByIdAsync(command.CustomerId, command.OrderId);
 
-        public CancelOrderComandHandler(IOrderRepository orderRepository, IMessageBroker messageBroker,
-            ILogger<CancelOrderComandHandler> logger)
-        {
-            _orderRepository = orderRepository;
-            _messageBroker = messageBroker;
-            _logger = logger;
-        }
+        if (order is null)
+            throw new NoSuchOrderExistsForCustomerException(command.OrderId, command.CustomerId);
 
-        public async Task HandleAsync(CancelOrderCommand command)
-        {
-            var order = await _orderRepository.GetForCustomerByIdAsync(command.CustomerId, command.OrderId);
+        order.CancelOrder();
+        await orderRepository.UpdateAsync(order);
 
-            if (order is null)
-                throw new NoSuchOrderExistsForCustomerException(command.OrderId, command.CustomerId);
+        var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
 
-            order.CancelOrder();
-            await _orderRepository.UpdateAsync(order);
+        await messageBroker.PublishAsync(orderCanceled);
 
-            var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
-
-            await _messageBroker.PublishAsync(orderCanceled);
-
-            _logger.LogInformation("Order canceled: {@order}", orderCanceled);
-        }
+        logger.LogInformation("Order canceled: {@order}", orderCanceled);
     }
 }

@@ -8,45 +8,31 @@ using System.Threading;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Infrastructure.Correlation;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Messages
+namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
+
+public class BackroundMessageDispatcher(
+    IMessageChannel messageChannel,
+    IMessageClient messageClient,
+    IServiceScopeFactory serviceScopeFactory,
+    ILogger<BackroundMessageDispatcher> logger,
+    ICorrelationContext correlationContext)
+    : BackgroundService
 {
-    public class BackroundMessageDispatcher : BackgroundService
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        private readonly IMessageChannel _messageChannel;
-        private readonly IMessageClient _messageClient;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ICorrelationContext _correlationContext;
-        private readonly ILogger<BackroundMessageDispatcher> _logger;
-
-        public BackroundMessageDispatcher(IMessageChannel messageChannel,
-            IMessageClient messageClient,
-            IServiceScopeFactory serviceScopeFactory,
-            ILogger<BackroundMessageDispatcher> logger,
-            ICorrelationContext correlationContext)
+        await foreach(var message in messageChannel.Reader.ReadAllAsync())
         {
-            _messageChannel = messageChannel;
-            _messageClient = messageClient;
-            _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
-            _correlationContext = correlationContext;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            await foreach(var message in _messageChannel.Reader.ReadAllAsync())
+            using var scope = serviceScopeFactory.CreateScope();
+            correlationContext.CorrelationId = message.Metadata.SingleOrDefault().Value;
+            using (LogContext.PushProperty(correlationContext.CorrelationIdKey, correlationContext.CorrelationId))
             {
-                using var scope = _serviceScopeFactory.CreateScope();
-                _correlationContext.CorrelationId = message.Metadata.SingleOrDefault().Value;
-                using (LogContext.PushProperty(_correlationContext.CorrelationIdKey, _correlationContext.CorrelationId))
+                try
                 {
-                    try
-                    {
-                        await _messageClient.PublishAsync(message);
-                    }
-                    catch(Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                    }
+                    await messageClient.PublishAsync(message);
+                }
+                catch(Exception ex)
+                {
+                    logger.LogError(ex, ex.Message);
                 }
             }
         }

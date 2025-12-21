@@ -10,47 +10,46 @@ using YetAnotherECommerce.Modules.Products.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Modules.Products.UnitTests.Fixtures.Entities;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.Events
+namespace YetAnotherECommerce.Modules.Products.UnitTests.Events;
+
+public class OrderRevokedHandlerTests
 {
-    public class OrderRevokedHandlerTests
+    private readonly Mock<IProductRepository> _productRepositoryMock;
+    private readonly OrderRevokedHandler _handler;
+
+    public OrderRevokedHandlerTests()
     {
-        private readonly Mock<IProductRepository> _productRepositoryMock;
-        private readonly OrderRevokedHandler _handler;
+        _productRepositoryMock = new Mock<IProductRepository>();
+        _handler = new OrderRevokedHandler(_productRepositoryMock.Object);
+    }
 
-        public OrderRevokedHandlerTests()
+    [Fact]
+    public async Task WhenValidData_ThenShouldUpdateProductsAndSaveChangesToDatabase()
+    {
+        var products = new List<Product>
         {
-            _productRepositoryMock = new Mock<IProductRepository>();
-            _handler = new OrderRevokedHandler(_productRepositoryMock.Object);
-        }
+            ProductFixture.Create(),
+            ProductFixture.Create()
+        };
+        products[0].UpdateQuantity(15);
+        products[1].UpdateQuantity(17);
 
-        [Fact]
-        public async Task WhenValidData_ThenShouldUpdateProductsAndSaveChangesToDatabase()
-        {
-            var products = new List<Product>
-            {
-                ProductFixture.Create(),
-                ProductFixture.Create()
-            };
-            products[0].UpdateQuantity(15);
-            products[1].UpdateQuantity(17);
+        var quanitiesBeforeUpdate = new Dictionary<Guid, int>();
+        products.ForEach(x => quanitiesBeforeUpdate.Add(x.Id, x.Quantity));
+        var productsFromRevokedOrder = new Dictionary<Guid, int>();
+        products.ForEach(x => productsFromRevokedOrder.Add(x.Id, 1));
 
-            var quanitiesBeforeUpdate = new Dictionary<Guid, int>();
-            products.ForEach(x => quanitiesBeforeUpdate.Add(x.Id, x.Quantity));
-            var productsFromRevokedOrder = new Dictionary<Guid, int>();
-            products.ForEach(x => productsFromRevokedOrder.Add(x.Id, 1));
+        var orderCreated = new OrderRevoked(Guid.NewGuid(), productsFromRevokedOrder);
+        _productRepositoryMock
+            .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+            .ReturnsAsync(products);
 
-            var orderCreated = new OrderRevoked(Guid.NewGuid(), productsFromRevokedOrder);
-            _productRepositoryMock
-                .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
-                .ReturnsAsync(products);
+        await _handler.HandleAsync(orderCreated);
 
-            await _handler.HandleAsync(orderCreated);
-
-            products[0].Quantity.Value
-                .ShouldBe(quanitiesBeforeUpdate.GetValueOrDefault(products[0].Id) + productsFromRevokedOrder.GetValueOrDefault(products[0].Id));
-            products[1].Quantity.Value
-                .ShouldBe(quanitiesBeforeUpdate.GetValueOrDefault(products[1].Id) + productsFromRevokedOrder.GetValueOrDefault(products[1].Id));
-            _productRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<IEnumerable<Product>>()));
-        }
+        products[0].Quantity.Value
+            .ShouldBe(quanitiesBeforeUpdate.GetValueOrDefault(products[0].Id) + productsFromRevokedOrder.GetValueOrDefault(products[0].Id));
+        products[1].Quantity.Value
+            .ShouldBe(quanitiesBeforeUpdate.GetValueOrDefault(products[1].Id) + productsFromRevokedOrder.GetValueOrDefault(products[1].Id));
+        _productRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<IEnumerable<Product>>()));
     }
 }

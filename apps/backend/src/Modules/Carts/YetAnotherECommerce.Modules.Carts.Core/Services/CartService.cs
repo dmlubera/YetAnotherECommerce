@@ -9,52 +9,41 @@ using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-namespace YetAnotherECommerce.Modules.Carts.Core.Services
+namespace YetAnotherECommerce.Modules.Carts.Core.Services;
+
+public class CartService(ICache cache, IMessageBroker messageBroker, ILogger<CartService> logger)
+    : ICartService
 {
-    public class CartService : ICartService
+    public Cart Browse(string cacheKey)
+        => cache.Get<Cart>(cacheKey);
+
+    public async Task PlaceOrderAsync(Guid userId)
     {
-        private readonly ICache _cache;
-        private readonly IMessageBroker _messageBroker;
-        private readonly ILogger<CartService> _logger;
+        var cart = cache.Get<Cart>($"{userId}-cart");
 
-        public CartService(ICache cache, IMessageBroker messageBroker, ILogger<CartService> logger)
+        if (cart.Items.Count == 0)
+            throw new CannotCreateOrderFromEmptyCartException();
+
+        var productDtos = new List<ProductDto>();
+        foreach(var item in cart.Items)
         {
-            _cache = cache;
-            _messageBroker = messageBroker;
-            _logger = logger;
-        }
-        
-        public Cart Browse(string cacheKey)
-            => _cache.Get<Cart>(cacheKey);
-
-        public async Task PlaceOrderAsync(Guid userId)
-        {
-            var cart = _cache.Get<Cart>($"{userId}-cart");
-
-            if (cart.Items.Count == 0)
-                throw new CannotCreateOrderFromEmptyCartException();
-
-            var productDtos = new List<ProductDto>();
-            foreach(var item in cart.Items)
-            {
-                if (item.Quantity == 0)
-                    throw new CannotOrderProductInZeroQuantityException();
-                productDtos.Add(new ProductDto(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
-            }
-
-            var orderPlaced = new OrderPlaced(userId, productDtos);
-            await _messageBroker.PublishAsync(orderPlaced);
-
-            _logger.LogInformation("Order placed: {@order}", orderPlaced);
+            if (item.Quantity == 0)
+                throw new CannotOrderProductInZeroQuantityException();
+            productDtos.Add(new ProductDto(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
         }
 
-        public void ClearCart(string cacheKey)
-            => _cache.Clear(cacheKey);
+        var orderPlaced = new OrderPlaced(userId, productDtos);
+        await messageBroker.PublishAsync(orderPlaced);
 
-        public void RemoveItem(string cacheKey, Guid itemId)
-        {
-            var cart =_cache.Get<Cart>(cacheKey);
-            cart.RemoveItem(itemId);
-        }
+        logger.LogInformation("Order placed: {@order}", orderPlaced);
+    }
+
+    public void ClearCart(string cacheKey)
+        => cache.Clear(cacheKey);
+
+    public void RemoveItem(string cacheKey, Guid itemId)
+    {
+        var cart =cache.Get<Cart>(cacheKey);
+        cart.RemoveItem(itemId);
     }
 }

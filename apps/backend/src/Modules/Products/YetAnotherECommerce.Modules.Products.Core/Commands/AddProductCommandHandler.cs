@@ -5,29 +5,22 @@ using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
+
+public class AddProductCommandHandler(
+    IProductRepository productRepository,
+    ILogger<AddProductCommandHandler> logger)
+    : ICommandHandler<AddProductCommand>
 {
-    public class AddProductCommandHandler : ICommandHandler<AddProductCommand>
+    public async Task HandleAsync(AddProductCommand command)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly ILogger<AddProductCommandHandler> _logger;
+        if (await productRepository.CheckIfProductAlreadyExistsAsync(command.Name))
+            throw new ProductWithGivenNameAlreadyExistsException();
 
-        public AddProductCommandHandler(IProductRepository productRepository, ILogger<AddProductCommandHandler> logger)
-        {
-            _productRepository = productRepository;
-            _logger = logger;
-        }
+        var product = new Product(command.Name, command.Description, command.Price, command.Quantity);
 
-        public async Task HandleAsync(AddProductCommand command)
-        {
-            if (await _productRepository.CheckIfProductAlreadyExistsAsync(command.Name))
-                throw new ProductWithGivenNameAlreadyExistsException();
+        await productRepository.AddAsync(product);
 
-            var product = new Product(command.Name, command.Description, command.Price, command.Quantity);
-
-            await _productRepository.AddAsync(product);
-
-            _logger.LogInformation("Product added: {@product}", product);
-        }
+        logger.LogInformation("Product added: {@product}", product);
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 using YetAnotherECommerce.Modules.Identity.Core.Dtos;
 
-namespace YetAnotherECommerce.Modules.Identity.Core.Services
+namespace YetAnotherECommerce.Modules.Identity.Core.Services;
+
+public interface IAuthManager
 {
-    public interface IAuthManager
-    {
-        JsonWebToken GenerateJwtToken(Guid userId, string userRole);
-    }
+    JsonWebToken GenerateJwtToken(Guid userId, string userRole);
 }

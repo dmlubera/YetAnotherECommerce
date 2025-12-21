@@ -1,7 +1,6 @@
-﻿namespace YetAnotherECommerce.Shared.Infrastructure.Messages
+﻿namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
+
+public class MessagingOptions
 {
-    public class MessagingOptions
-    {
-        public bool UseAsyncDispatcher { get; set; }
-    }
+    public bool UseAsyncDispatcher { get; set; }
 }

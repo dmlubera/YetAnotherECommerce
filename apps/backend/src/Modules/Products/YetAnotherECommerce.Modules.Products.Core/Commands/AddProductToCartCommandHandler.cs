@@ -7,38 +7,29 @@ using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
+
+public class AddProductToCartCommandHandler(
+    IProductRepository productRepository,
+    IMessageBroker messageBroker,
+    ILogger<AddProductToCartCommandHandler> logger)
+    : ICommandHandler<AddProductToCartCommand>
 {
-    public class AddProductToCartCommandHandler : ICommandHandler<AddProductToCartCommand>
+    public async Task HandleAsync(AddProductToCartCommand command)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMessageBroker _messageBroker;
-        private readonly ILogger<AddProductToCartCommandHandler> _logger;
+        var product = await productRepository.GetByIdAsync(command.ProductId);
 
-        public AddProductToCartCommandHandler(IProductRepository productRepository, IMessageBroker messageBroker,
-            ILogger<AddProductToCartCommandHandler> logger)
-        {
-            _productRepository = productRepository;
-            _messageBroker = messageBroker;
-            _logger = logger;
-        }
+        if (product is null)
+            throw new ProductDoesNotExistException(command.ProductId);
 
-        public async Task HandleAsync(AddProductToCartCommand command)
-        {
-            var product = await _productRepository.GetByIdAsync(command.ProductId);
+        if (product.Quantity < command.Quantity)
+            throw new ProductIsNotAvailableInOrderedQuantityException();
 
-            if (product is null)
-                throw new ProductDoesNotExistException(command.ProductId);
+        var productAddedToCart = new ProductAddedToCart(command.CustomerId, command.ProductId,
+            product.Name, product.Price, command.Quantity);
 
-            if (product.Quantity < command.Quantity)
-                throw new ProductIsNotAvailableInOrderedQuantityException();
+        await messageBroker.PublishAsync(productAddedToCart);
 
-            var productAddedToCart = new ProductAddedToCart(command.CustomerId, command.ProductId,
-                product.Name, product.Price, command.Quantity);
-
-            await _messageBroker.PublishAsync(productAddedToCart);
-
-            _logger.LogInformation("Product added to cart: {@product}", productAddedToCart);
-        }
+        logger.LogInformation("Product added to cart: {@product}", productAddedToCart);
     }
 }

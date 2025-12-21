@@ -1,7 +1,6 @@
-﻿namespace YetAnotherECommerce.Modules.Products.Core.DTOs
+﻿namespace YetAnotherECommerce.Modules.Products.Core.DTOs;
+
+public class ProductDetailsDto : ProductDto
 {
-    public class ProductDetailsDto : ProductDto
-    {
-        public string Description { get; set; }
-    }
+    public string Description { get; set; }
 }

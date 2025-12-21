@@ -4,25 +4,19 @@ using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
+
+public class OrderRejectedHandler(IOrderRepository orderRepository) : IEventHandler<OrderRejected>
 {
-    public class OrderRejectedHandler : IEventHandler<OrderRejected>
+    public async Task HandleAsync(OrderRejected @event)
     {
-        private readonly IOrderRepository _orderRepository;
+        var order = await orderRepository.GetByIdAsync(@event.OrderId);
 
-        public OrderRejectedHandler(IOrderRepository orderRepository)
-            => _orderRepository = orderRepository;
+        if (order is null)
+            throw new OrderDoesNotExistException(@event.OrderId);
 
-        public async Task HandleAsync(OrderRejected @event)
-        {
-            var order = await _orderRepository.GetByIdAsync(@event.OrderId);
+        order.RejectOrder();
 
-            if (order is null)
-                throw new OrderDoesNotExistException(@event.OrderId);
-
-            order.RejectOrder();
-
-            await _orderRepository.UpdateAsync(order);
-        }
+        await orderRepository.UpdateAsync(order);
     }
 }

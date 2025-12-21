@@ -1,29 +1,19 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Modules.Carts.Core.Entities
+namespace YetAnotherECommerce.Modules.Carts.Core.Entities;
+
+public class CartItem(Guid productId, string name, int quantity, decimal unitPrice)
 {
-    public class CartItem
-    {
-        public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
-        public string Name { get; private set; }
-        public int Quantity { get; private set; }
-        public decimal UnitPrice { get; private set; }
-        public decimal TotalPrice => UnitPrice * Quantity;
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid ProductId { get; set; } = productId;
+    public string Name { get; private set; } = name;
+    public int Quantity { get; private set; } = quantity;
+    public decimal UnitPrice { get; private set; } = unitPrice;
+    public decimal TotalPrice => UnitPrice * Quantity;
 
-        public CartItem(Guid productId, string name, int quantity, decimal unitPrice)
-        {
-            Id = Guid.NewGuid();
-            ProductId = productId;
-            Name = name;
-            Quantity = quantity;
-            UnitPrice = unitPrice;
-        }
+    public void IncreaseQuantity(int quantity)
+        => Quantity += quantity;
 
-        public void IncreaseQuantity(int quantity)
-            => Quantity += quantity;
-
-        public void UpdatePrice(decimal price)
-            => UnitPrice = price;
-    }
+    public void UpdatePrice(decimal price)
+        => UnitPrice = price;
 }

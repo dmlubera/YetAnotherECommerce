@@ -3,31 +3,30 @@ using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.ValueObjects;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects
+namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects;
+
+public class PriceTests
 {
-    public class PriceTests
+    [Fact]
+    public void Create_WhenPriceIsLesserThanZero_ThenShouldThrowException()
     {
-        [Fact]
-        public void Create_WhenPriceIsLesserThanZero_ThenShouldThrowException()
-        {
-            var expectedException = new InvalidPriceException();
+        var expectedException = new InvalidPriceException();
 
-            var exception = Assert.Throws<InvalidPriceException>(() => Price.Create(-10));
+        var exception = Assert.Throws<InvalidPriceException>(() => Price.Create(-10));
 
-            exception.ShouldNotBeNull();
-            exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            exception.Message.ShouldBe(expectedException.Message);
-        }
+        exception.ShouldNotBeNull();
+        exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        exception.Message.ShouldBe(expectedException.Message);
+    }
 
-        [Fact]
-        public void Create_WhenPriceIsGreaterThanZero_ThenShouldReturnValueObject()
-        {
-            var price = 10;
+    [Fact]
+    public void Create_WhenPriceIsGreaterThanZero_ThenShouldReturnValueObject()
+    {
+        var price = 10;
 
-            var result = Price.Create(price);
+        var result = Price.Create(price);
 
-            result.ShouldNotBeNull();
-            result.Value.ShouldBe(price);
-        }
+        result.ShouldNotBeNull();
+        result.Value.ShouldBe(price);
     }
 }

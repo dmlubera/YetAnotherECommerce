@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Messages
+namespace YetAnotherECommerce.Shared.Abstractions.Messages;
+
+public interface IMessageEnvelope
 {
-    public interface IMessageEnvelope
-    {
-        IDictionary<string, string> Metadata { get; }
-        IMessage Payload { get; }
-    }
+    IDictionary<string, string> Metadata { get; }
+    IMessage Payload { get; }
 }

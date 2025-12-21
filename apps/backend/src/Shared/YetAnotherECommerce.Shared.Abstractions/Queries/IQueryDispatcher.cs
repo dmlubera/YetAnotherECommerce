@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Queries
+namespace YetAnotherECommerce.Shared.Abstractions.Queries;
+
+public interface IQueryDispatcher
 {
-    public interface IQueryDispatcher
-    {
-        Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query);
-    }
+    Task<TResult> DispatchAsync<TResult>(IQuery<TResult> query);
 }

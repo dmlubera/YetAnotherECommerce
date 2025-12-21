@@ -4,21 +4,14 @@ using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
+
+public class RegistrationCompletedHandler(ICustomerRepository customerRepository)
+    : IEventHandler<RegistrationCompleted>
 {
-    public class RegistrationCompletedHandler : IEventHandler<RegistrationCompleted>
+    public async Task HandleAsync(RegistrationCompleted @event)
     {
-        private readonly ICustomerRepository _customerRepository;
-
-        public RegistrationCompletedHandler(ICustomerRepository customerRepository)
-        {
-            _customerRepository = customerRepository;
-        }
-
-        public async Task HandleAsync(RegistrationCompleted @event)
-        {
-            await _customerRepository.AddAsync(
-                new Customer(@event.CustomerId, @event.FirstName, @event.LastName, @event.Email, @event.Address));
-        }
+        await customerRepository.AddAsync(
+            new Customer(@event.CustomerId, @event.FirstName, @event.LastName, @event.Email, @event.Address));
     }
 }

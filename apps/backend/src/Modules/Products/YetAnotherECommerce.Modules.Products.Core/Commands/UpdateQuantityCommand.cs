@@ -1,17 +1,10 @@
 ﻿using System;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
-{
-    public class UpdateQuantityCommand : ICommand
-    {
-        public Guid ProductId { get; set; }
-        public int Quantity { get; set; }
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
 
-        public UpdateQuantityCommand(Guid productId, int quantity)
-        {
-            ProductId = productId;
-            Quantity = quantity;
-        }
-    }
+public class UpdateQuantityCommand(Guid productId, int quantity) : ICommand
+{
+    public Guid ProductId { get; set; } = productId;
+    public int Quantity { get; set; } = quantity;
 }

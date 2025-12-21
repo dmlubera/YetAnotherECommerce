@@ -4,22 +4,16 @@ using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Postgres.Repositories
+namespace YetAnotherECommerce.Modules.Orders.Core.DAL.Postgres.Repositories;
+
+internal class PostgresCustomersRepository(OrdersDbContext dbContext) : ICustomerRepository
 {
-    internal class PostgresCustomersRepository : ICustomerRepository
+    public async Task AddAsync(Customer customer)
     {
-        private readonly OrdersDbContext _dbContext;
-
-        public PostgresCustomersRepository(OrdersDbContext dbContext)
-            => _dbContext = dbContext;
-
-        public async Task AddAsync(Customer customer)
-        {
-            _dbContext.Customers.Add(customer);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Customer> GetByIdAsync(Guid id)
-            => await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == id);
+        dbContext.Customers.Add(customer);
+        await dbContext.SaveChangesAsync();
     }
+
+    public async Task<Customer> GetByIdAsync(Guid id)
+        => await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == id);
 }

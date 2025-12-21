@@ -3,25 +3,17 @@ using System.Threading.Tasks;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
+
+public class DeleteProductCommandHandler(
+    IProductRepository productRepository,
+    ILogger<DeleteProductCommandHandler> logger)
+    : ICommandHandler<DeleteProductCommand>
 {
-    public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand>
+    public async Task HandleAsync(DeleteProductCommand command)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly ILogger<DeleteProductCommandHandler> _logger;
+        await productRepository.DeleteAsync(command.ProductId);
 
-        public DeleteProductCommandHandler(IProductRepository productRepository,
-            ILogger<DeleteProductCommandHandler> logger)
-        {
-            _productRepository = productRepository;
-            _logger = logger;
-        }
-
-        public async Task HandleAsync(DeleteProductCommand command)
-        {
-            await _productRepository.DeleteAsync(command.ProductId);
-
-            _logger.LogInformation($"Product with ID: {command.ProductId} has been deleted.");
-        }
+        logger.LogInformation($"Product with ID: {command.ProductId} has been deleted.");
     }
 }

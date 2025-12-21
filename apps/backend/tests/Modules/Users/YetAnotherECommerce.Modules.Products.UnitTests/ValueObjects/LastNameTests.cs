@@ -3,34 +3,33 @@ using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects
+namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects;
+
+public class LastNameTests
 {
-    public class LastNameTests
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Create_WhenLastNameHasInvalidFormat_ThenShouldThrowExcepion(string lastName)
     {
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("   ")]
-        public void Create_WhenLastNameHasInvalidFormat_ThenShouldThrowExcepion(string lastName)
-        {
-            var expectedException = new InvalidLastNameValueException();
+        var expectedException = new InvalidLastNameValueException();
 
-            var exception = Assert.Throws<InvalidLastNameValueException>(() => LastName.Create(lastName));
+        var exception = Assert.Throws<InvalidLastNameValueException>(() => LastName.Create(lastName));
 
-            exception.ShouldNotBeNull();
-            exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
-            exception.Message.ShouldBe(expectedException.Message);
-        }
+        exception.ShouldNotBeNull();
+        exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        exception.Message.ShouldBe(expectedException.Message);
+    }
 
-        [Fact]
-        public void Create_WhenLastNameHasValidFormat_ThenShouldReturnValueObject()
-        {
-            var lastName = "Johnson";
+    [Fact]
+    public void Create_WhenLastNameHasValidFormat_ThenShouldReturnValueObject()
+    {
+        var lastName = "Johnson";
 
-            var result = LastName.Create(lastName);
+        var result = LastName.Create(lastName);
 
-            result.ShouldNotBeNull();
-            result.Value.ShouldBe(lastName);
-        }
+        result.ShouldNotBeNull();
+        result.Value.ShouldBe(lastName);
     }
 }

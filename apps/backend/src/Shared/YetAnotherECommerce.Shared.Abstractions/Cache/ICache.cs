@@ -1,9 +1,8 @@
-﻿namespace YetAnotherECommerce.Shared.Abstractions.Cache
+﻿namespace YetAnotherECommerce.Shared.Abstractions.Cache;
+
+public interface ICache
 {
-    public interface ICache
-    {
-        T Get<T>(string key);
-        void Set<T>(string key, T value);
-        void Clear(string key);
-    }
+    T Get<T>(string key);
+    void Set<T>(string key, T value);
+    void Clear(string key);
 }

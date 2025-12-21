@@ -2,30 +2,29 @@
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
-namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects
+namespace YetAnotherECommerce.Modules.Users.Core.ValueObjects;
+
+public class LastName : ValueObject
 {
-    public class LastName : ValueObject
+    public string Value { get; private set; }
+
+    private LastName(string value)
+        => Value = value;
+
+    public static LastName Create(string value)
     {
-        public string Value { get; private set; }
+        if (string.IsNullOrWhiteSpace(value))
+            throw new InvalidLastNameValueException();
 
-        private LastName(string value)
-            => Value = value;
+        return new(value);
+    }
 
-        public static LastName Create(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new InvalidLastNameValueException();
+    public static implicit operator string(LastName lastName) => lastName?.Value;
 
-            return new(value);
-        }
+    public static implicit operator LastName(string lastName) => new(lastName);
 
-        public static implicit operator string(LastName lastName) => lastName?.Value;
-
-        public static implicit operator LastName(string lastName) => new(lastName);
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Value;
-        }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

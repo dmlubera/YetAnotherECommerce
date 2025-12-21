@@ -3,22 +3,16 @@ using Serilog.Context;
 using System;
 using System.Threading.Tasks;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Correlation
+namespace YetAnotherECommerce.Shared.Infrastructure.Correlation;
+
+public class CorrelationMiddleware(ICorrelationContext correlationContext) : IMiddleware
 {
-    public class CorrelationMiddleware : IMiddleware
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        private readonly ICorrelationContext _correlationId;
-
-        public CorrelationMiddleware(ICorrelationContext correlationContext)
-            => _correlationId = correlationContext;
-
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        correlationContext.CorrelationId = Guid.NewGuid().ToString();
+        using (LogContext.PushProperty(correlationContext.CorrelationIdKey, correlationContext.CorrelationId))
         {
-            _correlationId.CorrelationId = Guid.NewGuid().ToString();
-            using (LogContext.PushProperty(_correlationId.CorrelationIdKey, _correlationId.CorrelationId))
-            {
-                await next(context);
-            }
+            await next(context);
         }
     }
 }

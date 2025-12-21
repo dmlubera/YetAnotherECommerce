@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.DTOs
+namespace YetAnotherECommerce.Modules.Orders.Core.DTOs;
+
+public class OrderDto
 {
-    public class OrderDto
-    {
-        public Guid Id { get; set; }
-        public string Status { get; set; }
-        public decimal TotalPrice { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Status { get; set; }
+    public decimal TotalPrice { get; set; }
 }

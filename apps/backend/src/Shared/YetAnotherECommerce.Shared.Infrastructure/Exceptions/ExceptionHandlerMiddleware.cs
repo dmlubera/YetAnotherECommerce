@@ -5,42 +5,35 @@ using System.Net;
 using System.Threading.Tasks;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 
-namespace YetAnotherECommerce.Shared.Infrastructure.Exceptions
+namespace YetAnotherECommerce.Shared.Infrastructure.Exceptions;
+
+internal class ExceptionHandlerMiddleware(
+    ILogger<ExceptionHandlerMiddleware> logger,
+    IExceptionToResponseMapper exceptionToResponseMapper)
+    : IMiddleware
 {
-    internal class ExceptionHandlerMiddleware : IMiddleware
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-        private readonly IExceptionToResponseMapper _exceptionToResponseMapper;
-
-        public ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger, IExceptionToResponseMapper exceptionToResponseMapper)
+        try
         {
-            _logger = logger;
-            _exceptionToResponseMapper = exceptionToResponseMapper;
+            await next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        catch (Exception ex)
         {
-            try
-            {
-                await next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                await HandleExceptionAsync(context, ex);
-            }
+            logger.LogError(ex, ex.Message);
+            await HandleExceptionAsync(context, ex);
         }
+    }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
-        {
-            var errorResponse = _exceptionToResponseMapper.Map(ex);
-            context.Response.StatusCode = (int)(errorResponse?.StatusCode ?? HttpStatusCode.InternalServerError);
-            var response = errorResponse?.Response;
+    private async Task HandleExceptionAsync(HttpContext context, Exception ex)
+    {
+        var errorResponse = exceptionToResponseMapper.Map(ex);
+        context.Response.StatusCode = (int)(errorResponse?.StatusCode ?? HttpStatusCode.InternalServerError);
+        var response = errorResponse?.Response;
 
-            if (response is null)
-                return;
+        if (response is null)
+            return;
 
-            await context.Response.WriteAsJsonAsync(response);
-        }
+        await context.Response.WriteAsJsonAsync(response);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace YetAnotherECommerce.Shared.Infrastructure.Correlation
+﻿namespace YetAnotherECommerce.Shared.Infrastructure.Correlation;
+
+public interface ICorrelationContext
 {
-    public interface ICorrelationContext
-    {
-        string CorrelationId { get; set; }
-        string CorrelationIdKey { get; }
-    }
+    string CorrelationId { get; set; }
+    string CorrelationIdKey { get; }
 }

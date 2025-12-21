@@ -9,40 +9,31 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers
+namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
+
+public class OrderPlacedHandler(
+    IOrderRepository orderRepository,
+    ICustomerRepository customerRepository,
+    IMessageBroker messageBroker)
+    : IEventHandler<OrderPlaced>
 {
-    public class OrderPlacedHandler : IEventHandler<OrderPlaced>
+    public async Task HandleAsync(OrderPlaced @event)
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IMessageBroker _messageBroker;
+        var customer = await customerRepository.GetByIdAsync(@event.CustomerId);
+        if (customer is null)
+            throw new CustomerWithGivenIdDoesNotExistsException(@event.CustomerId);
 
-        public OrderPlacedHandler(IOrderRepository orderRepository, ICustomerRepository customerRepository,
-            IMessageBroker messageBroker)
+        var orderItems = new List<OrderItem>();
+        var productsWithQuantity = new Dictionary<Guid, int>();
+        foreach(var item in @event.Products)
         {
-            _orderRepository = orderRepository;
-            _customerRepository = customerRepository;
-            _messageBroker = messageBroker;
+            orderItems.Add(new OrderItem(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
+            productsWithQuantity.Add(item.ProductId, item.Quantity);
         }
+        var order = new Order(@event.CustomerId, orderItems);
 
-        public async Task HandleAsync(OrderPlaced @event)
-        {
-            var customer = await _customerRepository.GetByIdAsync(@event.CustomerId);
-            if (customer is null)
-                throw new CustomerWithGivenIdDoesNotExistsException(@event.CustomerId);
+        await orderRepository.AddAsync(order);
 
-            var orderItems = new List<OrderItem>();
-            var productsWithQuantity = new Dictionary<Guid, int>();
-            foreach(var item in @event.Products)
-            {
-                orderItems.Add(new OrderItem(item.ProductId, item.Name, item.UnitPrice, item.Quantity));
-                productsWithQuantity.Add(item.ProductId, item.Quantity);
-            }
-            var order = new Order(@event.CustomerId, orderItems);
-
-            await _orderRepository.AddAsync(order);
-
-            await _messageBroker.PublishAsync(new OrderCreated(order.Id, productsWithQuantity));
-        }
+        await messageBroker.PublishAsync(new OrderCreated(order.Id, productsWithQuantity));
     }
 }

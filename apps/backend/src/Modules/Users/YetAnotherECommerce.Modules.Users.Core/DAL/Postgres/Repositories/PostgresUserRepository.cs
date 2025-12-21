@@ -4,28 +4,22 @@ using YetAnotherECommerce.Modules.Users.Core.Entities;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
-namespace YetAnotherECommerce.Modules.Users.Core.DAL.Postgres.Repositories
+namespace YetAnotherECommerce.Modules.Users.Core.DAL.Postgres.Repositories;
+
+internal class PostgresUserRepository(UsersDbContext dbContext) : IUserRepository
 {
-    internal class PostgresUserRepository : IUserRepository
+    public async Task AddAsync(User user)
     {
-        private readonly UsersDbContext _dbContext;
+        dbContext.Add(user);
+        await dbContext.SaveChangesAsync();
+    }
 
-        public PostgresUserRepository(UsersDbContext dbContext)
-            => _dbContext = dbContext;
+    public async Task<User> GetByIdAsync(Guid id)
+        => await dbContext.Users.FindAsync(new AggregateId(id));
 
-        public async Task AddAsync(User user)
-        {
-            _dbContext.Add(user);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<User> GetByIdAsync(Guid id)
-            => await _dbContext.Users.FindAsync(new AggregateId(id));
-
-        public async Task UpdateAsync(User user)
-        {
-            _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-        }
+    public async Task UpdateAsync(User user)
+    {
+        dbContext.Users.Update(user);
+        await dbContext.SaveChangesAsync();
     }
 }

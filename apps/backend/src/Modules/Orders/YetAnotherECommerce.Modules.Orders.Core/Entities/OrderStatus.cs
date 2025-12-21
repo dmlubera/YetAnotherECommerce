@@ -1,11 +1,10 @@
-﻿namespace YetAnotherECommerce.Modules.Orders.Core.Entities
+﻿namespace YetAnotherECommerce.Modules.Orders.Core.Entities;
+
+public enum OrderStatus
 {
-    public enum OrderStatus
-    {
-        Created,
-        Accepted,
-        Completed,
-        Canceled,
-        Rejected
-    }
+    Created,
+    Accepted,
+    Completed,
+    Canceled,
+    Rejected
 }

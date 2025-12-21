@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Exceptions
+namespace YetAnotherECommerce.Shared.Abstractions.Exceptions;
+
+public interface IExceptionToResponseMapper
 {
-    public interface IExceptionToResponseMapper
-    {
-        ExceptionResponse Map(Exception exception);
-    }
+    ExceptionResponse Map(Exception exception);
 }

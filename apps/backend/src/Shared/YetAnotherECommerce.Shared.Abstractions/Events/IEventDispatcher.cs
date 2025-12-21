@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace YetAnotherECommerce.Shared.Abstractions.Events
+namespace YetAnotherECommerce.Shared.Abstractions.Events;
+
+public interface IEventDispatcher
 {
-    public interface IEventDispatcher
-    {
-        Task PublishAsync<TEvent>(TEvent @event) where TEvent : class, IEvent;
-    }
+    Task PublishAsync<TEvent>(TEvent @event) where TEvent : class, IEvent;
 }

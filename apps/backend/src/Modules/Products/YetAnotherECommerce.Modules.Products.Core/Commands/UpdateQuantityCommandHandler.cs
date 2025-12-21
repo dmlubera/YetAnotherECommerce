@@ -3,25 +3,19 @@ using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
-namespace YetAnotherECommerce.Modules.Products.Core.Commands
+namespace YetAnotherECommerce.Modules.Products.Core.Commands;
+
+public class UpdateQuantityCommandHandler(IProductRepository repository) : ICommandHandler<UpdateQuantityCommand>
 {
-    public class UpdateQuantityCommandHandler : ICommandHandler<UpdateQuantityCommand>
+    public async Task HandleAsync(UpdateQuantityCommand command)
     {
-        private readonly IProductRepository _repository;
+        var product = await repository.GetByIdAsync(command.ProductId);
 
-        public UpdateQuantityCommandHandler(IProductRepository repository)
-            => _repository = repository;
+        if (product is null)
+            throw new ProductDoesNotExistException(command.ProductId);
 
-        public async Task HandleAsync(UpdateQuantityCommand command)
-        {
-            var product = await _repository.GetByIdAsync(command.ProductId);
+        product.UpdateQuantity(command.Quantity);
 
-            if (product is null)
-                throw new ProductDoesNotExistException(command.ProductId);
-
-            product.UpdateQuantity(command.Quantity);
-
-            await _repository.UpdateAsync(product);
-        }
+        await repository.UpdateAsync(product);
     }
 }

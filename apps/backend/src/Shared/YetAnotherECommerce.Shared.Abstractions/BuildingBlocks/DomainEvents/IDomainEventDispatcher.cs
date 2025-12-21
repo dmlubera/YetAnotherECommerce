@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents
+namespace YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
+
+public interface IDomainEventDispatcher
 {
-    public interface IDomainEventDispatcher
-    {
-        Task DispatchAsync(params IDomainEvent[] events);
-    }
+    Task DispatchAsync(params IDomainEvent[] events);
 }

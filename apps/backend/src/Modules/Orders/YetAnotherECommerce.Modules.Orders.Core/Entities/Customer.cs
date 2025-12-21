@@ -1,22 +1,12 @@
 ﻿using System;
 
-namespace YetAnotherECommerce.Modules.Orders.Core.Entities
-{
-    public class Customer
-    {
-        public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
+namespace YetAnotherECommerce.Modules.Orders.Core.Entities;
 
-        public Customer(Guid id, string firstName, string lastName, string email, string address)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Address = address;
-        }
-    }
+public class Customer(Guid id, string firstName, string lastName, string email, string address)
+{
+    public Guid Id { get; set; } = id;
+    public string FirstName { get; set; } = firstName;
+    public string LastName { get; set; } = lastName;
+    public string Email { get; set; } = email;
+    public string Address { get; set; } = address;
 }

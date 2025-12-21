@@ -4,20 +4,14 @@ using YetAnotherECommerce.Modules.Users.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 
-namespace YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers
+namespace YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers;
+
+public class UserRegisteredHandler(IUserRepository userRepository) : IEventHandler<UserRegistered>
 {
-    public class UserRegisteredHandler : IEventHandler<UserRegistered>
+    public async Task HandleAsync(UserRegistered @event)
     {
-        private readonly IUserRepository _userRepository;
+        var user = new User(@event.Id, @event.Email);
 
-        public UserRegisteredHandler(IUserRepository userRepository)
-            => _userRepository = userRepository;
-
-        public async Task HandleAsync(UserRegistered @event)
-        {
-            var user = new User(@event.Id, @event.Email);
-
-            await _userRepository.AddAsync(user);
-        }
+        await userRepository.AddAsync(user);
     }
 }
