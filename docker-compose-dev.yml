@@ -1,8 +1,10 @@
 services:
   database:
-    image: postgres
+    image: postgres:16.11-alpine
     container_name: database
     restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
@@ -19,8 +21,10 @@ services:
       start_period: 10s
 
   backend:
-    build: ./apps/backend
-    container_name: backend
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile.Dev
+    container_name: backend-dev
     ports:
       - 5001:5001
     networks:
@@ -30,12 +34,25 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./apps/frontend
-    container_name: frontend
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile.Dev
+    container_name: frontend-dev
     ports:
-      - 5173:80
+      - 5173:5173
+    volumes:
+      - type: bind
+        source: ./apps/frontend
+        target: /usr/src/app
+      - type: volume
+        target: /usr/src/app/node_modules
+    environment:
+      VITE_API_BASE_URL: "http://localhost:5001"
     networks:
       - yetanotherecommerce_net
+
+volumes:
+  pgdata:
 
 networks:
   yetanotherecommerce_net:

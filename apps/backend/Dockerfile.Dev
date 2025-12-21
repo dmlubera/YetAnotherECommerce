@@ -1,0 +1,16 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+WORKDIR /app
+
+COPY YetAnotherECommerce.sln ./
+COPY src/ ./src/
+COPY tests/ ./tests/
+
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet restore
+
+WORKDIR /app/src/Bootstrapper/YetAnotherECommerce.Bootstrapper
+
+EXPOSE 5001
+
+CMD ["dotnet", "run", "--urls", "http://0.0.0.0:5001"]
