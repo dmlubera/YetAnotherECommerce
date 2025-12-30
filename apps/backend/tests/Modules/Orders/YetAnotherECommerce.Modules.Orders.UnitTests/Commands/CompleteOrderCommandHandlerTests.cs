@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -13,16 +13,13 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands;
 
 public class CompleteOrderCommandHandlerTests
 {
-    private readonly Mock<IOrderRepository> _orderRepositoryMock;
-    private readonly Mock<ILogger<CompleteOrderCommandHandler>> _loggerMock;
+    private readonly Mock<IOrderRepository> _orderRepositoryMock = new();
     private readonly CompleteOrderCommandHandler _handler;
 
     public CompleteOrderCommandHandlerTests()
     {
-        _orderRepositoryMock = new Mock<IOrderRepository>();
-        _loggerMock = new Mock<ILogger<CompleteOrderCommandHandler>>();
         _handler = new CompleteOrderCommandHandler(_orderRepositoryMock.Object,
-            _loggerMock.Object);
+            NullLogger<CompleteOrderCommandHandler>.Instance);
     }
 
     [Fact]

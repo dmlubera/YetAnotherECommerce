@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
@@ -10,15 +10,13 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
 public class DeleteProductCommandHandlerTests
 {
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly Mock<ILogger<DeleteProductCommandHandler>> _loggerMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock = new();
     private readonly DeleteProductCommandHandler _handler;
 
     public DeleteProductCommandHandlerTests()
     {
-        _productRepositoryMock = new Mock<IProductRepository>();
-        _loggerMock = new Mock<ILogger<DeleteProductCommandHandler>>();
-        _handler = new DeleteProductCommandHandler(_productRepositoryMock.Object, _loggerMock.Object);
+        _handler = new DeleteProductCommandHandler(_productRepositoryMock.Object,
+            NullLogger<DeleteProductCommandHandler>.Instance);
     }
 
     [Fact]

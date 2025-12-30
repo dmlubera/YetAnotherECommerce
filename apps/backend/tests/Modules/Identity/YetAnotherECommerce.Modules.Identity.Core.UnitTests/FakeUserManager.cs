@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
@@ -16,4 +16,4 @@ public class FakeUserManager() : UserManager<User>(
     new Mock<ILookupNormalizer>().Object,
     new Mock<IdentityErrorDescriber>().Object,
     new Mock<IServiceProvider>().Object,
-    new Mock<ILogger<UserManager<User>>>().Object);
+    NullLogger<UserManager<User>>.Instance);

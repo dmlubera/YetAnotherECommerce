@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -13,15 +13,13 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
 public class AddProductCommandHandlerTests
 {
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly Mock<ILogger<AddProductCommandHandler>> _loggerMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock = new();
     private readonly AddProductCommandHandler _handler;
 
     public AddProductCommandHandlerTests()
     {
-        _productRepositoryMock = new Mock<IProductRepository>();
-        _loggerMock = new Mock<ILogger<AddProductCommandHandler>>();
-        _handler = new AddProductCommandHandler(_productRepositoryMock.Object, _loggerMock.Object);
+        _handler = new AddProductCommandHandler(_productRepositoryMock.Object,
+            NullLogger<AddProductCommandHandler>.Instance);
     }
 
     [Fact]
