@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
+using YetAnotherECommerce.Modules.Products.Core;
 using YetAnotherECommerce.Modules.Products.Core.Entitites;
 using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers;
@@ -12,19 +13,18 @@ using YetAnotherECommerce.Modules.Products.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Modules.Products.UnitTests.Fixtures.Entities;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.UnitTests.Events;
 
 public class OrderCreatedHandlerTests
 {
     private readonly Mock<IProductRepository> _productRepositoryMock = new();
-    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<IProductsMessagePublisher> _messagePublisherMock = new();
     private readonly OrderCreatedHandler _handler;
 
     public OrderCreatedHandlerTests()
     {
-        _handler = new OrderCreatedHandler(_productRepositoryMock.Object, _messageBrokerMock.Object,
+        _handler = new OrderCreatedHandler(_productRepositoryMock.Object, _messagePublisherMock.Object,
             NullLogger<OrderCreatedHandler>.Instance);
     }
 
@@ -51,7 +51,7 @@ public class OrderCreatedHandlerTests
         exception.ShouldNotBeNull();
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class OrderCreatedHandlerTests
         exception.ShouldNotBeNull();
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
     }
 
     [Fact]
@@ -95,6 +95,6 @@ public class OrderCreatedHandlerTests
 
 
         products[0].Quantity.Value.ShouldBe(originalQuantity - orderedProducts.GetValueOrDefault(products[0].Id));
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderAccepted>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderAccepted>()));
     }
 }

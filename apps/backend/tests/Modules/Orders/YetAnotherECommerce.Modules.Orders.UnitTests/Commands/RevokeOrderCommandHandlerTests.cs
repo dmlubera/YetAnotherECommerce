@@ -4,24 +4,24 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
+using YetAnotherECommerce.Modules.Orders.Core;
 using YetAnotherECommerce.Modules.Orders.Core.Commands;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands;
 
 public class RevokeOrderCommandHandlerTests
 {
     private readonly Mock<IOrderRepository> _orderRepositoryMock = new();
-    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<IOrdersMessagePublisher> _messagePublisherMock = new();
     private readonly RevokeOrderCommandHandler _handler;
 
     public RevokeOrderCommandHandlerTests()
     {
-        _handler = new RevokeOrderCommandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object,
+        _handler = new RevokeOrderCommandHandler(_orderRepositoryMock.Object, _messagePublisherMock.Object,
             NullLogger<RevokeOrderCommandHandler>.Instance);
     }
 
@@ -40,7 +40,7 @@ public class RevokeOrderCommandHandlerTests
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
         _orderRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Order>()), Times.Never);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderRevoked>()), Times.Never);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRevoked>()), Times.Never);
     }
 
     [Fact]
@@ -57,6 +57,6 @@ public class RevokeOrderCommandHandlerTests
 
         order.Status.ShouldBe(OrderStatus.Rejected);
         _orderRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Order>()));
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderRevoked>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRevoked>()));
     }
 }

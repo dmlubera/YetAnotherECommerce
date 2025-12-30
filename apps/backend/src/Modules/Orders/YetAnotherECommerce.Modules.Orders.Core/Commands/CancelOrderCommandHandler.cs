@@ -5,14 +5,13 @@ using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
 
-public class CancelOrderComandHandler(
+public class CancelOrderCommandHandler(
     IOrderRepository orderRepository,
-    IMessagePublisher messagePublisher,
-    ILogger<CancelOrderComandHandler> logger)
+    IOrdersMessagePublisher messagePublisher,
+    ILogger<CancelOrderCommandHandler> logger)
     : ICommandHandler<CancelOrderCommand>
 {
     public async Task HandleAsync(CancelOrderCommand command)

@@ -18,6 +18,10 @@ internal static class CoreInstaller
         services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
         services.RegisterQueriesFromAssembly(Assembly.GetExecutingAssembly());
         services.AddTransient<IProductRepository, PostgresProductsRepository>();
+        services.AddScoped<IProductsMessagePublisher, ProductsMessagePublisher>();
+
         services.AddDbContext<ProductsDbContext>(x => x.UseNpgsql(configuration.GetConnectionString("Default")));
+
+        services.AddHostedService<OrdersEventsReceiver>();
     }
 }

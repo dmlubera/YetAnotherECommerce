@@ -4,25 +4,25 @@ using Bogus;
 using Moq;
 using Shouldly;
 using Xunit;
+using YetAnotherECommerce.Modules.Users.Core;
 using YetAnotherECommerce.Modules.Users.Core.Commands;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
 using YetAnotherECommerce.Modules.Users.Core.Events;
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
 public class CompleteRegistrationCommandHandlerTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock = new();
-    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<IUsersMessagePublisher> _messagePublisherMock = new();
     private readonly CompleteRegistrationCommandHandler _handler;
 
     public CompleteRegistrationCommandHandlerTests()
     {
-        _handler = new CompleteRegistrationCommandHandler(_userRepositoryMock.Object, _messageBrokerMock.Object);
+        _handler = new CompleteRegistrationCommandHandler(_userRepositoryMock.Object, _messagePublisherMock.Object);
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class CompleteRegistrationCommandHandlerTests
         user.Address.Country.ShouldBe(command.Country);
         user.IsRegistrationCompleted.ShouldBeTrue();
         _userRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<User>()));
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<RegistrationCompleted>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<RegistrationCompleted>()));
     }
 
     private static CompleteRegistrationCommand CreateCommand()

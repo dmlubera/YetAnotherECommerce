@@ -5,13 +5,12 @@ using YetAnotherECommerce.Modules.Products.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers;
 
 public class OrderCreatedHandler(
     IProductRepository productRepository,
-    IMessagePublisher messagePublisher,
+    IProductsMessagePublisher messagePublisher,
     ILogger<OrderCreatedHandler> logger)
     : IEventHandler<OrderCreated>
 {

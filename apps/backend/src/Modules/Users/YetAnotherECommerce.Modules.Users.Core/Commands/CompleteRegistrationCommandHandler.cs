@@ -3,11 +3,10 @@ using YetAnotherECommerce.Modules.Users.Core.Events;
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Users.Core.Commands;
 
-public class CompleteRegistrationCommandHandler(IUserRepository userRepository, IMessagePublisher messagePublisher)
+public class CompleteRegistrationCommandHandler(IUserRepository userRepository, IUsersMessagePublisher messagePublisher)
     : ICommandHandler<CompleteRegistrationCommand>
 {
     public async Task HandleAsync(CompleteRegistrationCommand command)

@@ -5,13 +5,12 @@ using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
 
 public class RevokeOrderCommandHandler(
     IOrderRepository orderRepository,
-    IMessagePublisher messagePublisher,
+    IOrdersMessagePublisher messagePublisher,
     ILogger<RevokeOrderCommandHandler> logger)
     : ICommandHandler<RevokeOrderCommand>
 {

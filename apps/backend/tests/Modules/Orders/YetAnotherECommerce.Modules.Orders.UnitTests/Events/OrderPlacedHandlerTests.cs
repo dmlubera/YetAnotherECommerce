@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Moq;
 using Shouldly;
 using Xunit;
+using YetAnotherECommerce.Modules.Orders.Core;
 using YetAnotherECommerce.Modules.Orders.Core.Entities;
 using YetAnotherECommerce.Modules.Orders.Core.Events;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.UnitTests.Events;
 
@@ -18,13 +18,13 @@ public class OrderPlacedHandlerTests
 {
     private readonly Mock<ICustomerRepository> _customerRepositoryMock = new();
     private readonly Mock<IOrderRepository> _orderRepositoryMock = new();
-    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<IOrdersMessagePublisher> _messagePublisherMock = new();
     private readonly OrderPlacedHandler _handler;
 
     public OrderPlacedHandlerTests()
     {
         _handler = new OrderPlacedHandler(_orderRepositoryMock.Object, _customerRepositoryMock.Object,
-            _messageBrokerMock.Object);
+            _messagePublisherMock.Object);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class OrderPlacedHandlerTests
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
         _orderRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Order>()), Times.Never);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
     }
 
     [Fact]
@@ -61,6 +61,6 @@ public class OrderPlacedHandlerTests
         await _handler.HandleAsync(@event);
 
         _orderRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Order>()));
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderCreated>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderCreated>()));
     }
 }

@@ -58,7 +58,6 @@ internal static class SharedInfrastructureInstaller
 
         AddMessageRegistry(services, assemblies);
         services.AddSingleton<IMessageClient, MessageClient>();
-        services.AddSingleton<IMessagePublisher, InMemoryMessagePublisher>();
         services.AddSingleton<IMessageChannel, MessageChannel>();
         services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
         services.AddHostedService<BackgroundMessageDispatcher>();
@@ -109,7 +108,6 @@ internal static class SharedInfrastructureInstaller
             builder.AddServiceBusClient(configuration.GetSection("ServiceBusSettings:ConnectionString").Value);
         });
         
-        // TODO: Change from concrete registration once InMemoryMessageBroker removed
-        services.AddSingleton<ServiceBusMessagePublisher>();
+        services.AddSingleton<IMessagePublisher, ServiceBusMessagePublisher>();
     }
 }

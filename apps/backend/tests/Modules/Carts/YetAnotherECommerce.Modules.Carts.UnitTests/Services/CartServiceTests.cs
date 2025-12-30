@@ -4,24 +4,24 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
+using YetAnotherECommerce.Modules.Carts.Core;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
 using YetAnotherECommerce.Modules.Carts.Core.Events;
 using YetAnotherECommerce.Modules.Carts.Core.Exceptions;
 using YetAnotherECommerce.Modules.Carts.Core.Services;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.UnitTests.Services;
 
 public class CartServiceTests
 {
     private readonly Mock<ICache> _cacheMock = new();
-    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<ICartsMessagePublisher> _messagePublisherMock = new();
     private readonly CartService _cartService;
 
     public CartServiceTests()
     {
-        _cartService = new CartService(_cacheMock.Object, _messageBrokerMock.Object,
+        _cartService = new CartService(_cacheMock.Object, _messagePublisherMock.Object,
             NullLogger<CartService>.Instance);
     }
 
@@ -40,7 +40,7 @@ public class CartServiceTests
         expectedException.ShouldNotBeNull();
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class CartServiceTests
         exception.ShouldNotBeNull();
         exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
         exception.Message.ShouldBe(expectedException.Message);
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Never);
     }
 
     [Fact]
@@ -80,6 +80,6 @@ public class CartServiceTests
 
         await _cartService.PlaceOrderAsync(Guid.NewGuid());
 
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Once);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderPlaced>()), Times.Once);
     }
 }

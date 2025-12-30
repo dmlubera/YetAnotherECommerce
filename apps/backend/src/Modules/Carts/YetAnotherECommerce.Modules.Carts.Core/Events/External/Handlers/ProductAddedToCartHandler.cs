@@ -10,6 +10,7 @@ public class ProductAddedToCartHandler(ICache cache) : IEventHandler<ProductAdde
 {
     public async Task HandleAsync(ProductAddedToCart @event)
     {
+        // TODO: This is not an event, should be changed to command
         var cacheKey = $"{@event.CustomerId}-cart";
         var cart = cache.Get<Cart>(cacheKey) ?? new Cart();
 

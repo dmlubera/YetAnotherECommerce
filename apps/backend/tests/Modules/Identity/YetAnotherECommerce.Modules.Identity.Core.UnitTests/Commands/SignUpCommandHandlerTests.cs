@@ -14,12 +14,12 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 public class SignUpCommandHandlerTests
 {
     private readonly Mock<FakeUserManager> _userManagerMock = new();
-    private readonly Mock<IIdentityMessagePublisher> _messageBrokerMock = new();
+    private readonly Mock<IIdentityMessagePublisher> _messagePublisherMock = new();
     private readonly SignUpCommandHandler _handler;
 
     public SignUpCommandHandlerTests()
     {
-        _handler = new SignUpCommandHandler(_userManagerMock.Object, _messageBrokerMock.Object);
+        _handler = new SignUpCommandHandler(_userManagerMock.Object, _messagePublisherMock.Object);
     }
 
     [Theory, AutoData]
@@ -69,7 +69,7 @@ public class SignUpCommandHandlerTests
         var result = await _handler.HandleAsync(command);
 
         // Assert
-        _messageBrokerMock.Verify(x => x.PublishAsync(It.IsAny<UserRegistered>()));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<UserRegistered>()));
         result.IsSucceeded.ShouldBeTrue();
         result.Error.ShouldBeNull();
     }

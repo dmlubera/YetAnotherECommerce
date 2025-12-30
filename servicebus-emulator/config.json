@@ -4,7 +4,6 @@
       {
         "Name": "sbemulatorns",
         "Queues": [],
-
         "Topics": [
           {
             "Name": "identity.events",
@@ -14,9 +13,130 @@
               "RequiresDuplicateDetection": false
             },
             "Subscriptions": [
-                {
-                    "Name": "users"
-                }
+              {
+                "Name": "users",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('user.registered')"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "users.events",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "orders",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('registration.completed')"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "products.events",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "orders",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('order.accepted', 'order.rejected')"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "Name": "carts",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('product.added.to.cart')"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "orders.events",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "products",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('order.canceled', 'order.revoked', 'order.created')"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "carts.events",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "orders",
+                "Rules": [
+                  {
+                    "Name": "event-type-filter",
+                    "Properties": {
+                      "FilterType": "Sql",
+                      "SqlFilter": {
+                        "SqlExpression": "eventType IN ('order.placed')"
+                      }
+                    }
+                  }
+                ]
+              }
             ]
           }
         ]

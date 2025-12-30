@@ -4,13 +4,12 @@ using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Products.Core.Commands;
 
 public class AddProductToCartCommandHandler(
     IProductRepository productRepository,
-    IMessagePublisher messagePublisher,
+    IProductsMessagePublisher messagePublisher,
     ILogger<AddProductToCartCommandHandler> logger)
     : ICommandHandler<AddProductToCartCommand>
 {

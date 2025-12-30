@@ -10,5 +10,8 @@ internal static class CoreInstaller
     public static void AddCore(this IServiceCollection services)
     {
         services.AddTransient<ICartService, CartService>();
+        services.AddScoped<ICartsMessagePublisher, CartsMessagePublisher>();
+
+        services.AddHostedService<ProductsEventsReceiver>();
     }
 }

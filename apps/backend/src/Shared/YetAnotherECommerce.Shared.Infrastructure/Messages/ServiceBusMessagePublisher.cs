@@ -8,12 +8,6 @@ namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 public class ServiceBusMessagePublisher(ServiceBusClient serviceBusClient) : IMessagePublisher
 {
-    public Task PublishAsync(IMessage message)
-    {
-        throw new System.NotImplementedException();
-
-    }
-
     public async Task PublishAsync(IMessage message, string source)
     {
         var sender = serviceBusClient.CreateSender($"{source}.events");

@@ -6,14 +6,13 @@ using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Orders.Core.Exceptions;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
 
 public class OrderPlacedHandler(
     IOrderRepository orderRepository,
     ICustomerRepository customerRepository,
-    IMessagePublisher messagePublisher)
+    IOrdersMessagePublisher messagePublisher)
     : IEventHandler<OrderPlaced>
 {
     public async Task HandleAsync(OrderPlaced @event)

@@ -6,11 +6,10 @@ using YetAnotherECommerce.Modules.Carts.Core.Entities;
 using YetAnotherECommerce.Modules.Carts.Core.Events;
 using YetAnotherECommerce.Modules.Carts.Core.Exceptions;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.Core.Services;
 
-public class CartService(ICache cache, IMessagePublisher messagePublisher, ILogger<CartService> logger)
+public class CartService(ICache cache, ICartsMessagePublisher messagePublisher, ILogger<CartService> logger)
     : ICartService
 {
     public Cart Browse(string cacheKey)
