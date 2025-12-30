@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{E86DB4E3-7A1B-4ACE-8DB5-FC7AA3F9C7E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Products.UnitTests", "tests\Modules\Users\YetAnotherECommerce.Modules.Products.UnitTests\YetAnotherECommerce.Modules.Products.UnitTests.csproj", "{217DFBE8-5CB4-4185-AE72-530D8E430573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Users.UnitTests", "tests\Modules\Users\YetAnotherECommerce.Modules.Users.UnitTests\YetAnotherECommerce.Modules.Users.UnitTests.csproj", "{217DFBE8-5CB4-4185-AE72-530D8E430573}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{5A6CA0A6-8E21-40A5-9155-9DC7C0677712}"
 EndProject

@@ -5,7 +5,7 @@ using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Users.Core.Entities;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.Entities;
+namespace YetAnotherECommerce.Modules.Users.UnitTests.Entities;
 
 public class UserTests
 {

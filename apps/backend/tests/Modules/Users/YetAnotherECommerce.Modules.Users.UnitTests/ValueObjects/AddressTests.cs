@@ -4,7 +4,7 @@ using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects;
+namespace YetAnotherECommerce.Modules.Users.UnitTests.ValueObjects;
 
 public class AddressTests
 {

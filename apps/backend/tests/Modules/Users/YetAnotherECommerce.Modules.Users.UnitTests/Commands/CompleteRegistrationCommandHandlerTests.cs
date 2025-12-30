@@ -12,7 +12,7 @@ using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
+namespace YetAnotherECommerce.Modules.Users.UnitTests.Commands;
 
 public class CompleteRegistrationCommandHandlerTests
 {

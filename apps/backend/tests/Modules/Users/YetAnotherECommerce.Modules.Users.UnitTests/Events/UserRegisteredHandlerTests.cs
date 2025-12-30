@@ -7,7 +7,7 @@ using YetAnotherECommerce.Modules.Users.Core.Events.External.Handlers;
 using YetAnotherECommerce.Modules.Users.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Users.Core.Repositories;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.Events;
+namespace YetAnotherECommerce.Modules.Users.UnitTests.Events;
 
 public class UserRegisteredHandlerTests
 {

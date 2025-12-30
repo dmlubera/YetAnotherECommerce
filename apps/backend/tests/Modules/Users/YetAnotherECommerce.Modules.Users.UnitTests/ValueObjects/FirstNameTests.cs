@@ -3,7 +3,7 @@ using Xunit;
 using YetAnotherECommerce.Modules.Users.Core.Exceptions;
 using YetAnotherECommerce.Modules.Users.Core.ValueObjects;
 
-namespace YetAnotherECommerce.Modules.Products.UnitTests.ValueObjects;
+namespace YetAnotherECommerce.Modules.Users.UnitTests.ValueObjects;
 
 public class FirstNameTests
 {
