@@ -48,15 +48,4 @@ public class UserTests
         user.LastName.Value.ShouldBe(lastName);
         user.Events.FirstOrDefault().ShouldBeOfType<LastNameChanged>();
     }
-
-    [Fact]
-    public void UpdateEmail_ShouldUpdateAndAddDomainEvent()
-    {
-        var user = Mock.Of<User>();
-        var email = "cj@yetanotherecommerce.com";
-        user.UpdateEmail(email);
-
-        user.Email.ShouldBe(email);
-        user.Events.FirstOrDefault().ShouldBeOfType<EmailChanged>();
-    }
 }

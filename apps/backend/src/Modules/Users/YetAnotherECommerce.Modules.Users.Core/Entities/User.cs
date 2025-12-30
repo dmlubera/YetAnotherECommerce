@@ -70,12 +70,4 @@ public class User : AggregateRoot, IAuditable
 
         AddEvent(new AddressChanged(this, Address));
     }
-
-    public void UpdateEmail(string email)
-    {
-        Email = email;
-        LastUpdatedAt = DateTime.UtcNow;
-
-        AddEvent(new EmailChanged(this, Email));
-    }
 }
