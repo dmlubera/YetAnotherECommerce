@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -15,17 +15,14 @@ namespace YetAnotherECommerce.Modules.Carts.UnitTests.Services;
 
 public class CartServiceTests
 {
-    private readonly Mock<ICache> _cacheMock;
-    private readonly Mock<IMessageBroker> _messageBrokerMock;
-    private readonly Mock<ILogger<CartService>> _loggerMock;
+    private readonly Mock<ICache> _cacheMock = new();
+    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
     private readonly CartService _cartService;
 
     public CartServiceTests()
     {
-        _cacheMock = new Mock<ICache>();
-        _messageBrokerMock = new Mock<IMessageBroker>();
-        _loggerMock = new Mock<ILogger<CartService>>();
-        _cartService = new CartService(_cacheMock.Object, _messageBrokerMock.Object, _loggerMock.Object);
+        _cartService = new CartService(_cacheMock.Object, _messageBrokerMock.Object,
+            NullLogger<CartService>.Instance);
     }
 
     [Fact]

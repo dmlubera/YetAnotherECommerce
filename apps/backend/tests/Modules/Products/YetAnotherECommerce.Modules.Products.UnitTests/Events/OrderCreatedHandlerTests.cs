@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -18,18 +18,14 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Events;
 
 public class OrderCreatedHandlerTests
 {
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly Mock<IMessageBroker> _messageBrokerMock;
-    private readonly Mock<ILogger<OrderCreatedHandler>> _loggerMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock = new();
+    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
     private readonly OrderCreatedHandler _handler;
 
     public OrderCreatedHandlerTests()
     {
-        _productRepositoryMock = new Mock<IProductRepository>();
-        _messageBrokerMock = new Mock<IMessageBroker>();
-        _loggerMock = new Mock<ILogger<OrderCreatedHandler>>();
         _handler = new OrderCreatedHandler(_productRepositoryMock.Object, _messageBrokerMock.Object,
-            _loggerMock.Object);
+            NullLogger<OrderCreatedHandler>.Instance);
     }
 
     [Fact]

@@ -10,7 +10,7 @@ using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.Core.Services;
 
-public class CartService(ICache cache, IMessageBroker messageBroker, ILogger<CartService> logger)
+public class CartService(ICache cache, IMessagePublisher messagePublisher, ILogger<CartService> logger)
     : ICartService
 {
     public Cart Browse(string cacheKey)
@@ -32,7 +32,7 @@ public class CartService(ICache cache, IMessageBroker messageBroker, ILogger<Car
         }
 
         var orderPlaced = new OrderPlaced(userId, productDtos);
-        await messageBroker.PublishAsync(orderPlaced);
+        await messagePublisher.PublishAsync(orderPlaced);
 
         logger.LogInformation("Order placed: {@order}", orderPlaced);
     }

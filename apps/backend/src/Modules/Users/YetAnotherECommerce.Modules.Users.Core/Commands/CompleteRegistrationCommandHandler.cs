@@ -7,7 +7,7 @@ using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Users.Core.Commands;
 
-public class CompleteRegistrationCommandHandler(IUserRepository userRepository, IMessageBroker messageBroker)
+public class CompleteRegistrationCommandHandler(IUserRepository userRepository, IMessagePublisher messagePublisher)
     : ICommandHandler<CompleteRegistrationCommand>
 {
     public async Task HandleAsync(CompleteRegistrationCommand command)
@@ -24,7 +24,7 @@ public class CompleteRegistrationCommandHandler(IUserRepository userRepository, 
 
         await userRepository.UpdateAsync(user);
 
-        await messageBroker.PublishAsync(
+        await messagePublisher.PublishAsync(
             new RegistrationCompleted(user.Id, user.FirstName, user.LastName, user.Email, user.Address.ToString()));
     }
 }

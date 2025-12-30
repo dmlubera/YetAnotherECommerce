@@ -403,3 +403,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore environment variables
+.env
+.env.*
+!.env.example

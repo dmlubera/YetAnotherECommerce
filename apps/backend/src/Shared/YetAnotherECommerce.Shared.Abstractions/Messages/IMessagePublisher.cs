@@ -2,7 +2,7 @@
 
 namespace YetAnotherECommerce.Shared.Abstractions.Messages;
 
-public interface IMessageBroker
+public interface IMessagePublisher
 {
     Task PublishAsync(IMessage message);
 }

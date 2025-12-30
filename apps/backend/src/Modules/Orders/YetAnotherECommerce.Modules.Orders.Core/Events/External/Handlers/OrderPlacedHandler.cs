@@ -13,7 +13,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Events.External.Handlers;
 public class OrderPlacedHandler(
     IOrderRepository orderRepository,
     ICustomerRepository customerRepository,
-    IMessageBroker messageBroker)
+    IMessagePublisher messagePublisher)
     : IEventHandler<OrderPlaced>
 {
     public async Task HandleAsync(OrderPlaced @event)
@@ -33,6 +33,6 @@ public class OrderPlacedHandler(
 
         await orderRepository.AddAsync(order);
 
-        await messageBroker.PublishAsync(new OrderCreated(order.Id, productsWithQuantity));
+        await messagePublisher.PublishAsync(new OrderCreated(order.Id, productsWithQuantity));
     }
 }

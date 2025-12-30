@@ -16,16 +16,13 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Events;
 
 public class OrderPlacedHandlerTests
 {
-    private readonly Mock<ICustomerRepository> _customerRepositoryMock;
-    private readonly Mock<IOrderRepository> _orderRepositoryMock;
-    private readonly Mock<IMessageBroker> _messageBrokerMock;
+    private readonly Mock<ICustomerRepository> _customerRepositoryMock = new();
+    private readonly Mock<IOrderRepository> _orderRepositoryMock = new();
+    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
     private readonly OrderPlacedHandler _handler;
 
     public OrderPlacedHandlerTests()
     {
-        _orderRepositoryMock = new Mock<IOrderRepository>();
-        _customerRepositoryMock = new Mock<ICustomerRepository>();
-        _messageBrokerMock = new Mock<IMessageBroker>();
         _handler = new OrderPlacedHandler(_orderRepositoryMock.Object, _customerRepositoryMock.Object,
             _messageBrokerMock.Object);
     }

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 
-public class SignUpCommandHandler(UserManager<User> userManager, IMessageBroker messageBroker) : ICommandHandler<SignUpCommand, SignUpResult>
+public class SignUpCommandHandler(UserManager<User> userManager, IIdentityMessagePublisher messagePublisher)
+    : ICommandHandler<SignUpCommand, SignUpResult>
 {
     public async Task<SignUpResult> HandleAsync(SignUpCommand command)
     {
@@ -29,7 +29,7 @@ public class SignUpCommandHandler(UserManager<User> userManager, IMessageBroker 
         }
 
         await userManager.AddToRoleAsync(user, "customer");
-        await messageBroker.PublishAsync(new UserRegistered(user.Id, user.Email));
+        await messagePublisher.PublishAsync(new UserRegistered(user.Id, user.Email));
 
         return SignUpResult.Succeeded();
     }

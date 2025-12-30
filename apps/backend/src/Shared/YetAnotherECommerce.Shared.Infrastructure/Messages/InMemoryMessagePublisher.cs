@@ -6,12 +6,12 @@ using YetAnotherECommerce.Shared.Infrastructure.Correlation;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-public class InMemoryMessageBroker(
+public class InMemoryMessagePublisher(
     IMessageClient messageClient,
     IAsyncMessageDispatcher asyncMessageDispatcher,
     ICorrelationContext correlationContext,
     IOptions<MessagingOptions> messagingOptions)
-    : IMessageBroker
+    : IMessagePublisher
 {
     private readonly MessagingOptions _messagingOptions = messagingOptions.Value;
 

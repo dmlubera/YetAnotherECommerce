@@ -11,7 +11,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
 
 public class RevokeOrderCommandHandler(
     IOrderRepository orderRepository,
-    IMessageBroker messageBroker,
+    IMessagePublisher messagePublisher,
     ILogger<RevokeOrderCommandHandler> logger)
     : ICommandHandler<RevokeOrderCommand>
 {
@@ -26,7 +26,7 @@ public class RevokeOrderCommandHandler(
         await orderRepository.UpdateAsync(order);
 
         var orderRevoked = new OrderRevoked(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
-        await messageBroker.PublishAsync(orderRevoked);
+        await messagePublisher.PublishAsync(orderRevoked);
 
         logger.LogInformation("Order revoked: {@order}", orderRevoked);
     }

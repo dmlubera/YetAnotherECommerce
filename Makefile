@@ -2,7 +2,7 @@ DEV_COMPOSE_FILE=docker-compose-dev.yml
 
 .PHONY: compose-up-dev
 compose-up-dev:
-	docker compose -f $(DEV_COMPOSE_FILE) up --no-deps database frontend
+	docker compose -f $(DEV_COMPOSE_FILE) up --build --no-deps database frontend servicebus-emulator mssql
 
 .PHONY: compose-up-build
 compose-up-build:

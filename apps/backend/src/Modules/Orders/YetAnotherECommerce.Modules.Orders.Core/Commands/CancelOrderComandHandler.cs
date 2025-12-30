@@ -11,7 +11,7 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Commands;
 
 public class CancelOrderComandHandler(
     IOrderRepository orderRepository,
-    IMessageBroker messageBroker,
+    IMessagePublisher messagePublisher,
     ILogger<CancelOrderComandHandler> logger)
     : ICommandHandler<CancelOrderCommand>
 {
@@ -27,7 +27,7 @@ public class CancelOrderComandHandler(
 
         var orderCanceled = new OrderCanceled(command.OrderId, order.OrderItems.ToDictionary(x => x.ProductId, x => x.Quantity));
 
-        await messageBroker.PublishAsync(orderCanceled);
+        await messagePublisher.PublishAsync(orderCanceled);
 
         logger.LogInformation("Order canceled: {@order}", orderCanceled);
     }

@@ -11,7 +11,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Events.External.Handlers;
 
 public class OrderCreatedHandler(
     IProductRepository productRepository,
-    IMessageBroker messageBroker,
+    IMessagePublisher messagePublisher,
     ILogger<OrderCreatedHandler> logger)
     : IEventHandler<OrderCreated>
 {
@@ -32,14 +32,14 @@ public class OrderCreatedHandler(
             }
 
             await productRepository.UpdateAsync(products);
-            await messageBroker.PublishAsync(new OrderAccepted(@event.OrderId));
+            await messagePublisher.PublishAsync(new OrderAccepted(@event.OrderId));
 
             logger.LogInformation($"Order with ID: {@event.OrderId} has been accepted.");
         }
         catch(Exception ex)
         {
             logger.LogError(ex, ex.Message);
-            await messageBroker.PublishAsync(new OrderRejected(@event.OrderId));
+            await messagePublisher.PublishAsync(new OrderRejected(@event.OrderId));
             logger.LogInformation($"Order with ID: {@event.OrderId} has been rejected.");
 
             throw;

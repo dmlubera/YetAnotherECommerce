@@ -16,14 +16,12 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 
 public class CompleteRegistrationCommandHandlerTests
 {
-    private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly Mock<IMessageBroker> _messageBrokerMock;
+    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
     private readonly CompleteRegistrationCommandHandler _handler;
 
     public CompleteRegistrationCommandHandlerTests()
     {
-        _userRepositoryMock = new Mock<IUserRepository>();
-        _messageBrokerMock = new Mock<IMessageBroker>();
         _handler = new CompleteRegistrationCommandHandler(_userRepositoryMock.Object, _messageBrokerMock.Object);
     }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
 using Xunit;
@@ -15,18 +15,14 @@ namespace YetAnotherECommerce.Modules.Orders.UnitTests.Commands;
 
 public class RevokeOrderCommandHandlerTests
 {
-    private readonly Mock<IOrderRepository> _orderRepositoryMock;
-    private readonly Mock<IMessageBroker> _messageBrokerMock;
-    private readonly Mock<ILogger<RevokeOrderCommandHandler>> _loggerMock;
+    private readonly Mock<IOrderRepository> _orderRepositoryMock = new();
+    private readonly Mock<IMessagePublisher> _messageBrokerMock = new();
     private readonly RevokeOrderCommandHandler _handler;
 
     public RevokeOrderCommandHandlerTests()
     {
-        _orderRepositoryMock = new Mock<IOrderRepository>();
-        _messageBrokerMock = new Mock<IMessageBroker>();
-        _loggerMock = new Mock<ILogger<RevokeOrderCommandHandler>>();
         _handler = new RevokeOrderCommandHandler(_orderRepositoryMock.Object, _messageBrokerMock.Object,
-            _loggerMock.Object);
+            NullLogger<RevokeOrderCommandHandler>.Instance);
     }
 
     [Fact]

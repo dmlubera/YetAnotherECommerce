@@ -18,8 +18,4 @@
     <ProjectReference Include="..\..\..\Shared\YetAnotherECommerce.Shared.Infrastructure\YetAnotherECommerce.Shared.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DomainEvents\" />
-  </ItemGroup>
-
 </Project>

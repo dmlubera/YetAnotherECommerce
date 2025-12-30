@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
@@ -11,7 +12,6 @@ using YetAnotherECommerce.Shared.Abstractions.Cache;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks;
@@ -22,6 +22,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Queries;
+using IMessagePublisher = YetAnotherECommerce.Shared.Abstractions.Messages.IMessagePublisher;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
 namespace YetAnotherECommerce.Shared.Infrastructure.DI;
@@ -57,13 +58,15 @@ internal static class SharedInfrastructureInstaller
 
         AddMessageRegistry(services, assemblies);
         services.AddSingleton<IMessageClient, MessageClient>();
-        services.AddSingleton<IMessageBroker, InMemoryMessageBroker>();
+        services.AddSingleton<IMessagePublisher, InMemoryMessagePublisher>();
         services.AddSingleton<IMessageChannel, MessageChannel>();
         services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
         services.AddHostedService<BackgroundMessageDispatcher>();
 
         services.AddSingleton<ICorrelationContext, CorrelationContext>();
         services.AddScoped<CorrelationMiddleware>();
+
+        services.AddServiceBus(configuration);
     }
 
     public static void UseInfrastructure(this IApplicationBuilder app)
@@ -97,5 +100,16 @@ internal static class SharedInfrastructureInstaller
 
             return registry;
         });
+    }
+
+    private static void AddServiceBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAzureClients(builder =>
+        {
+            builder.AddServiceBusClient(configuration.GetSection("ServiceBusSettings:ConnectionString").Value);
+        });
+        
+        // TODO: Change from concrete registration once InMemoryMessageBroker removed
+        services.AddSingleton<ServiceBusMessagePublisher>();
     }
 }

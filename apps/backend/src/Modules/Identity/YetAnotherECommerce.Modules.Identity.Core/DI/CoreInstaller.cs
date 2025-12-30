@@ -26,5 +26,6 @@ internal static class CoreInstaller
         services.AddScoped<UserManager<User>>();
         services.AddScoped<SignInManager<User>>();
         services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddScoped<IIdentityMessagePublisher, IdentityMessagePublisher>();
     }
 }

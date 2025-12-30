@@ -10,7 +10,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.Commands;
 
 public class AddProductToCartCommandHandler(
     IProductRepository productRepository,
-    IMessageBroker messageBroker,
+    IMessagePublisher messagePublisher,
     ILogger<AddProductToCartCommandHandler> logger)
     : ICommandHandler<AddProductToCartCommand>
 {
@@ -27,7 +27,7 @@ public class AddProductToCartCommandHandler(
         var productAddedToCart = new ProductAddedToCart(command.CustomerId, command.ProductId,
             product.Name, product.Price, command.Quantity);
 
-        await messageBroker.PublishAsync(productAddedToCart);
+        await messagePublisher.PublishAsync(productAddedToCart);
 
         logger.LogInformation("Product added to cart: {@product}", productAddedToCart);
     }

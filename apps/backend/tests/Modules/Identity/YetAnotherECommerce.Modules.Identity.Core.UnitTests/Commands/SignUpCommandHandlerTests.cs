@@ -8,14 +8,13 @@ using YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Modules.Identity.Core.UnitTests.Customizations;
-using YetAnotherECommerce.Shared.Abstractions.Messages;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 
 public class SignUpCommandHandlerTests
 {
     private readonly Mock<FakeUserManager> _userManagerMock = new();
-    private readonly Mock<IMessageBroker> _messageBrokerMock = new();
+    private readonly Mock<IIdentityMessagePublisher> _messageBrokerMock = new();
     private readonly SignUpCommandHandler _handler;
 
     public SignUpCommandHandlerTests()
