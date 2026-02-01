@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
-using YetAnotherECommerce.Modules.Identity.Core.Events;
 using YetAnotherECommerce.Shared.Abstractions.Commands;
 
 namespace YetAnotherECommerce.Modules.Identity.Core.Commands.SignUp;
 
-public class SignUpCommandHandler(UserManager<User> userManager, IIdentityMessagePublisher messagePublisher)
+public class SignUpCommandHandler(UserManager<User> userManager)
     : ICommandHandler<SignUpCommand, SignUpResult>
 {
     public async Task<SignUpResult> HandleAsync(SignUpCommand command)
@@ -29,7 +28,7 @@ public class SignUpCommandHandler(UserManager<User> userManager, IIdentityMessag
         }
 
         await userManager.AddToRoleAsync(user, "customer");
-        await messagePublisher.PublishAsync(new UserRegistered(user.Id, user.Email));
+        user.MarkAsRegistered();
 
         return SignUpResult.Succeeded();
     }

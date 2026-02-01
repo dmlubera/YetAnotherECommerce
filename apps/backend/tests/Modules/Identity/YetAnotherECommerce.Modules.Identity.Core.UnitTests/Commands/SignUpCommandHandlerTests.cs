@@ -19,7 +19,7 @@ public class SignUpCommandHandlerTests
 
     public SignUpCommandHandlerTests()
     {
-        _handler = new SignUpCommandHandler(_userManagerMock.Object, _messagePublisherMock.Object);
+        _handler = new SignUpCommandHandler(_userManagerMock.Object);
     }
 
     [Theory, AutoData]
