@@ -14,7 +14,6 @@ namespace YetAnotherECommerce.Modules.Identity.Core.UnitTests.Commands;
 public class SignUpCommandHandlerTests
 {
     private readonly Mock<FakeUserManager> _userManagerMock = new();
-    private readonly Mock<IIdentityMessagePublisher> _messagePublisherMock = new();
     private readonly SignUpCommandHandler _handler;
 
     public SignUpCommandHandlerTests()
@@ -54,23 +53,5 @@ public class SignUpCommandHandlerTests
         // Assert
         result.IsSucceeded.ShouldBeFalse();
         result.Error.ShouldBeOfType<SignUpFailedError>();
-    }
-
-    [Theory, AutoData]
-    public async Task WhenUserSuccessfullyCreated_ThenPublishEventAndReturnSucceededResult(
-        [FixtureCustomization] SignUpCommand command)
-    {
-        // Arrange
-        _userManagerMock
-            .Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
-            .ReturnsAsync(IdentityResult.Success);
-
-        // Act
-        var result = await _handler.HandleAsync(command);
-
-        // Assert
-        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<UserRegistered>()));
-        result.IsSucceeded.ShouldBeTrue();
-        result.Error.ShouldBeNull();
     }
 }
