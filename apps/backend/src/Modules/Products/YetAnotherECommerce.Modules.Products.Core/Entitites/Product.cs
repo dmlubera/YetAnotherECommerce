@@ -11,7 +11,7 @@ public class Product : AggregateRoot, IAuditable
     public string Description { get; private set; }
     public Price Price { get; private set; }
     public Quantity Quantity { get; private set; }
-    public DateTime? CreatedAt { get; }
+    public DateTime? CreatedAt { get; private set; }
     public DateTime? LastUpdatedAt { get; private set; }
 
     protected Product() { }

@@ -1,22 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
-using Microsoft.Extensions.DependencyInjection;
+using Dapper;
 using Microsoft.Extensions.Hosting;
-using YetAnotherECommerce.Shared.Abstractions.Events;
+using YetAnotherECommerce.Shared.Abstractions.Database;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Messages;
 
-public class ServiceBusMessageReceiver(
+public abstract class ServiceBusMessageReceiver(
+    IDbConnectionFactory dbConnectionFactory,
     ServiceBusClient serviceBusClient,
-    IServiceProvider serviceProvider,
-    string topicName,
-    string subscriptionName,
-    Dictionary<string, Type> eventTypeMap) : BackgroundService
+    TimeProvider timeProvider) : BackgroundService
 {
+    protected abstract string TopicName { get; }
+    protected abstract string SubscriptionName { get; }
+    protected abstract Dictionary<string, Type> EventTypeMapping { get; }
+    protected abstract string DatabaseSchema { get; }
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
        await ConsumeMessagesAsync(stoppingToken);
@@ -24,7 +26,7 @@ public class ServiceBusMessageReceiver(
 
     private async Task ConsumeMessagesAsync(CancellationToken cancellationToken)
     {
-        await using var processor = serviceBusClient.CreateProcessor(topicName, subscriptionName, new ServiceBusProcessorOptions
+        await using var processor = serviceBusClient.CreateProcessor(TopicName, SubscriptionName, new ServiceBusProcessorOptions
         {
             AutoCompleteMessages = false,
             MaxConcurrentCalls = 1
@@ -39,7 +41,7 @@ public class ServiceBusMessageReceiver(
         {
             await Task.Delay(Timeout.Infinite, cancellationToken);
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
         }
         
@@ -51,13 +53,22 @@ public class ServiceBusMessageReceiver(
         try
         {
             var eventType = ResolveEventType(eventArgs.Message.ApplicationProperties["eventType"].ToString());
-            var @event = JsonSerializer.Deserialize(eventArgs.Message.Body, eventType);
+            using var connection = await dbConnectionFactory.GetConnectionAsync();
 
-            using var scope = serviceProvider.CreateScope();
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-            var handler = scope.ServiceProvider.GetRequiredService(handlerType);
-
-            await ((Task)handlerType.GetMethod(nameof(IEventHandler<>.HandleAsync))?.Invoke(handler, [@event]))!;
+            await connection.ExecuteAsync(
+                $"""
+                INSERT INTO "{DatabaseSchema}"."InboxMessages"
+                ("Id", "OccurredOn", "Type", "Data")
+                VALUES
+                (@Id, @OccurredOn, @Type, @Data)
+                """,
+                new
+                {
+                    Id = Guid.NewGuid(),
+                    OccurredOn = timeProvider.GetUtcNow(),
+                    Type = eventType.Name,
+                    Data = eventArgs.Message.Body.ToString()
+                });
             
             await eventArgs.CompleteMessageAsync(eventArgs.Message);
         }
@@ -73,7 +84,7 @@ public class ServiceBusMessageReceiver(
     }
 
     private Type ResolveEventType(string eventType)
-        => eventTypeMap.TryGetValue(eventType, out var type) 
+        => EventTypeMapping.TryGetValue(eventType, out var type) 
             ? type
             : throw new InvalidOperationException($"Unknown event type: {eventType}");
 }

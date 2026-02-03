@@ -4,55 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using YetAnotherECommerce.Modules.Products.Core.DAL.Postgres;
+using YetAnotherECommerce.Modules.Carts.Core.DAL;
 
 #nullable disable
 
-namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres.Migrations
+namespace YetAnotherECommerce.Modules.Carts.Core.DAL.Migrations
 {
-    [DbContext(typeof(ProductsDbContext))]
-    partial class ProductsDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CartsDbContext))]
+    partial class CartsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("carts")
                 .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("YetAnotherECommerce.Modules.Products.Core.Entitites.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products", "products");
-                });
 
             modelBuilder.Entity("YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.Inbox.InboxMessage", b =>
                 {
@@ -74,7 +43,7 @@ namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InboxMessages", "products");
+                    b.ToTable("InboxMessages", "carts");
                 });
 #pragma warning restore 612, 618
         }

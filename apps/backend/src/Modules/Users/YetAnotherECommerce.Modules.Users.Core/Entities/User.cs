@@ -12,7 +12,7 @@ public class User : AggregateRoot, IAuditable
     public string Email { get; private set; }
     public Address Address { get; private set; }
     public bool IsRegistrationCompleted { get; private set; }
-    public DateTime? CreatedAt { get; }
+    public DateTime? CreatedAt { get; private set; }
     public DateTime? LastUpdatedAt { get; private set; }
 
     protected User() { }

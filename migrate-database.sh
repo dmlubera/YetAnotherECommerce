@@ -1,7 +1,7 @@
 DB_CONNECTION_STRING='Host=localhost;Port=5432;Database=yetanotherecommerce;Username=postgres;Password=root'
 
 echo 'Creating directories...'
-mkdir -p migrations/Identity migrations/Users migrations/Products migrations/Orders
+mkdir -p migrations/Identity migrations/Users migrations/Products migrations/Orders migrations/Carts
 
 echo 'Building solution...'
 dotnet build ./apps/backend --no-restore
@@ -27,11 +27,17 @@ dotnet ef migrations bundle --no-build --force \
 --context OrdersDbContext \
 --output migrations/Orders/migrate
 
+dotnet ef migrations bundle --no-build --force \
+--project ./apps/backend/src/Modules/Carts/YetAnotherECommerce.Modules.Carts.Core/YetAnotherECommerce.Modules.Carts.Core.csproj \
+--context CartsDbContext \
+--output migrations/Carts/migrate
+
 echo 'Applying migrations...'
 migrations/Identity/migrate --connection $DB_CONNECTION_STRING
 migrations/Users/migrate --connection $DB_CONNECTION_STRING
 migrations/Products/migrate --connection $DB_CONNECTION_STRING
 migrations/Orders/migrate --connection $DB_CONNECTION_STRING
+migrations/Carts/migrate --connection $DB_CONNECTION_STRING
 
 echo 'Cleaning up...'
 rm -r migrations

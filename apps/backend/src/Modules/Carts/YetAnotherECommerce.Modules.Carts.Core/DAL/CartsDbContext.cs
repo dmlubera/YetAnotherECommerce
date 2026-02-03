@@ -1,19 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using YetAnotherECommerce.Modules.Products.Core.Entitites;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.Inbox;
 
-namespace YetAnotherECommerce.Modules.Products.Core.DAL.Postgres;
+namespace YetAnotherECommerce.Modules.Carts.Core.DAL;
 
-internal class ProductsDbContext(DbContextOptions<ProductsDbContext> options) : DbContext(options)
+internal class CartsDbContext(DbContextOptions<CartsDbContext> options) : DbContext(options)
 {
-    public DbSet<Product> Products { get; set; }
     public DbSet<InboxMessage> InboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasDefaultSchema("products");
+        modelBuilder.HasDefaultSchema("carts");
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }
