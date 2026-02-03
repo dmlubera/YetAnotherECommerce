@@ -11,7 +11,6 @@ using YetAnotherECommerce.Modules.Identity.Core.DAL;
 using YetAnotherECommerce.Modules.Identity.Core.Entities;
 using YetAnotherECommerce.Modules.Identity.Core.Outbox;
 using YetAnotherECommerce.Modules.Identity.Core.Services;
-using YetAnotherECommerce.Shared.Abstractions.Outbox;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 using YetAnotherECommerce.Shared.Infrastructure.Interceptors;
 
@@ -38,15 +37,15 @@ internal static class CoreInstaller
         services.AddScoped<IIdentityMessagePublisher, IdentityMessagePublisher>();
 
         services.RegisterDomainEventHandlersFromAssembly(Assembly.GetExecutingAssembly());
-        
-        services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
+
+        services.AddScoped<ProcessOutboxJob>();
     }
 
     public static void UseBackgroundJobs(this IApplicationBuilder app)
     {
         app.ApplicationServices
             .GetRequiredService<IRecurringJobManager>()
-            .AddOrUpdate<IProcessOutboxJob>(
+            .AddOrUpdate<ProcessOutboxJob>(
             "identity-outbox-processor",
             job => job.ProcessAsync(),
             "0/15 * * * * *"
