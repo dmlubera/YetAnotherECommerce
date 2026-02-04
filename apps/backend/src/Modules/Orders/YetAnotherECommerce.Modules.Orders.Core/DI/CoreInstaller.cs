@@ -3,8 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using YetAnotherECommerce.Modules.Orders.Core.DAL.Postgres;
 using YetAnotherECommerce.Modules.Orders.Core.DAL.Postgres.Repositories;
+using YetAnotherECommerce.Modules.Orders.Core.Inbox;
 using YetAnotherECommerce.Modules.Orders.Core.Repositories;
 using YetAnotherECommerce.Shared.Infrastructure.Extensions;
 
@@ -26,5 +29,17 @@ internal static class CoreInstaller
         services.AddHostedService<UsersEventsReceiver>();
         services.AddHostedService<CartsEventsReceiver>();
         services.AddHostedService<ProductsEventsReceiver>();
+        services.AddScoped<ProcessInboxJob>();
+    }
+    
+    public static void UseBackgroundJobs(this IApplicationBuilder app)
+    {
+        app.ApplicationServices
+            .GetRequiredService<IRecurringJobManager>()
+            .AddOrUpdate<ProcessInboxJob>(
+                "orders-inbox-processor",
+                job => job.ProcessAsync(),
+                "0/15 * * * * *"
+            );
     }
 }

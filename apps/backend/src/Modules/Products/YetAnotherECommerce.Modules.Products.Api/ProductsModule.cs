@@ -21,5 +21,6 @@ internal class ProductsModule : IModule
 
     public void Use(IApplicationBuilder app)
     {
+        app.UseBackgroundJobs();
     }
 }

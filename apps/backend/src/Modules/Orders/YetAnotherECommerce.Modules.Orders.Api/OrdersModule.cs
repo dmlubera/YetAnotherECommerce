@@ -21,5 +21,6 @@ internal class OrdersModule : IModule
 
     public void Use(IApplicationBuilder app)
     {
+        app.UseBackgroundJobs();
     }
 }
