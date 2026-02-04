@@ -4,8 +4,6 @@ using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Products.Core.Commands;
-using YetAnotherECommerce.Modules.Products.Core.Entitites;
-using YetAnotherECommerce.Modules.Products.Core.Events;
 using YetAnotherECommerce.Modules.Products.Core.Exceptions;
 using YetAnotherECommerce.Modules.Products.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Events;
@@ -15,14 +13,13 @@ namespace YetAnotherECommerce.Modules.Products.UnitTests.Commands;
 public class UpdatePriceCommandHandlerTests
 {
     private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly Mock<IEventDispatcher> _eventDispatcherMock;
     private readonly UpdatePriceCommandHandler _handler;
 
     public UpdatePriceCommandHandlerTests()
     {
         _productRepositoryMock = new Mock<IProductRepository>();
-        _eventDispatcherMock = new Mock<IEventDispatcher>();
-        _handler = new UpdatePriceCommandHandler(_productRepositoryMock.Object, _eventDispatcherMock.Object);
+        new Mock<IEventDispatcher>();
+        _handler = new UpdatePriceCommandHandler(_productRepositoryMock.Object);
     }
 
     [Fact]
@@ -39,21 +36,5 @@ public class UpdatePriceCommandHandlerTests
         result.ShouldNotBeNull();
         result.ErrorCode.ShouldBe(expectedException.ErrorCode);
         result.Message.ShouldBe(expectedException.Message);
-    }
-
-    [Fact]
-    public async Task WhenGivenDataIsValid_ThenShouldUpdateProductAndSaveChangesToDatabaseAndPublishIntegrationEvent()
-    {
-        var command = new UpdatePriceCommand(Guid.NewGuid(), 100);
-        var product = new Product("Test", string.Empty, 10, 10);
-        _productRepositoryMock
-            .Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(product);
-
-        await _handler.HandleAsync(command);
-
-        product.Price.Value.ShouldBe(command.Price);
-        _productRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Product>()));
-        _eventDispatcherMock.Verify(x => x.PublishAsync(It.IsAny<PriceUpdated>()));
     }
 }

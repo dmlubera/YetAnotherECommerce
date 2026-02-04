@@ -6,15 +6,17 @@ using YetAnotherECommerce.Shared.Abstractions.Events;
 
 namespace YetAnotherECommerce.Shared.Infrastructure.Events;
 
-public class EventDispatcher(IServiceProvider serviceProvider) : IEventDispatcher
+internal class EventDispatcher(IServiceProvider serviceProvider) : IEventDispatcher
 {
-    public async Task PublishAsync<TEvent>(TEvent @event) where TEvent : class, IEvent
+    public async Task DispatchAsync(IEvent @event)
     {
+        if (@event is null)
+            return;
+
         using var scope = serviceProvider.CreateScope();
-        var handlers = scope.ServiceProvider.GetServices<IEventHandler<TEvent>>();
+        var handlerType = typeof(IEventHandler<>).MakeGenericType(@event.GetType());
+        var handler = scope.ServiceProvider.GetRequiredService(handlerType);
 
-        var tasks = handlers.Select(x => x.HandleAsync(@event));
-
-        await Task.WhenAll(tasks);
+        await ((Task)handlerType.GetMethod(nameof(IEventHandler<>.HandleAsync))?.Invoke(handler, [@event]))!;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hangfire;
 using YetAnotherECommerce.Modules.Orders.Core.Events.External.Models;
 using YetAnotherECommerce.Shared.Abstractions.Database;
+using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Infrastructure.InboxMessageProcessor;
 
 namespace YetAnotherECommerce.Modules.Orders.Core.Inbox;
@@ -10,8 +11,8 @@ namespace YetAnotherECommerce.Modules.Orders.Core.Inbox;
 [DisableConcurrentExecution(timeoutInSeconds: 60)]
 internal sealed class ProcessInboxJob(
     IDbConnectionFactory dbConnectionFactory,
-    IServiceProvider serviceProvider,
-    TimeProvider timeProvider) : InboxMessagesProcessor(dbConnectionFactory, serviceProvider, timeProvider)
+    IEventDispatcher eventDispatcher,
+    TimeProvider timeProvider) : InboxMessagesProcessor(dbConnectionFactory, eventDispatcher, timeProvider)
 {
     private static readonly Dictionary<string, Type> _eventMapping = new()
     {

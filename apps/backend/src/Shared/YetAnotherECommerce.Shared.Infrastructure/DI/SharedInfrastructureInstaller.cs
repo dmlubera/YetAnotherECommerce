@@ -47,8 +47,6 @@ internal static class SharedInfrastructureInstaller
                 manager.FeatureProviders.Add(new InternalControllerFeautreProvider());
             });
 
-        services.Configure<MessagingOptions>(configuration.GetSection("Messaging"));
-
         services.AddMemoryCache();
         services.AddTransient<ICache, InMemoryCache>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
@@ -60,12 +58,6 @@ internal static class SharedInfrastructureInstaller
             .AddClasses(f => f.AssignableTo(typeof(IEventHandler<>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime());
-
-        AddMessageRegistry(services, assemblies);
-        services.AddSingleton<IMessageClient, MessageClient>();
-        services.AddSingleton<IMessageChannel, MessageChannel>();
-        services.AddSingleton<IAsyncMessageDispatcher, AsyncMessageDispatcher>();
-        services.AddHostedService<BackgroundMessageDispatcher>();
 
         services.AddSingleton<ICorrelationContext, CorrelationContext>();
         services.AddScoped<CorrelationMiddleware>();
@@ -85,33 +77,6 @@ internal static class SharedInfrastructureInstaller
         app.UseHangfireDashboard(options: new DashboardOptions
         {
             Authorization = []
-        });
-    }
-
-    private static void AddMessageRegistry(IServiceCollection services, IEnumerable<Assembly> assemblies)
-    {
-        var registry = new MessageRegistry();
-        var types = assemblies
-            .Where(x => x.FullName.StartsWith("YetAnotherECommerce"))
-            .SelectMany(x => x.GetTypes())
-            .ToArray();
-        var eventTypes = types.Where(x => x.IsClass && typeof(IEvent).IsAssignableFrom(x)).ToArray();
-
-        services.AddSingleton<IMessageRegistry>(sp =>
-        {
-            var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
-            var eventDispatcherType = eventDispatcher.GetType();
-
-            foreach (var type in eventTypes)
-            {
-                registry.AddRegistration(type, @event =>
-                    (Task)eventDispatcherType
-                        .GetMethod(nameof(eventDispatcher.PublishAsync))
-                        ?.MakeGenericMethod(type)
-                        .Invoke(eventDispatcher, [@event]));
-            }
-
-            return registry;
         });
     }
 

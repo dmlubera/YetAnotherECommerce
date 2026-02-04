@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.Inbox;
 using YetAnotherECommerce.Shared.Abstractions.Database;
 using YetAnotherECommerce.Shared.Abstractions.Events;
@@ -13,7 +12,7 @@ namespace YetAnotherECommerce.Shared.Infrastructure.InboxMessageProcessor;
 
 public abstract class InboxMessagesProcessor(
     IDbConnectionFactory dbConnectionFactory,
-    IServiceProvider serviceProvider,
+    IEventDispatcher eventDispatcher,
     TimeProvider timeProvider)
 {
     protected abstract Dictionary<string, Type> EventMapping { get; }
@@ -35,14 +34,8 @@ public abstract class InboxMessagesProcessor(
 
         foreach (var message in inboxMessages)
         {
-            var eventType = EventMapping[message.Type];
-            var @event = (IEvent)JsonSerializer.Deserialize(message.Data, eventType);
-
-            using var scope = serviceProvider.CreateScope();
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-            var handler = scope.ServiceProvider.GetRequiredService(handlerType);
-
-            await ((Task)handlerType.GetMethod(nameof(IEventHandler<>.HandleAsync))?.Invoke(handler, [@event]))!;
+            var @event = (IEvent)JsonSerializer.Deserialize(message.Data, EventMapping[message.Type]);
+            await eventDispatcher.DispatchAsync(@event);
 
             await connection.ExecuteAsync(
                 $"""

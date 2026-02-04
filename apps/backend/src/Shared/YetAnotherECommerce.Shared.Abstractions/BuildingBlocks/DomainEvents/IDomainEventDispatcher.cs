@@ -4,5 +4,5 @@ namespace YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
 
 public interface IDomainEventDispatcher
 {
-    Task DispatchAsync(params IDomainEvent[] events);
+    Task DispatchAsync(IDomainEvent @event);
 }
