@@ -18,7 +18,7 @@ public class ClearCartEndpoint(ICartService cartService) : EndpointWithoutReques
     public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
-        cartService.ClearCart($"{userId}-cart");
+        cartService.ClearCart(userId);
 
         await SendNoContentAsync(ct);
     }

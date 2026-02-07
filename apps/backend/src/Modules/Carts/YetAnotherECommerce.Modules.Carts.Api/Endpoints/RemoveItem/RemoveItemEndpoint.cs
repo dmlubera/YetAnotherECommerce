@@ -18,7 +18,7 @@ public class RemoveItemEndpoint(ICartService cartService) : EndpointWithoutReque
     public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
-        cartService.RemoveItem($"{userId}-cart", Route<Guid>("itemId"));
+        cartService.RemoveItem(userId, Route<Guid>("itemId"));
         await SendNoContentAsync(ct);
     }
 }

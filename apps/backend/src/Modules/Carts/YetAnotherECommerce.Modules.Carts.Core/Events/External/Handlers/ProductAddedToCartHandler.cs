@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using YetAnotherECommerce.Modules.Carts.Core.Cache;
 using YetAnotherECommerce.Modules.Carts.Core.Entities;
 using YetAnotherECommerce.Modules.Carts.Core.Events.External.Models;
 using YetAnotherECommerce.Shared.Abstractions.Cache;
@@ -11,8 +12,8 @@ public class ProductAddedToCartHandler(ICache cache) : IEventHandler<ProductAdde
     public async Task HandleAsync(ProductAddedToCart @event)
     {
         // TODO: This is not an event, should be changed to command
-        var cacheKey = $"{@event.CustomerId}-cart";
-        var cart = cache.Get<Cart>(cacheKey) ?? new Cart();
+        var cacheKey = new CartCacheKey(@event.CustomerId);
+        var cart = cache.Get(cacheKey) ?? new Cart();
 
         var cartItem = new CartItem(@event.ProductId, @event.Name, @event.Quantity, @event.UnitPrice);
         cart.AddItem(cartItem);

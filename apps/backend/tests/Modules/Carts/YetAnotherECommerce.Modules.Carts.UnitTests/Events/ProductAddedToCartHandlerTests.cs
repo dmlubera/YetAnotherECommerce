@@ -33,7 +33,7 @@ public class ProductAddedToCartHandlerTests
             10);
         var cart = new Cart();
         _cacheMock
-            .Setup(x => x.Get<Cart>(It.IsAny<string>()))
+            .Setup(x => x.Get(It.IsAny<ICacheKey<Cart>>()))
             .Returns(cart);
 
         await _handler.HandleAsync(@event);

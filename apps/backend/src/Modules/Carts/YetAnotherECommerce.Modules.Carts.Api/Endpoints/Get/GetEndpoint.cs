@@ -18,6 +18,6 @@ public class GetEndpoint(ICartService cartService) : EndpointWithoutRequest
     public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.Identity.Name) : Guid.Empty;
-        await SendOkAsync(cartService.Browse($"{userId}-cart"), ct);
+        await SendOkAsync(cartService.Browse(userId), ct);
     }
 }

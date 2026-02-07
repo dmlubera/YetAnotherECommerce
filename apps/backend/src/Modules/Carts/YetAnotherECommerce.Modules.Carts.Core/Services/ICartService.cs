@@ -6,8 +6,8 @@ namespace YetAnotherECommerce.Modules.Carts.Core.Services;
 
 public interface ICartService
 {
-    Cart Browse(string cacheKey);
+    Cart Browse(Guid userId);
     Task PlaceOrderAsync(Guid userId);
-    void ClearCart(string cacheKey);
-    void RemoveItem(string cacheKey, Guid itemId);
+    void ClearCart(Guid userId);
+    void RemoveItem(Guid userId, Guid itemId);
 }

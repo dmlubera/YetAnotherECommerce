@@ -31,7 +31,7 @@ public class CartServiceTests
         var cart = new Cart();
         var expectedException = new CannotCreateOrderFromEmptyCartException();
         _cacheMock
-            .Setup(x => x.Get<Cart>(It.IsAny<string>()))
+            .Setup(x => x.Get(It.IsAny<ICacheKey<Cart>>()))
             .Returns(cart);
 
         var exception =
@@ -54,7 +54,7 @@ public class CartServiceTests
             unitPrice: 5));
         var expectedException = new CannotOrderProductInZeroQuantityException();
         _cacheMock
-            .Setup(x => x.Get<Cart>(It.IsAny<string>()))
+            .Setup(x => x.Get(It.IsAny<ICacheKey<Cart>>()))
             .Returns(cart);
         var exception =
             await Assert.ThrowsAsync<CannotOrderProductInZeroQuantityException>(() => _cartService.PlaceOrderAsync(Guid.NewGuid()));
@@ -75,7 +75,7 @@ public class CartServiceTests
             quantity: 10,
             unitPrice: 5));
         _cacheMock
-            .Setup(x => x.Get<Cart>(It.IsAny<string>()))
+            .Setup(x => x.Get(It.IsAny<ICacheKey<Cart>>()))
             .Returns(cart);
 
         await _cartService.PlaceOrderAsync(Guid.NewGuid());

@@ -2,7 +2,7 @@
 
 public interface ICache
 {
-    T Get<T>(string key);
-    void Set<T>(string key, T value);
-    void Clear(string key);
+    T Get<T>(ICacheKey<T> key);
+    void Set<T>(ICacheKey<T> key, T value);
+    void Clear<T>(ICacheKey<T> key);
 }

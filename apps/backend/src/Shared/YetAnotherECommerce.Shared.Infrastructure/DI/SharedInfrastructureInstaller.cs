@@ -8,6 +8,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
@@ -48,7 +49,8 @@ internal static class SharedInfrastructureInstaller
             });
 
         services.AddMemoryCache();
-        services.AddTransient<ICache, InMemoryCache>();
+        services.Configure<CacheSettings>(configuration.GetSection(CacheSettings.SectionName));
+        services.AddSingleton<ICache, InMemoryCache>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
         services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
         services.AddSingleton<IEventDispatcher, EventDispatcher>();
