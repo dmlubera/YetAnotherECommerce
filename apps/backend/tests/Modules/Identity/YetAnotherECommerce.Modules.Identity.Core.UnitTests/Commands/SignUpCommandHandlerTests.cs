@@ -28,7 +28,7 @@ public class SignUpCommandHandlerTests
         // Arrange
         _userManagerMock
             .Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
-            .ReturnsAsync(new User());
+            .ReturnsAsync(User.Register(It.IsAny<string>()));
         
         // Act
         var result = await _handler.HandleAsync(command);

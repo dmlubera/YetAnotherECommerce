@@ -43,7 +43,7 @@ public class SignInCommandHandlerTests
         [FixtureCustomization] SignInCommand command)
     {
         // Arrange
-        _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
+        _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(User.Register(It.IsAny<string>()));
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
 
         // Act
@@ -60,7 +60,7 @@ public class SignInCommandHandlerTests
         [FixtureCustomization] SignInCommand command)
     {
         // Arrange
-        _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
+        _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(User.Register(It.IsAny<string>()));
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
         _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync([Role.Customer]);
 

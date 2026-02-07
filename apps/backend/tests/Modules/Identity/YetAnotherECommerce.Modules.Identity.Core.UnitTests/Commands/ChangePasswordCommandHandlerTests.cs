@@ -45,7 +45,7 @@ public class ChangePasswordCommandHandlerTests
         // Arrange
         _userManagerMock
             .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync(new User());
+            .ReturnsAsync(User.Register(It.IsAny<string>()));
         _userManagerMock
             .Setup(x => x.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Failed());
@@ -65,7 +65,7 @@ public class ChangePasswordCommandHandlerTests
         // Arrange
         _userManagerMock
             .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync(new User());
+            .ReturnsAsync(User.Register(It.IsAny<string>()));
         _userManagerMock
             .Setup(x => x.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);

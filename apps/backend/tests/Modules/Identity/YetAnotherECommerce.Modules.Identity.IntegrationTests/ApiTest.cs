@@ -29,11 +29,7 @@ public abstract class ApiTest : IAsyncLifetime
     {
         var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-        var testCustomer = new User
-        {
-            Email = PredefinedUserCredentials.Email,
-            UserName = PredefinedUserCredentials.Email
-        };
+        var testCustomer = User.Register(PredefinedUserCredentials.Email);
         await userManager.CreateAsync(testCustomer, PredefinedUserCredentials.Password);
         await userManager.AddToRoleAsync(testCustomer, Role.Customer);
     }

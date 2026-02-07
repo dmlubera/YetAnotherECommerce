@@ -15,12 +15,8 @@ public class SignUpCommandHandler(UserManager<User> userManager)
         {
             return SignUpResult.Failed();
         }
-        
-        var user = new User
-        {
-            Email = command.Email,
-            UserName = command.Email
-        };
+
+        var user = User.Register(command.Email);
         var result = await userManager.CreateAsync(user, command.Password);
         if (!result.Succeeded)
         {
@@ -28,7 +24,6 @@ public class SignUpCommandHandler(UserManager<User> userManager)
         }
 
         await userManager.AddToRoleAsync(user, "customer");
-        user.MarkAsRegistered();
 
         return SignUpResult.Succeeded();
     }
