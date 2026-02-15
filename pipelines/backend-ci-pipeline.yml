@@ -9,7 +9,7 @@ variables:
   basePath: 'apps/backend'
   solution: '$(basePath)/YetAnotherECommerce.sln'
   unitTestProjects: '$(basePath)/tests/**/*.UnitTests.csproj'
-  bootstrapperProject: '$(basePath)/src/bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
+  bootstrapperProject: '$(basePath)/src/Bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
 
 steps:
 - task: UseDotNet@2
