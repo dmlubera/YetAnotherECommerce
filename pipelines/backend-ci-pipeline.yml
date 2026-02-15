@@ -9,6 +9,7 @@ variables:
   basePath: 'apps/backend'
   solution: '$(basePath)/YetAnotherECommerce.sln'
   unitTestProjects: '$(basePath)/tests/**/*.UnitTests.csproj'
+  integrationTestProjects: '$(basePath)/tests/**/*.IntegrationTests.csproj'
   bootstrapperProject: '$(basePath)/src/Bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
 
 steps:
@@ -40,6 +41,14 @@ steps:
   inputs:
     command: 'test'
     projects: '$(unitTestProjects)'
+    arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
+
+- task: DotNetCoreCLI@2
+  name: 'RunIntegrationTests'
+  displayName: 'Run integration tests'
+  inputs:
+    command: 'test'
+    projects: '$(integrationTestProjects)'
     arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
 
 - task: DotNetCoreCLI@2
