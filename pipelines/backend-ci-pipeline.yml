@@ -6,10 +6,10 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  basePath: '../apps/backend'
+  basePath: 'apps/backend'
   solution: '$(basePath)/YetAnotherECommerce.sln'
   unitTestProjects: '$(basePath)/tests/**/*.UnitTests.csproj'
-  bootstrapperProject: '$(basePath)/src/bootsrapper/YetAnotherECommerce.Bootsrapper/YetAnotherECommerce.Bootsrapper.csproj'
+  bootstrapperProject: '$(basePath)/src/bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
 
 steps:
 - task: UseDotNet@2
