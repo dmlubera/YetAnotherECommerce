@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Testcontainers.PostgreSql;
 using Xunit;
 using YetAnotherECommerce.Bootstrapper;
@@ -24,29 +25,39 @@ public class IdentityModuleWebApplicationFactory : WebApplicationFactory<Startup
         .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
-        => builder.ConfigureTestServices(services =>
-        {
-            services.SetupDbContext<IdentityDbContext>(_dbContainer.GetConnectionString(), (context, _) =>
+        => builder
+            .ConfigureAppConfiguration((_, config) =>
             {
-                var rolesToAdd = new List<IdentityRole<Guid>>
+                var dict = new Dictionary<string, string?>
                 {
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = Role.Admin,
-                        NormalizedName = Role.Admin.ToUpperInvariant()
-                    },
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = Role.Customer,
-                        NormalizedName = Role.Customer.ToUpperInvariant()
-                    }
+                    ["ConnectionStrings:Default"] = _dbContainer.GetConnectionString()
                 };
-                context.Set<IdentityRole<Guid>>().AddRange(rolesToAdd);
-                context.SaveChanges();
+
+                config.AddInMemoryCollection(dict);
+            })
+            .ConfigureTestServices(services =>
+            {
+                services.SetupDbContext<IdentityDbContext>(_dbContainer.GetConnectionString(), (context, _) =>
+                {
+                    var rolesToAdd = new List<IdentityRole<Guid>>
+                    {
+                        new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = Role.Admin,
+                            NormalizedName = Role.Admin.ToUpperInvariant()
+                        },
+                        new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = Role.Customer,
+                            NormalizedName = Role.Customer.ToUpperInvariant()
+                        }
+                    };
+                    context.Set<IdentityRole<Guid>>().AddRange(rolesToAdd);
+                    context.SaveChanges();
+                });
             });
-        });
 
     public async Task InitializeAsync() => await _dbContainer.StartAsync();
 
