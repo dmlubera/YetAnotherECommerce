@@ -1,0 +1,22 @@
+parameters:
+- name: tf_dir
+  type: string
+
+- bash: |
+    terraform init \
+      -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME" \
+      -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" \
+      -backend-config="container_name=$TF_STATE_CONTAINER_NAME" \
+      -backend-config="key=$TF_STATE_KEY" \
+      -input=false -no-color
+  workingDirectory: ${{ tf_dir }}
+  displayName: 'Terraform Init'
+  env:
+    ARM_TENANT_ID: $(arm_tenant_id)
+    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+    ARM_CLIENT_ID: $(arm_client_id)
+    ARM_CLIENT_SECRET: $(arm_client_secret)
+    TF_STATE_RESOURCE_GROUP_NAME: $(tf-state-resource-grup-name)
+    TF_STATE_STORAGE_ACCOUNT_NAME: $(tf-state-storage-account-name)
+    TF_STATE_CONTAINER_NAME: $(tf-state-container-name)
+    TF_STATE_KEY: $(tf-state-key)
