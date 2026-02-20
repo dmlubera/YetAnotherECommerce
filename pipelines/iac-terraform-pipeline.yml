@@ -81,7 +81,6 @@ stages:
       steps:
       - download: current
         artifact: tfplan
-        path: $(Pipeline.Workspace)/tfplan
 
       - bash: |
           curl -LO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
