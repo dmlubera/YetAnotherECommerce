@@ -44,12 +44,10 @@ stages:
         parameters:
           tfDir: $(TF_DIR)
 
-      - bash: |
-          terraform plan \
-            -var="subscription_id=$ARM_SUBSCRIPTION_ID" \
-            -out=tfplan \
-            -input=false -no-color
+      - bash: terraform plan -out=tfplan -input=false -no-color
         displayName: 'Terraform Plan'
+        env:
+          TF_VAR_subscription_id: $(arm_subscription_id)
       
       - publish: $(TF_DIR)/tfplan
         artifact: tfplan
