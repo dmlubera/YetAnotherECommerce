@@ -27,9 +27,9 @@ stages:
         displayName: 'Install Terraform'
 
       - bash: |
-          terraform init -backend=false
-          terraform fmt -check
-          terraform validate
+          terraform init -backend=false -input-false -no-color
+          terraform fmt -check -no-color
+          terraform validate -no-color
         workingDirectory: $(TF_DIR)
         displayName: 'Terraform Validate'
 
@@ -51,11 +51,10 @@ stages:
             -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME" \
             -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" \
             -backend-config="container_name=$TF_STATE_CONTAINER_NAME" \
-            -backend-config="key=$TF_STATE_KEY"
+            -backend-config="key=$TF_STATE_KEY" \
+            -input=false -no-color
 
-          terraform plan \
-            -out=tfplan \
-            -lock=true
+          terraform plan -out=tfplan -input=false -no-color
         workingDirectory: $(TF_DIR)
         displayName: 'Terraform Plan'
         env:
