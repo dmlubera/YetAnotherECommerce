@@ -1,5 +1,10 @@
 trigger:
-  - none
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - 'infrastructure/**'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -99,7 +104,7 @@ stages:
 
           terraform apply -input=false -no-color $(Pipeline.Workspace)/tfplan/tfplan
         workingDirectory: $(TF_DIR)
-        displayName: 'Terraform Plan'
+        displayName: 'Terraform Apply'
         env:
           ARM_TENANT_ID: $(arm_tenant_id)
           ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
