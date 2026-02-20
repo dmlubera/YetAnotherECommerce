@@ -27,7 +27,7 @@ stages:
         displayName: 'Install Terraform'
 
       - bash: |
-          terraform init -backend=false -input-false -no-color
+          terraform init -backend=false -input=false -no-color
           terraform fmt -check -no-color
           terraform validate -no-color
         workingDirectory: $(TF_DIR)
