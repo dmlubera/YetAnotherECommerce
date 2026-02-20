@@ -7,8 +7,10 @@ pool:
 variables:
 - group: arm-tfstate-platform
 
-  TF_VERSION: '1.14.5'
-  TF_DIR: '$(Build.SourcesDirectory)/infrastructure'
+- name: TF_VERSION
+  value: '1.14.5'
+- name:  TF_DIR
+  value: '$(Build.SourcesDirectory)/infrastructure'
   
 
 stages:
