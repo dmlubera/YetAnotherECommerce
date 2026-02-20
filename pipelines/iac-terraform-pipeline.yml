@@ -54,7 +54,10 @@ stages:
             -backend-config="key=$TF_STATE_KEY" \
             -input=false -no-color
 
-          terraform plan -out=tfplan -input=false -no-color
+          terraform plan \
+            -var="subscription_id=$ARM_SUBSCRIPTION_ID" \
+            -out=tfplan \
+            -input=false -no-color
         workingDirectory: $(TF_DIR)
         displayName: 'Terraform Plan'
         env:
