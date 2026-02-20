@@ -16,7 +16,9 @@ variables:
 - name: TF_VERSION
   value: '1.14.5'
 - name:  TF_DIR
-  value: '$(Build.SourcesDirectory)/infrastructure'  
+  value: '$(Build.SourcesDirectory)/infrastructure'
+- name: TF_HAS_CHANGES
+  value: false
 
 stages:
   - stage: Validate
@@ -44,7 +46,13 @@ stages:
         parameters:
           tfDir: $(TF_DIR)
 
-      - bash: terraform plan -out=tfplan -input=false -no-color
+      - bash: |
+          terraform plan -out=tfplan -detailed-exitcode -input=false -no-color
+          PLAN_EXIT_CODE=$?
+
+          if [ $PLAN_EXIT_CODE -eq 2]; then
+            echo "##vso[task.setvariable variable=TF_HAS_CHANGES]true"
+          fi
         displayName: 'Terraform Plan'
         workingDirectory: $(TF_DIR)
         env:
@@ -55,7 +63,7 @@ stages:
 
   - stage: Apply
     dependsOn: Plan
-    condition: succeeded()
+    condition: and(succeeded(), eq(variables['TF_HAS_CHANGES'], 'true'))
     jobs:
     - job: apply
       steps:
