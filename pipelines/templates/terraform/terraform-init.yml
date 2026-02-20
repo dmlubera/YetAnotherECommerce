@@ -1,5 +1,5 @@
 parameters:
-- name: tf_dir
+- name: tfDir
   type: string
 
 steps:
@@ -10,7 +10,7 @@ steps:
       -backend-config="container_name=$TF_STATE_CONTAINER_NAME" \
       -backend-config="key=$TF_STATE_KEY" \
       -input=false -no-color
-  workingDirectory: ${{ tf_dir }}
+  workingDirectory: ${{ parameters.tfDir }}
   displayName: 'Terraform Init'
   env:
     ARM_TENANT_ID: $(arm_tenant_id)

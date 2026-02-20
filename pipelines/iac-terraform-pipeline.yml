@@ -42,7 +42,7 @@ stages:
 
       - template: templates/terraform/terraform-init.yml
         parameters:
-          tf_dir: $(TF_DIR)
+          tfDir: $(TF_DIR)
 
       - bash: |
           terraform plan \
@@ -67,7 +67,7 @@ stages:
 
       - template: templates/terraform/terraform-init.yml
         parameters:
-          tf_dir: $(TF_DIR)
+          tfDir: $(TF_DIR)
 
       - bash: terraform apply -input=false -no-color $(Pipeline.Workspace)/tfplan/tfplan
         displayName: 'Terraform Apply'
