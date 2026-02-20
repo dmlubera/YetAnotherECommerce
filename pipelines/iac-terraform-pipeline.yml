@@ -46,6 +46,7 @@ stages:
 
       - bash: terraform plan -out=tfplan -input=false -no-color
         displayName: 'Terraform Plan'
+        workingDirectory: $(TF_DIR)
         env:
           TF_VAR_subscription_id: $(arm_subscription_id)
       
@@ -68,4 +69,5 @@ stages:
           tfDir: $(TF_DIR)
 
       - bash: terraform apply -input=false -no-color $(Pipeline.Workspace)/tfplan/tfplan
+        workingDirectory: $(TF_DIR)
         displayName: 'Terraform Apply'
