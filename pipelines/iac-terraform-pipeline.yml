@@ -5,6 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+- group: arm
 - group: arm-tfstate-platform
 
 - name: TF_VERSION
@@ -58,6 +59,10 @@ stages:
         workingDirectory: $(TF_DIR)
         displayName: 'Terraform Plan'
         env:
+          ARM_TENANT_ID: $(arm_tenant_id)
+          ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+          ARM_CLIENT_ID: $(arm_client_id)
+          ARM_CLIENT_SECRET: $(arm_client_secret)
           TF_STATE_RESOURCE_GROUP_NAME: $(tf-state-resource-grup-name)
           TF_STATE_STORAGE_ACCOUNT_NAME: $(tf-state-storage-account-name)
           TF_STATE_CONTAINER_NAME: $(tf-state-container-name)
