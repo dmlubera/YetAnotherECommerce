@@ -2,6 +2,7 @@ parameters:
 - name: tf_dir
   type: string
 
+steps:
 - bash: |
     terraform init \
       -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME" \
