@@ -14,6 +14,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "rg" {
   name     = "yetanotherecommerce-rg-${var.environment_name}"
   location = "West Europe"
@@ -43,4 +45,22 @@ resource "azurerm_linux_web_app" "web" {
       dotnet_version = "10.0"
     }
   }
+}
+
+resource "azurerm_key_vault" "kv" {
+  name                = "yetanotherecommerce-kv-${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.location
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "standard"
+}
+
+resource "azurerm_key_vault_access_policy" "webapp_kv_policy" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_linux_web_app.web.identity[0].principal_id
+
+  secret_permissions = [
+    "Get", "List"
+  ]
 }
