@@ -50,8 +50,10 @@ stages:
           terraform plan -out=tfplan -detailed-exitcode -input=false -no-color
           PLAN_EXIT_CODE=$?
 
-          if [ $PLAN_EXIT_CODE -eq 2]; then
+          if [ $PLAN_EXIT_CODE -eq 2 ]; then
             echo "##vso[task.setvariable variable=TF_HAS_CHANGES]true"
+          elif [ $PLAN_EXIT_CODE -eq 1 ]; then
+            exit 1
           fi
         displayName: 'Terraform Plan'
         workingDirectory: $(TF_DIR)
