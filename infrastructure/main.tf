@@ -64,3 +64,10 @@ resource "azurerm_key_vault_access_policy" "webapp_kv_policy" {
     "Get", "List"
   ]
 }
+
+resource "azurerm_postgresql_flexible_server" "postgres" {
+  name                = "yeacommerce-sql-${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  sku_name            = "B_Standard_B1ms"
+}
