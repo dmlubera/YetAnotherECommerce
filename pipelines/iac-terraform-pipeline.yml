@@ -60,6 +60,8 @@ stages:
         workingDirectory: $(TF_DIR)
         env:
           TF_VAR_subscription_id: $(arm_subscription_id)
+          TF_VAR_sql_administrator_login: $(sql_administrator_login)
+          TF_VAR_sql_administrator_password: $(sql_administrator_password)
       
       - publish: $(TF_DIR)/tfplan
         artifact: tfplan

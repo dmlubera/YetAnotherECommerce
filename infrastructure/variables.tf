@@ -24,3 +24,14 @@ variable "service_plan_sku" {
     error_message = "Not allowed SKU"
   }
 }
+
+variable "sql_administrator_login" {
+  description = "Administator login"
+  type        = string
+}
+
+variable "sql_administrator_password" {
+  description = "Administator password"
+  type        = string
+  sensitive   = true
+}
