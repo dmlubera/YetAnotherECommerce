@@ -1,0 +1,26 @@
+resources:
+  pipelines:
+    - pipeline: backend_ci
+      source: backend-ci
+      trigger: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: backend      
+
+stages:
+- stage: Deploy
+  jobs:
+    - job: Deploy
+      steps:
+        - download: backend_ci
+          artifact: yetanotherecommerce-backend
+
+        - task: AzureWebApp@1
+          inputs:
+            azureSubscription: $(subscription_name)
+            appName: $(webapp_name)
+            appType: 'webAppLinux'
+            package: '$(Pipeline.Workspace)/backend_ci/yetanotherecommerce-backend/**/*.zip'
