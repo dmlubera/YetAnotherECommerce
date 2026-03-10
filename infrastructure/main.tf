@@ -71,6 +71,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   location            = azurerm_resource_group.rg.location
   sku_name            = "B_Standard_B1ms"
   version             = 18
+  zone                = 1
 
   administrator_login    = var.sql_administrator_login
   administrator_password = var.sql_administrator_password
