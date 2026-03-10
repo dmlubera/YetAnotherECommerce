@@ -75,3 +75,10 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   administrator_login    = var.sql_administrator_login
   administrator_password = var.sql_administrator_password
 }
+
+resource "azurerm_servicebus_namespace" "servicebus" {
+  name                = "yeacommerce-sb-${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  sku                 = "Standard"
+}
