@@ -10,12 +10,20 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfiguration: 'Release'
-  basePath: 'apps/backend'
-  solution: '$(basePath)/YetAnotherECommerce.sln'
-  unitTestProjects: '$(basePath)/tests/**/*.UnitTests.csproj'
-  integrationTestProjects: '$(basePath)/tests/**/*.IntegrationTests.csproj'
-  bootstrapperProject: '$(basePath)/src/Bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
+- group: backend
+
+- name: buildConfiguration
+  value: 'Release'
+- name: basePath
+  value: 'apps/backend'
+- name: solution
+  value: '$(basePath)/YetAnotherECommerce.sln'
+- name: unitTestProjects
+  value: '$(basePath)/tests/**/*.UnitTests.csproj'
+- name: integrationTestProjects
+  value: '$(basePath)/tests/**/*.IntegrationTests.csproj'
+- name: bootstrapperProject
+  value: '$(basePath)/src/Bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
 
 steps:
 - task: UseDotNet@2
@@ -55,6 +63,11 @@ steps:
     command: 'test'
     projects: '$(integrationTestProjects)'
     arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
+
+- task: FileTransform@2
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)'
+    jsonTargetFiles: '**/appsettings.json'
 
 - task: DotNetCoreCLI@2
   name: 'PublishProject'
