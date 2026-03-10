@@ -1,3 +1,5 @@
+trigger: none
+
 resources:
   pipelines:
     - pipeline: backend_ci
