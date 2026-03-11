@@ -86,103 +86,103 @@ resource "azurerm_servicebus_namespace" "servicebus" {
 
 resource "azurerm_servicebus_topic" "identity_topic" {
   name         = "identity.events"
-  namespace_id = azurerm_servicebus_namespace.servicebus.name
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
 resource "azurerm_servicebus_topic" "users_topic" {
   name         = "users.events"
-  namespace_id = azurerm_servicebus_namespace.servicebus.name
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
 resource "azurerm_servicebus_topic" "products_topic" {
   name         = "products.events"
-  namespace_id = azurerm_servicebus_namespace.servicebus.name
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
 resource "azurerm_servicebus_topic" "orders_topic" {
   name         = "orders.events"
-  namespace_id = azurerm_servicebus_namespace.servicebus.name
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
 resource "azurerm_servicebus_topic" "carts_topic" {
   name         = "carts.events"
-  namespace_id = azurerm_servicebus_namespace.servicebus.name
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
 resource "azurerm_servicebus_subscription" "orders_carts_subscription" {
   name               = "orders"
-  topic_id           = azurerm_servicebus_topic.carts_topic.name
+  topic_id           = azurerm_servicebus_topic.carts_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "orders_carts_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.orders_carts_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('order.placed')"
 }
 
 resource "azurerm_servicebus_subscription" "products_orders_subscription" {
   name               = "products"
-  topic_id           = azurerm_servicebus_topic.orders_topic.name
+  topic_id           = azurerm_servicebus_topic.orders_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "products_orders_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.products_orders_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('order.canceled', 'order.revoked', 'order.created')"
 }
 
 resource "azurerm_servicebus_subscription" "orders_products_subscription" {
   name               = "orders"
-  topic_id           = azurerm_servicebus_topic.products_topic.name
+  topic_id           = azurerm_servicebus_topic.products_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "orders_products_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.orders_products_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('order.accepted', 'order.rejected')"
 }
 
 resource "azurerm_servicebus_subscription" "carts_products_subscription" {
   name               = "carts"
-  topic_id           = azurerm_servicebus_topic.products_topic.name
+  topic_id           = azurerm_servicebus_topic.products_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "carts_products_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.carts_products_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('product.added.to.cart')"
 }
 
 resource "azurerm_servicebus_subscription" "orders_users_subscription" {
   name               = "orders"
-  topic_id           = azurerm_servicebus_topic.users_topic.name
+  topic_id           = azurerm_servicebus_topic.users_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "orders_users_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.orders_users_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('registration.completed')"
 }
 
 resource "azurerm_servicebus_subscription" "users_identity_subscription" {
   name               = "users"
-  topic_id           = azurerm_servicebus_topic.identity_topic
+  topic_id           = azurerm_servicebus_topic.identity_topic.id
   max_delivery_count = 5
 }
 
 resource "azurerm_servicebus_subscription_rule" "users_identity_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = data.azurerm_client_config.current.subscription_id
+  subscription_id = azurerm_servicebus_subscription.users_identity_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('user.registered')"
 }
