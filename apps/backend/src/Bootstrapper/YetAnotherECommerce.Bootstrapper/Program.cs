@@ -28,6 +28,11 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
+                webBuilder.ConfigureKestrel(options =>
+                {
+                    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+                    options.ListenAnyIP(int.Parse(port));
+                });
             })
             .UseSerilog((context, _, configuration) =>
             {
