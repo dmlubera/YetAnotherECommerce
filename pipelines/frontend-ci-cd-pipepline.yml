@@ -1,0 +1,47 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - 'apps/frontend/**'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: frontend
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+        steps:
+          - task: NodeTool@0
+            displayName: 'Install Node.js'
+            inputs:
+              versionSpec: '20.x'
+
+          - script: npm ci
+            displayName: 'Install dependencies'
+
+          - script: npm run build
+            displayName: 'Build app'
+
+          - publish: dist
+            artifact: webapp
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        steps:
+          - download: current
+            artifact: webapp
+
+          - task: AzureStaticWebApp@0
+            displayName: 'Deploy to Azure Static Web Apps'
+            inputs:
+              app_location: '/'
+              output_location: 'dist'
+              azure_static_web_apps_api_token: $(azure_static_web_apps_api_token)
