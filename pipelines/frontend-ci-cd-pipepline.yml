@@ -30,8 +30,10 @@ stages:
             displayName: 'Build app'
             workingDirectory: apps/frontend
 
-          - publish: apps/frontend/dist
-            artifact: webapp
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'apps/frontend/dist'
+              artifactName: 'webapp'
 
   - stage: Deploy
     dependsOn: Build
@@ -44,7 +46,7 @@ stages:
           - task: AzureStaticWebApp@0
             displayName: 'Deploy to Azure Static Web Apps'
             inputs:
-              app_location: 'webapp'
+              app_location: '$(Pipeline.Workspace)/webapp'
               output_location: ''
               skip_app_build: true
               skip_api_build: true
