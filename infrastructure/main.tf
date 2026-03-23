@@ -47,6 +47,13 @@ resource "azurerm_linux_web_app" "web" {
   }
 }
 
+resource "azurerm_static_web_app" "swa" {
+  name                = "yeaecommerce-swa${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  sku_tier            = "Free"
+}
+
 resource "azurerm_key_vault" "kv" {
   name                = "yaecommerce-kv-${var.environment_name}"
   resource_group_name = azurerm_resource_group.rg.name
