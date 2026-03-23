@@ -29,6 +29,8 @@ stages:
           - script: npm run build
             displayName: 'Build app'
             workingDirectory: apps/frontend
+            env:
+              VITE_API_BASE_URL: $(api_base_url)
 
           - task: PublishPipelineArtifact@1
             inputs:
