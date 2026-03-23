@@ -44,7 +44,7 @@ stages:
           - task: AzureStaticWebApp@0
             displayName: 'Deploy to Azure Static Web Apps'
             inputs:
-              app_location: '/'
+              app_location: '/webapp'
               output_location: ''
               skip_app_build: true
               skip_api_build: true
