@@ -24,11 +24,13 @@ stages:
 
           - script: npm ci
             displayName: 'Install dependencies'
+            workingDirectory: apps/frontend
 
           - script: npm run build
             displayName: 'Build app'
+            workingDirectory: apps/frontend
 
-          - publish: dist
+          - publish: apps/frontend/dist
             artifact: webapp
 
   - stage: Deploy
@@ -43,5 +45,5 @@ stages:
             displayName: 'Deploy to Azure Static Web Apps'
             inputs:
               app_location: '/'
-              output_location: 'dist'
+              output_location: ''
               azure_static_web_apps_api_token: $(azure_static_web_apps_api_token)
