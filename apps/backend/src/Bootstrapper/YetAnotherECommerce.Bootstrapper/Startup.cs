@@ -29,9 +29,10 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var allowedOrigins = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
         services.AddCors(options =>
         {
-            options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:5173").AllowAnyHeader());
+            options.AddDefaultPolicy(policy => policy.WithOrigins(allowedOrigins).AllowAnyHeader());
         });
         services.AddFastEndpoints();
             
