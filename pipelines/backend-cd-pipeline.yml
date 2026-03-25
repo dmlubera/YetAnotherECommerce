@@ -26,3 +26,5 @@ stages:
             appName: $(webapp_name)
             appType: 'webAppLinux'
             package: '$(Pipeline.Workspace)/backend_ci/yetanotherecommerce-backend/**/*.zip'
+          appSettings: |
+            - Cors__AllowedOrigins__0 $(Cors__AllowedOrigins__0)
