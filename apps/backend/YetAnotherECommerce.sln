@@ -75,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{63B97FAB-2A36-42D4-B317-9E27D6846FA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Functions", "src\YetAnotherECommerce.Functions\YetAnotherECommerce.Functions.csproj", "{3E937A51-E698-4ACA-A564-2BB1D5C63FA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Functions", "src\Functions\YetAnotherECommerce.Functions\YetAnotherECommerce.Functions.csproj", "{3E937A51-E698-4ACA-A564-2BB1D5C63FA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherECommerce.Shared.Contracts", "src\Shared\YetAnotherECommerce.Shared.Contracts\YetAnotherECommerce.Shared.Contracts.csproj", "{5350969B-8D69-447F-8BC0-48B84A1B470D}"
 EndProject
