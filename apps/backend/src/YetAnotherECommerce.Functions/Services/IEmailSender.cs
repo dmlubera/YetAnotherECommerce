@@ -19,7 +19,7 @@ public class SmtpEmailSender(IOptions<EmailNotificationsSettings> options) : IEm
     public async Task SendAsync(EmailMessage emailMessage)
     {
         var message = new MimeMessage();
-        message.From.Add(MailboxAddress.Parse(_settings.NoReplyAddressEmail));
+        message.From.Add(MailboxAddress.Parse(_settings.NoReplyEmailAddress));
         message.To.Add(MailboxAddress.Parse(emailMessage.To));
         message.Subject = emailMessage.Subject;
         message.Body = new TextPart(TextFormat.Html) { Text = emailMessage.Body };
