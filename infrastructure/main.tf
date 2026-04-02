@@ -193,3 +193,34 @@ resource "azurerm_servicebus_subscription_rule" "users_identity_subscription_rul
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('user.registered')"
 }
+
+resource "azurerm_email_communication_service" "ecs" {
+  name                = "yeacommerce-ecs-${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  data_location       = "Europe"
+}
+
+resource "azurerm_email_communication_service_domain" "ecs_domain" {
+  name              = "AzureManagedDomain"
+  email_service_id  = azurerm_email_communication_service.ecs.id
+  domain_management = "AzureManaged"
+}
+
+resource "azurerm_storage_account" "sa" {
+  name                     = "yeacommerce-sa-${var.environment_name}"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_linux_function_app" "function_app" {
+  name                       = "yeacommerce-fa-${var.environment_name}"
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  storage_account_name       = azurerm_storage_account.sa.name
+  storage_account_access_key = azurerm_storage_account.sa.primary_access_key
+  service_plan_id            = azurerm_service_plan.asp.id
+
+  site_config {}
+}

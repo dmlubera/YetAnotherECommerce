@@ -17,7 +17,7 @@ variable "environment_name" {
 variable "service_plan_sku" {
   description = "Service Plan SKU"
   type        = string
-  default     = "F1"
+  default     = "B1"
 
   validation {
     condition     = contains(["F1", "B1", "B2"], var.service_plan_sku)
