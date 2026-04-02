@@ -24,6 +24,8 @@ variables:
   value: '$(basePath)/tests/**/*.IntegrationTests.csproj'
 - name: bootstrapperProject
   value: '$(basePath)/src/Bootstrapper/YetAnotherECommerce.Bootstrapper/YetAnotherECommerce.Bootstrapper.csproj'
+- name: functionsProject
+  value: '$(basePath)/src/Functions/YetAnotherECommerce.Functions/YetAnotherECommerce.Functions.csproj'
 
 steps:
 - task: UseDotNet@2
@@ -70,13 +72,22 @@ steps:
     jsonTargetFiles: '**/appsettings.json'
 
 - task: DotNetCoreCLI@2
-  name: 'PublishProject'
-  displayName: 'Publish project'
+  name: 'PublishApiProject'
+  displayName: 'Publish API project'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: '$(bootstrapperProject)'
-    arguments: '--configuration $(buildConfiguration) --no-build --no-restore --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(buildConfiguration) --no-build --no-restore --output $(Build.ArtifactStagingDirectory)/api'
+
+- task: DotNetCoreCLI@2
+  name: 'PublishFunctionsProject'
+  displayName: 'Publish Functions project'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(functionsProject)'
+    arguments: '--configuration $(buildConfiguration) --no-build --no-restore --output $(Build.ArtifactStagingDirectory)/functions'
 
 - task: PublishPipelineArtifact@1
   name: 'PublishPipleineArtifact'

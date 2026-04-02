@@ -21,10 +21,26 @@ stages:
           artifact: yetanotherecommerce-backend
 
         - task: AzureWebApp@1
+          displayName: 'Deploy Web App'
           inputs:
             azureSubscription: $(subscription_name)
             appName: $(webapp_name)
             appType: 'webAppLinux'
-            package: '$(Pipeline.Workspace)/backend_ci/yetanotherecommerce-backend/**/*.zip'
+            package: '$(Pipeline.Workspace)/backend_ci/yetanotherecommerce-backend/api/**/*.zip'
             appSettings: |
               -Cors__AllowedOrigins__0 $(Cors__AllowedOrigins__0)
+
+        - task: AzureWebApp@1
+          displayName: 'Deploy Function App'
+          inputs:
+            azureSubscription: $(subscription_name)
+            appName: $(functionapp_name)
+            appType: 'functionAppLinux'
+            package: '$(Pipeline.Workspace)/backend_ci/yetanotherecommerce-backend/functions/**/*.zip'
+            appSettings:
+              -FUNCTIONS_WORKER_RUNTIME dotnet-isolated
+              -AzureWebJobsStorage $(azure_web_jobs_storage)
+              -EmailNotificationsSettings__NoReplyEmailAddress $(noreply_email_address)
+              -ServiceBusConnectionString $(servicebus_connection_string)
+              -CommunicationServicesConnectionString $(communicationservices_connection_string)
+            
