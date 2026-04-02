@@ -207,7 +207,7 @@ resource "azurerm_email_communication_service_domain" "ecs_domain" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                     = "yeacommerce-sa-${var.environment_name}"
+  name                     = "yeacommercesa${var.environment_name}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
