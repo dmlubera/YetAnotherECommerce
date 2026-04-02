@@ -1,3 +1,4 @@
+using Azure.Communication.Email;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +22,18 @@ builder.Services
     .ConfigureFunctionsApplicationInsights();
 
 builder.Services
-    .AddSingleton<IEmailSender, SmtpEmailSender>()
     .AddSingleton<IEmailMessageBuilder, CompleteRegistrationEmailMessageBuilder>()
     .AddSingleton<IEmailMessageBuilderFactory, EmailMessageBuilderFactory>();
+
+if (builder.Configuration["EmailProvider"] == "SMTP")
+{
+    builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
+}
+else
+{
+    builder.Services
+        .AddSingleton<IEmailSender, AzureCommunicationServicesSender>()
+        .AddSingleton(new EmailClient(builder.Configuration["CommunicationServicesConnectionString"]));
+}
 
 builder.Build().Run();
