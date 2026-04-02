@@ -1,4 +1,16 @@
 services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    hostname: azurite
+    restart: always
+    command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+    networks:
+      - yetanotherecommerce_net
+
   database:
     image: postgres:16.11-alpine
     container_name: database
@@ -26,7 +38,7 @@ services:
     ports:
       - 5672:5672
     volumes:
-      - ${CONFIG_PATH}:/ServiceBus_Emulator/ConfigFiles/Config.json
+      - ${CONFIG_PATH}:/ServiceBus_Emulator/ConfigFiles/Config.json:Z
     environment:
       SQL_SERVER: mssql
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
@@ -70,15 +82,28 @@ services:
     ports:
       - 5173:5173
     volumes:
-      - type: bind
-        source: ./apps/frontend
-        target: /usr/src/app
+      - ./apps/frontend:/usr/src/app:Z
       - type: volume
         target: /usr/src/app/node_modules
     environment:
       VITE_API_BASE_URL: "http://localhost:5001"
     networks:
       - yetanotherecommerce_net
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - ./mailpit:/data:Z
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
 volumes:
   pgdata:

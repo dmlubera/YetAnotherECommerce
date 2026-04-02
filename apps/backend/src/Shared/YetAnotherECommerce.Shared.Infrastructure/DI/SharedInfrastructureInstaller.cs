@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
@@ -17,6 +14,7 @@ using YetAnotherECommerce.Shared.Abstractions.Commands;
 using YetAnotherECommerce.Shared.Abstractions.Database;
 using YetAnotherECommerce.Shared.Abstractions.Events;
 using YetAnotherECommerce.Shared.Abstractions.Exceptions;
+using YetAnotherECommerce.Shared.Abstractions.Notifications;
 using YetAnotherECommerce.Shared.Abstractions.Queries;
 using YetAnotherECommerce.Shared.Infrastructure.Api;
 using YetAnotherECommerce.Shared.Infrastructure.BuildingBlocks;
@@ -27,6 +25,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Db;
 using YetAnotherECommerce.Shared.Infrastructure.Events;
 using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
+using YetAnotherECommerce.Shared.Infrastructure.Notifications;
 using YetAnotherECommerce.Shared.Infrastructure.Queries;
 using IMessagePublisher = YetAnotherECommerce.Shared.Abstractions.Messages.IMessagePublisher;
 
@@ -90,6 +89,7 @@ internal static class SharedInfrastructureInstaller
         });
         
         services.AddSingleton<IMessagePublisher, ServiceBusMessagePublisher>();
+        services.AddSingleton<INotificationSender, NotificationSender>();
     }
 
     private static void AddHangfire(IServiceCollection services, IConfiguration configuration)

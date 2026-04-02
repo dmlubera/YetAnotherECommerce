@@ -1,0 +1,3 @@
+namespace YetAnotherECommerce.Functions.Settings;
+
+public record EmailNotificationsSettings(string NoReplyAddressEmail);

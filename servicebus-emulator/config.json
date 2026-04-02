@@ -138,6 +138,19 @@
                 ]
               }
             ]
+          },
+          {
+            "Name": "notification.events",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "notification.dispatcher"
+              }
+            ]
           }
         ]
       }
