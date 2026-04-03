@@ -116,6 +116,11 @@ resource "azurerm_servicebus_topic" "carts_topic" {
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
+resource "azurerm_servicebus_topic" "notifications_topic" {
+  name         = "notification.events"
+  namespace_id = azurerm_servicebus_namespace.servicebus.id
+}
+
 resource "azurerm_servicebus_subscription" "orders_carts_subscription" {
   name               = "orders"
   topic_id           = azurerm_servicebus_topic.carts_topic.id
@@ -192,6 +197,12 @@ resource "azurerm_servicebus_subscription_rule" "users_identity_subscription_rul
   subscription_id = azurerm_servicebus_subscription.users_identity_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('user.registered')"
+}
+
+resource "azurerm_servicebus_subscription" "notification_dispatcher_subscription" {
+  name               = "notification.dispatcher"
+  topic_id           = azurerm_servicebus_topic.notifications_topic.id
+  max_delivery_count = 5
 }
 
 resource "azurerm_communication_service" "acs" {
