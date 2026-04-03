@@ -226,12 +226,23 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_linux_function_app" "function_app" {
-  name                       = "yeacommerce-fa-${var.environment_name}"
-  resource_group_name        = azurerm_resource_group.rg.name
-  location                   = azurerm_resource_group.rg.location
+  name                = "yeacommerce-fa-${var.environment_name}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  service_plan_id     = azurerm_service_plan.asp.id
+
   storage_account_name       = azurerm_storage_account.sa.name
   storage_account_access_key = azurerm_storage_account.sa.primary_access_key
-  service_plan_id            = azurerm_service_plan.asp.id
 
-  site_config {}
+  https_only = true
+
+  site_config {
+    application_stack {
+      dotnet_version = "10.0"
+    }
+  }
+
+  app_settings = {
+    "FUNCTIONS_WORKER_RUNTIME" = "dotnet-isolated"
+  }
 }
