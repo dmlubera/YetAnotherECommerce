@@ -1,4 +1,4 @@
-@moduleUrl = http://localhost:5000/identity-module
+@moduleUrl = http://localhost:5001/identity-module
 @email = test@yetanotherecommerce.com
 @password = Super$ecret123
 
@@ -23,6 +23,16 @@ Content-Type: application/json
 
 ### 
 @auth_token = {{signIn.response.body.$.accessToken}}
+
+### Confirm email
+POST {{moduleUrl}}/confirm-email
+Content-Type: application/json
+
+{
+  "userId": "",
+  "token": ""
+}
+
 
 ### Change password
 POST {{moduleUrl}}/account/change-password

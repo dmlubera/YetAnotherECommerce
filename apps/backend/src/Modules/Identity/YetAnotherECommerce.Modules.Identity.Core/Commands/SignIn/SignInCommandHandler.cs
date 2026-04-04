@@ -12,15 +12,31 @@ public class SignInCommandHandler(IAuthManager authManager, UserManager<User> us
     public async Task<SignInResult> HandleAsync(SignInCommand command)
     {
         var user = await userManager.FindByEmailAsync(command.Email);
-        if (user is null)
+
+        if (user is not null && userManager.SupportsUserLockout && await userManager.IsLockedOutAsync(user))
         {
+            return SignInResult.LockedOut();
+        }
+
+        var isValid = user is not null && await userManager.CheckPasswordAsync(user, command.Password);
+        if (!isValid)
+        {
+            if (user is not null && userManager.SupportsUserLockout)
+            {
+                await userManager.AccessFailedAsync(user);
+            }
+
             return SignInResult.InvalidCredentials();
         }
-        
-        var isCorrectPassword = await userManager.CheckPasswordAsync(user, command.Password);
-        if (!isCorrectPassword)
+
+        if (!await userManager.IsEmailConfirmedAsync(user))
         {
-            return SignInResult.InvalidCredentials();
+            return SignInResult.EmailNotConfirmed();
+        }
+
+        if (userManager.SupportsUserLockout && await userManager.IsLockedOutAsync(user))
+        {
+            await userManager.ResetAccessFailedCountAsync(user);
         }
         
         var userRole = (await userManager.GetRolesAsync(user)).SingleOrDefault();

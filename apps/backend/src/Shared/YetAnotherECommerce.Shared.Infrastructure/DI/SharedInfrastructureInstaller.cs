@@ -27,6 +27,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Exceptions;
 using YetAnotherECommerce.Shared.Infrastructure.Messages;
 using YetAnotherECommerce.Shared.Infrastructure.Notifications;
 using YetAnotherECommerce.Shared.Infrastructure.Queries;
+using YetAnotherECommerce.Shared.Infrastructure.Settings;
 using IMessagePublisher = YetAnotherECommerce.Shared.Abstractions.Messages.IMessagePublisher;
 
 [assembly: InternalsVisibleTo("YetAnotherECommerce.Bootstrapper")]
@@ -68,6 +69,8 @@ internal static class SharedInfrastructureInstaller
 
         AddServiceBus(services, configuration);
         AddHangfire(services, configuration);
+        
+        services.Configure<ClientAppSettings>(configuration.GetSection("ClientAppSettings"));
     }
 
     public static void UseInfrastructure(this IApplicationBuilder app)

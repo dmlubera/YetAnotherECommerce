@@ -12,8 +12,7 @@ public class CompleteRegistrationEmailMessageBuilder : EmailMessageBuilder<UserR
 
     protected override Task<EmailMessage> BuildEmailMessageAsync(UserRegistered notification, string template)
     {
-        //TODO: Inject correct url
-        var body = template.Replace("{{completionLink}}", "http://localhost:5173")
+        var body = template.Replace("{{completionLink}}", notification.EmailConfirmationLink)
             .Replace("{{year}}", DateTime.UtcNow.Year.ToString());
 
         return Task.FromResult(new EmailMessage(notification.Email, Subject, body));

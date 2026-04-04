@@ -21,17 +21,13 @@ internal static class CoreInstaller
 {
     public static void AddCore(this IServiceCollection services, IConfiguration configuration)
     {
+        services.ConfigureIdentity();
+        
         services.AddSingleton<InsertOutboxMessagesInterceptor>();
-        services.AddIdentityCore<User>()
-            .AddRoles<IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<IdentityDbContext>();
         services.AddDbContext<IdentityDbContext>((serviceProvider, options) =>
             options.UseNpgsql(configuration.GetConnectionString("Default"))
                 .AddInterceptors(serviceProvider.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
-        services.AddScoped<IAuthManager, AuthManager>();
-        services.AddScoped<UserManager<User>>();
-        services.AddScoped<SignInManager<User>>();
         services.RegisterCommandsFromAssembly(Assembly.GetExecutingAssembly());
         services.DecorateCommandWithUnitOfWork<IdentityDbContext>(Assembly.GetExecutingAssembly());
         services.AddScoped<IIdentityMessagePublisher, IdentityMessagePublisher>();
@@ -50,5 +46,16 @@ internal static class CoreInstaller
             job => job.ProcessAsync(),
             "0/15 * * * * *"
             );
+    }
+
+    private static void ConfigureIdentity(this IServiceCollection services)
+    {
+        services.AddIdentityCore<User>()
+            .AddRoles<IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<IdentityDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddScoped<IAuthManager, AuthManager>();
+        services.AddScoped<UserManager<User>>();
     }
 }
