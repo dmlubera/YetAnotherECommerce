@@ -23,7 +23,7 @@ public class UserRegisteredDomainEventHandler(
         {
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
             var emailConfirmationLink =
-                $"{_clientAppSettings.BaseUrl}/{_clientAppSettings.Paths.EmailConfirmation}?token={WebUtility.UrlEncode(token)}&userId={user.Id}";
+                $"{_clientAppSettings.BaseUrl}{_clientAppSettings.Paths.EmailConfirmation}?token={WebUtility.UrlEncode(token)}&userId={user.Id}";
             await notificationSender.SendAsync(
                 new YetAnotherECommerce.Shared.Contracts.Notifications.Identity.UserRegistered(@event.Email,
                     emailConfirmationLink));
