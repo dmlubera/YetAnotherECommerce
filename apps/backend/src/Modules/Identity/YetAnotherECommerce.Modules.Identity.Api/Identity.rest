@@ -41,6 +41,24 @@ Content-Type: application/json
   "email": "{{email}}"
 }
 
+### Request password reset
+POST {{moduleUrl}}/request-password-reset
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+### Reset password
+POST {{moduleUrl}}/reset-password
+Content-Type: application/json
+
+{
+  "userId": "",
+  "token": "",
+  "password": "newSuper$ecret123"
+}
+
 
 ### Change password
 POST {{moduleUrl}}/account/change-password

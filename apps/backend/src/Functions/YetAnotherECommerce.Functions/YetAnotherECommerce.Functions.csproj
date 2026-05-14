@@ -28,6 +28,8 @@
     <ItemGroup>
       <None Remove="Templates\complete-registration.html" />
       <EmbeddedResource Include="Templates\complete-registration.html" />
+      <None Remove="Templates\reset-password.html" />
+      <EmbeddedResource Include="Templates\reset-password.html" />
     </ItemGroup>
 
 </Project>

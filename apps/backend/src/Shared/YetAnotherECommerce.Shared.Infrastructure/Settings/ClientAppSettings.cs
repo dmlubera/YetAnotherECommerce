@@ -9,4 +9,5 @@ public class ClientAppSettings
 public class Paths
 {
     public string EmailConfirmation { get; set; }
+    public string PasswordReset { get; set; }
 }

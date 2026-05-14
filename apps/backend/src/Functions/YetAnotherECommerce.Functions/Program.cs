@@ -23,6 +23,7 @@ builder.Services
 
 builder.Services
     .AddSingleton<IEmailMessageBuilder, CompleteRegistrationEmailMessageBuilder>()
+    .AddSingleton<IEmailMessageBuilder, ResetPasswordEmailMessageBuilder>()
     .AddSingleton<IEmailMessageBuilderFactory, EmailMessageBuilderFactory>();
 
 if (builder.Configuration["EmailProvider"] == "SMTP")
