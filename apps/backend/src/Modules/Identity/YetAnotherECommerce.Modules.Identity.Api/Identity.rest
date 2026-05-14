@@ -33,6 +33,14 @@ Content-Type: application/json
   "token": ""
 }
 
+### Resend email confirmation
+POST {{moduleUrl}}/resend-email-confirmation
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
 
 ### Change password
 POST {{moduleUrl}}/account/change-password
