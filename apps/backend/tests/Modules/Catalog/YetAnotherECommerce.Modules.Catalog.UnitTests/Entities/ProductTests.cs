@@ -3,7 +3,7 @@ using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Catalog.Core.DomainEvents;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 
 namespace YetAnotherECommerce.Modules.Catalog.UnitTests.Entities;
 

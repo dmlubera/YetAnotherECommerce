@@ -6,7 +6,7 @@ using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Catalog.Core;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.Events;
 using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Handlers;
 using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Models;

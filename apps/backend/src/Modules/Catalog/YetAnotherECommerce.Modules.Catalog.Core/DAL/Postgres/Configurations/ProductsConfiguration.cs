@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 

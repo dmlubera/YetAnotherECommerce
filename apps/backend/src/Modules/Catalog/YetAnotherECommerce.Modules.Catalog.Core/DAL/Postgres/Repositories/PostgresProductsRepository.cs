@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.Repositories;
 
 namespace YetAnotherECommerce.Modules.Catalog.Core.DAL.Postgres.Repositories;

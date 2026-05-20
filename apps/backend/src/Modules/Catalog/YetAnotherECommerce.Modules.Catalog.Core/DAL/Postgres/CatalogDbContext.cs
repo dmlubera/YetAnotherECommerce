@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.Inbox;
 
 namespace YetAnotherECommerce.Modules.Catalog.Core.DAL.Postgres;

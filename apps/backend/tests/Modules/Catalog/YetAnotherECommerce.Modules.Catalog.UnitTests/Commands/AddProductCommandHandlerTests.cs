@@ -4,7 +4,7 @@ using Moq;
 using Shouldly;
 using Xunit;
 using YetAnotherECommerce.Modules.Catalog.Core.Commands;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.Exceptions;
 using YetAnotherECommerce.Modules.Catalog.Core.Repositories;
 using YetAnotherECommerce.Modules.Catalog.UnitTests.Fixtures.Commands;

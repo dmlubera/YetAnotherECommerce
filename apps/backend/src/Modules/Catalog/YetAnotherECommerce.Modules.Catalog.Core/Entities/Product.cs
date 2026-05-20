@@ -3,7 +3,7 @@ using YetAnotherECommerce.Modules.Catalog.Core.DomainEvents;
 using YetAnotherECommerce.Modules.Catalog.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks;
 
-namespace YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+namespace YetAnotherECommerce.Modules.Catalog.Core.Entities;
 
 public class Product : AggregateRoot, IAuditable
 {

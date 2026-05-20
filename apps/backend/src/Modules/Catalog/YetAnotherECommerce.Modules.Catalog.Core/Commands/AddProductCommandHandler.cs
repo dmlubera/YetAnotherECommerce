@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.Exceptions;
 using YetAnotherECommerce.Modules.Catalog.Core.Repositories;
 using YetAnotherECommerce.Shared.Abstractions.Commands;

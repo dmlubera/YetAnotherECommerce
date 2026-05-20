@@ -1,4 +1,4 @@
-﻿using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+﻿using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.ValueObjects;
 using YetAnotherECommerce.Shared.Abstractions.BuildingBlocks.DomainEvents;
 

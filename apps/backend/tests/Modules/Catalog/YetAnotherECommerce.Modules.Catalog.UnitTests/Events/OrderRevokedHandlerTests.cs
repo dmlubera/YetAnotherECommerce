@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using Shouldly;
 using Xunit;
-using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Entities;
 using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Handlers;
 using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Models;
 using YetAnotherECommerce.Modules.Catalog.Core.Repositories;
