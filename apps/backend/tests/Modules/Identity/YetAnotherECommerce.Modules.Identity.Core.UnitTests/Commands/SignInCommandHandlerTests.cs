@@ -62,6 +62,7 @@ public class SignInCommandHandlerTests
         // Arrange
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(User.Register(It.IsAny<string>()));
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+        _userManagerMock.Setup(x => x.IsEmailConfirmedAsync(It.IsAny<User>())).ReturnsAsync(true);
         _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync([Role.Customer]);
 
         // Act
