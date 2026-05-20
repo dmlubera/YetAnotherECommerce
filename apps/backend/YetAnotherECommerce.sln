@@ -17,11 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{4F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Api", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Api\YetAnotherECommerce.Modules.Identity.Api.csproj", "{7B8BF375-AC9C-475F-9C23-E755B0E63A19}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{D5413548-BCFC-478F-8906-0484E2D94B25}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{D5413548-BCFC-478F-8906-0484E2D94B25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{487BC44C-1C80-4F65-BAE4-189A0640D211}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Users.Api", "src\Modules\Users\YetAnotherECommerce.Modules.Users.Api\YetAnotherECommerce.Modules.Users.Api.csproj", "{D1A5E544-A954-45AF-9F25-18E1EDD49186}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Customers.Api", "src\Modules\Customers\YetAnotherECommerce.Modules.Customers.Api\YetAnotherECommerce.Modules.Customers.Api.csproj", "{D1A5E544-A954-45AF-9F25-18E1EDD49186}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Shared.Abstractions", "src\Shared\YetAnotherECommerce.Shared.Abstractions\YetAnotherECommerce.Shared.Abstractions.csproj", "{B41B117E-35AF-4EDA-9F2D-2B248F8D521A}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Shared.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Core", "src\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core\YetAnotherECommerce.Modules.Identity.Core.csproj", "{1BE43977-565C-49B1-BA3A-EC22CD6275DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Users.Core", "src\Modules\Users\YetAnotherECommerce.Modules.Users.Core\YetAnotherECommerce.Modules.Users.Core.csproj", "{41E7FFCC-3F03-4A81-9C80-C790A63A8D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Customers.Core", "src\Modules\Customers\YetAnotherECommerce.Modules.Customers.Core\YetAnotherECommerce.Modules.Customers.Core.csproj", "{41E7FFCC-3F03-4A81-9C80-C790A63A8D49}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{10381D27-084B-474E-8A7C-40DFBD08DA57}"
 EndProject
@@ -37,15 +37,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Identity.Core.UnitTests", "tests\Modules\Identity\YetAnotherECommerce.Modules.Identity.Core.UnitTests\YetAnotherECommerce.Modules.Identity.Core.UnitTests.csproj", "{59D6BAC7-D669-4056-BAC1-13762A6656C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{2A13C821-43CD-465E-BF2E-F5E2692C59DD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{2A13C821-43CD-465E-BF2E-F5E2692C59DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Products.Api", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Api\YetAnotherECommerce.Modules.Products.Api.csproj", "{DB6821F5-292C-4412-8D15-F8B323B52C62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Catalog.Api", "src\Modules\Catalog\YetAnotherECommerce.Modules.Catalog.Api\YetAnotherECommerce.Modules.Catalog.Api.csproj", "{DB6821F5-292C-4412-8D15-F8B323B52C62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Products.Core", "src\Modules\Products\YetAnotherECommerce.Modules.Products.Core\YetAnotherECommerce.Modules.Products.Core.csproj", "{B25B6552-4F0E-422A-ABD0-AECA9C082247}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Catalog.Core", "src\Modules\Catalog\YetAnotherECommerce.Modules.Catalog.Core\YetAnotherECommerce.Modules.Catalog.Core.csproj", "{B25B6552-4F0E-422A-ABD0-AECA9C082247}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{0FD49DFC-4FF4-4F78-B23D-FCFCDAC5C83A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Products.UnitTests", "tests\Modules\Products\YetAnotherECommerce.Modules.Products.UnitTests\YetAnotherECommerce.Modules.Products.UnitTests.csproj", "{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Catalog.UnitTests", "tests\Modules\Catalog\YetAnotherECommerce.Modules.Catalog.UnitTests\YetAnotherECommerce.Modules.Catalog.UnitTests.csproj", "{B2D5DCF5-9227-48E6-A5D1-F126C1B744AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Carts", "Carts", "{EB3C2439-CE05-478C-9BBE-CD6C6CF566FE}"
 EndProject
@@ -59,9 +59,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Orders.Core", "src\Modules\Orders\YetAnotherECommerce.Modules.Orders.Core\YetAnotherECommerce.Modules.Orders.Core.csproj", "{51AEC762-A4C0-42B3-8761-9BEF4EE397CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{E86DB4E3-7A1B-4ACE-8DB5-FC7AA3F9C7E3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{E86DB4E3-7A1B-4ACE-8DB5-FC7AA3F9C7E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Users.UnitTests", "tests\Modules\Users\YetAnotherECommerce.Modules.Users.UnitTests\YetAnotherECommerce.Modules.Users.UnitTests.csproj", "{217DFBE8-5CB4-4185-AE72-530D8E430573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YetAnotherECommerce.Modules.Customers.UnitTests", "tests\Modules\Customers\YetAnotherECommerce.Modules.Customers.UnitTests\YetAnotherECommerce.Modules.Customers.UnitTests.csproj", "{217DFBE8-5CB4-4185-AE72-530D8E430573}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{5A6CA0A6-8E21-40A5-9155-9DC7C0677712}"
 EndProject

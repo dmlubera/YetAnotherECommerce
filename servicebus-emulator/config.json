@@ -14,7 +14,7 @@
             },
             "Subscriptions": [
               {
-                "Name": "users",
+                "Name": "customers",
                 "Rules": [
                   {
                     "Name": "event-type-filter",
@@ -30,7 +30,7 @@
             ]
           },
           {
-            "Name": "users.events",
+            "Name": "customers.events",
             "Properties": {
               "DefaultMessageTimeToLive": "PT1H",
               "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -54,7 +54,7 @@
             ]
           },
           {
-            "Name": "products.events",
+            "Name": "catalog.events",
             "Properties": {
               "DefaultMessageTimeToLive": "PT1H",
               "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -100,7 +100,7 @@
             },
             "Subscriptions": [
               {
-                "Name": "products",
+                "Name": "catalog",
                 "Rules": [
                   {
                     "Name": "event-type-filter",

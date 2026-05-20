@@ -7,7 +7,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Carts.Core;
 
-internal sealed class ProductsEventsReceiver(
+internal sealed class CatalogEventsReceiver(
     IDbConnectionFactory dbConnectionFactory,
     ServiceBusClient serviceBusClient,
     TimeProvider timeProvider) : ServiceBusMessageReceiver(dbConnectionFactory, serviceBusClient, timeProvider)
@@ -17,7 +17,7 @@ internal sealed class ProductsEventsReceiver(
         { "product.added.to.cart", typeof(ProductAddedToCart) }
     };
 
-    protected override string TopicName => "products.events";
+    protected override string TopicName => "catalog.events";
     protected override string SubscriptionName => "carts";
     protected override Dictionary<string, Type> EventTypeMapping => _eventTypeMappings;
     protected override string DatabaseSchema => "carts";

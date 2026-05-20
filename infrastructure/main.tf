@@ -96,13 +96,13 @@ resource "azurerm_servicebus_topic" "identity_topic" {
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
-resource "azurerm_servicebus_topic" "users_topic" {
-  name         = "users.events"
+resource "azurerm_servicebus_topic" "customers_topic" {
+  name         = "customers.events"
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
-resource "azurerm_servicebus_topic" "products_topic" {
-  name         = "products.events"
+resource "azurerm_servicebus_topic" "catalog_topic" {
+  name         = "catalog.events"
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 }
 
@@ -134,67 +134,67 @@ resource "azurerm_servicebus_subscription_rule" "orders_carts_subscription_rule"
   sql_filter      = "eventType IN ('order.placed')"
 }
 
-resource "azurerm_servicebus_subscription" "products_orders_subscription" {
-  name               = "products"
+resource "azurerm_servicebus_subscription" "catalog_orders_subscription" {
+  name               = "catalog"
   topic_id           = azurerm_servicebus_topic.orders_topic.id
   max_delivery_count = 5
 }
 
-resource "azurerm_servicebus_subscription_rule" "products_orders_subscription_rule" {
+resource "azurerm_servicebus_subscription_rule" "catalog_orders_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = azurerm_servicebus_subscription.products_orders_subscription.id
+  subscription_id = azurerm_servicebus_subscription.catalog_orders_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('order.canceled', 'order.revoked', 'order.created')"
 }
 
-resource "azurerm_servicebus_subscription" "orders_products_subscription" {
+resource "azurerm_servicebus_subscription" "orders_catalog_subscription" {
   name               = "orders"
-  topic_id           = azurerm_servicebus_topic.products_topic.id
+  topic_id           = azurerm_servicebus_topic.catalog_topic.id
   max_delivery_count = 5
 }
 
-resource "azurerm_servicebus_subscription_rule" "orders_products_subscription_rule" {
+resource "azurerm_servicebus_subscription_rule" "orders_catalog_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = azurerm_servicebus_subscription.orders_products_subscription.id
+  subscription_id = azurerm_servicebus_subscription.orders_catalog_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('order.accepted', 'order.rejected')"
 }
 
-resource "azurerm_servicebus_subscription" "carts_products_subscription" {
+resource "azurerm_servicebus_subscription" "carts_catalog_subscription" {
   name               = "carts"
-  topic_id           = azurerm_servicebus_topic.products_topic.id
+  topic_id           = azurerm_servicebus_topic.catalog_topic.id
   max_delivery_count = 5
 }
 
-resource "azurerm_servicebus_subscription_rule" "carts_products_subscription_rule" {
+resource "azurerm_servicebus_subscription_rule" "carts_catalog_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = azurerm_servicebus_subscription.carts_products_subscription.id
+  subscription_id = azurerm_servicebus_subscription.carts_catalog_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('product.added.to.cart')"
 }
 
-resource "azurerm_servicebus_subscription" "orders_users_subscription" {
+resource "azurerm_servicebus_subscription" "orders_customers_subscription" {
   name               = "orders"
-  topic_id           = azurerm_servicebus_topic.users_topic.id
+  topic_id           = azurerm_servicebus_topic.customers_topic.id
   max_delivery_count = 5
 }
 
-resource "azurerm_servicebus_subscription_rule" "orders_users_subscription_rule" {
+resource "azurerm_servicebus_subscription_rule" "orders_customers_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = azurerm_servicebus_subscription.orders_users_subscription.id
+  subscription_id = azurerm_servicebus_subscription.orders_customers_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('registration.completed')"
 }
 
-resource "azurerm_servicebus_subscription" "users_identity_subscription" {
-  name               = "users"
+resource "azurerm_servicebus_subscription" "customers_identity_subscription" {
+  name               = "customers"
   topic_id           = azurerm_servicebus_topic.identity_topic.id
   max_delivery_count = 5
 }
 
-resource "azurerm_servicebus_subscription_rule" "users_identity_subscription_rule" {
+resource "azurerm_servicebus_subscription_rule" "customers_identity_subscription_rule" {
   name            = "event-type-filter"
-  subscription_id = azurerm_servicebus_subscription.users_identity_subscription.id
+  subscription_id = azurerm_servicebus_subscription.customers_identity_subscription.id
   filter_type     = "SqlFilter"
   sql_filter      = "eventType IN ('user.registered')"
 }

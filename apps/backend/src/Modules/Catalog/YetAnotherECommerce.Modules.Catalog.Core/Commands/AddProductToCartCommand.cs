@@ -1,0 +1,6 @@
+﻿using System;
+using YetAnotherECommerce.Shared.Abstractions.Commands;
+
+namespace YetAnotherECommerce.Modules.Catalog.Core.Commands;
+
+public record AddProductToCartCommand(Guid CustomerId, Guid ProductId, int Quantity) : ICommand;

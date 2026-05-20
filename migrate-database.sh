@@ -1,7 +1,7 @@
 DB_CONNECTION_STRING='Host=localhost;Port=5432;Database=yetanotherecommerce;Username=postgres;Password=root'
 
 echo 'Creating directories...'
-mkdir -p migrations/Identity migrations/Users migrations/Products migrations/Orders migrations/Carts
+mkdir -p migrations/Identity migrations/Customers migrations/Catalog migrations/Orders migrations/Carts
 
 echo 'Building solution...'
 dotnet build ./apps/backend --no-restore
@@ -13,14 +13,14 @@ dotnet ef migrations bundle --no-build --force \
 --output migrations/Identity/migrate
 
 dotnet ef migrations bundle --no-build --force \
---project ./apps/backend/src/Modules/Users/YetAnotherECommerce.Modules.Users.Core/YetAnotherECommerce.Modules.Users.Core.csproj \
---context UsersDbContext \
---output migrations/Users/migrate
+--project ./apps/backend/src/Modules/Customers/YetAnotherECommerce.Modules.Customers.Core/YetAnotherECommerce.Modules.Customers.Core.csproj \
+--context CustomersDbContext \
+--output migrations/Customers/migrate
 
 dotnet ef migrations bundle --no-build --force \
---project ./apps/backend/src/Modules/Products/YetAnotherECommerce.Modules.Products.Core/YetAnotherECommerce.Modules.Products.Core.csproj \
---context ProductsDbContext \
---output migrations/Products/migrate
+--project ./apps/backend/src/Modules/Catalog/YetAnotherECommerce.Modules.Catalog.Core/YetAnotherECommerce.Modules.Catalog.Core.csproj \
+--context CatalogDbContext \
+--output migrations/Catalog/migrate
 
 dotnet ef migrations bundle --no-build --force \
 --project ./apps/backend/src/Modules/Orders/YetAnotherECommerce.Modules.Orders.Core/YetAnotherECommerce.Modules.Orders.Core.csproj \
@@ -34,8 +34,8 @@ dotnet ef migrations bundle --no-build --force \
 
 echo 'Applying migrations...'
 migrations/Identity/migrate --connection $DB_CONNECTION_STRING
-migrations/Users/migrate --connection $DB_CONNECTION_STRING
-migrations/Products/migrate --connection $DB_CONNECTION_STRING
+migrations/Customers/migrate --connection $DB_CONNECTION_STRING
+migrations/Catalog/migrate --connection $DB_CONNECTION_STRING
 migrations/Orders/migrate --connection $DB_CONNECTION_STRING
 migrations/Carts/migrate --connection $DB_CONNECTION_STRING
 

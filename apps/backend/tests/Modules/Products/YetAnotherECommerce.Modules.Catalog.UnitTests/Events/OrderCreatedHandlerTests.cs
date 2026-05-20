@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
+using Shouldly;
+using Xunit;
+using YetAnotherECommerce.Modules.Catalog.Core;
+using YetAnotherECommerce.Modules.Catalog.Core.Entitites;
+using YetAnotherECommerce.Modules.Catalog.Core.Events;
+using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Handlers;
+using YetAnotherECommerce.Modules.Catalog.Core.Events.External.Models;
+using YetAnotherECommerce.Modules.Catalog.Core.Exceptions;
+using YetAnotherECommerce.Modules.Catalog.Core.Repositories;
+using YetAnotherECommerce.Modules.Catalog.UnitTests.Fixtures.Entities;
+
+namespace YetAnotherECommerce.Modules.Catalog.UnitTests.Events;
+
+public class OrderCreatedHandlerTests
+{
+    private readonly Mock<IProductRepository> _productRepositoryMock = new();
+    private readonly Mock<ICatalogMessagePublisher> _messagePublisherMock = new();
+    private readonly OrderCreatedHandler _handler;
+
+    public OrderCreatedHandlerTests()
+    {
+        _handler = new OrderCreatedHandler(_productRepositoryMock.Object, _messagePublisherMock.Object,
+            NullLogger<OrderCreatedHandler>.Instance);
+    }
+
+    [Fact]
+    public async Task WhenSomeOfOrderedProductsAreNotAvailable_ThenShouldThrowAnExceptionAndPublishIntegrationEvent()
+    {
+        var orderedProducts = new Dictionary<Guid, int>
+        {
+            { Guid.NewGuid(), 1 },
+            { Guid.NewGuid(), 1 }
+        };
+        var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
+        var products = new List<Product>
+        {
+            ProductFixture.Create()
+        };
+        var expectedException = new SomeOfOrderedProductsAreNotAvailableException();
+        _productRepositoryMock
+            .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+            .ReturnsAsync(products);
+
+        var exception = await Assert.ThrowsAsync<SomeOfOrderedProductsAreNotAvailableException>(() => _handler.HandleAsync(orderCreated));
+
+        exception.ShouldNotBeNull();
+        exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        exception.Message.ShouldBe(expectedException.Message);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
+    }
+
+    [Fact]
+    public async Task WhenSomeOfOrderedProcutsIsNotAvailableInOrderedQuantity_ThenShouldThrowAnExceptionAndPublishIntegrationEvent()
+    {
+        var products = new List<Product>
+        {
+            ProductFixture.Create()
+        };
+        products[0].UpdateQuantity(5);
+        var orderedProducts = new Dictionary<Guid, int> { { products[0].Id, 10 } };
+        var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
+        var expectedException = new ProductIsNotAvailableInOrderedQuantityException();
+        _productRepositoryMock
+            .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+            .ReturnsAsync(products);
+
+        var exception = await Assert.ThrowsAsync<ProductIsNotAvailableInOrderedQuantityException>(() => _handler.HandleAsync(orderCreated));
+
+        exception.ShouldNotBeNull();
+        exception.ErrorCode.ShouldBe(expectedException.ErrorCode);
+        exception.Message.ShouldBe(expectedException.Message);
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderRejected>()));
+    }
+
+    [Fact]
+    public async Task WhenOrderedProductsAreAvailable_ThenShouldUpdateQuanitityAndPublishIntegrationEvent()
+    {
+        var products = new List<Product>
+        {
+            ProductFixture.Create()
+        };
+        var originalQuantity = products[0].Quantity.Value;
+        var orderedProducts = new Dictionary<Guid, int> { { products[0].Id, 1 } };
+        var orderCreated = new OrderCreated(Guid.NewGuid(), orderedProducts);
+        _productRepositoryMock
+            .Setup(x => x.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+            .ReturnsAsync(products);
+
+        await _handler.HandleAsync(orderCreated);
+
+
+        products[0].Quantity.Value.ShouldBe(originalQuantity - orderedProducts.GetValueOrDefault(products[0].Id));
+        _messagePublisherMock.Verify(x => x.PublishAsync(It.IsAny<OrderAccepted>()));
+    }
+}

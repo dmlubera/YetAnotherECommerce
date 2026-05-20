@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Settings\**" />
+    <EmbeddedResource Remove="Settings\**" />
+    <None Remove="Settings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="module.users.json" />
+    <None Remove="module.users.Test.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YetAnotherECommerce.Modules.Customers.Core\YetAnotherECommerce.Modules.Customers.Core.csproj" />
+  </ItemGroup>
+
+</Project>

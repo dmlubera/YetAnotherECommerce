@@ -26,9 +26,9 @@ internal static class CoreInstaller
 
         services.AddDbContext<OrdersDbContext>(x => x.UseNpgsql(configuration.GetConnectionString("Default")));
 
-        services.AddHostedService<UsersEventsReceiver>();
+        services.AddHostedService<CustomersEventsReceiver>();
         services.AddHostedService<CartsEventsReceiver>();
-        services.AddHostedService<ProductsEventsReceiver>();
+        services.AddHostedService<CatalogEventsReceiver>();
         services.AddScoped<ProcessInboxJob>();
     }
     

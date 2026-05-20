@@ -1,0 +1,6 @@
+﻿using YetAnotherECommerce.Shared.Abstractions.Commands;
+
+namespace YetAnotherECommerce.Modules.Catalog.Core.Commands;
+
+public record AddProductCommand(string Name, string Description, decimal Price, int Quantity)
+    : ICommand;

@@ -15,7 +15,7 @@ internal static class CoreInstaller
         services.AddTransient<ICartService, CartService>();
         services.AddScoped<ICartsMessagePublisher, CartsMessagePublisher>();
 
-        services.AddHostedService<ProductsEventsReceiver>();
+        services.AddHostedService<CatalogEventsReceiver>();
         services.AddScoped<ProcessInboxJob>();
     }
     

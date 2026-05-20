@@ -7,7 +7,7 @@ using YetAnotherECommerce.Shared.Infrastructure.Messages;
 
 namespace YetAnotherECommerce.Modules.Orders.Core;
 
-internal sealed class UsersEventsReceiver(
+internal sealed class CustomersEventsReceiver(
     IDbConnectionFactory dbConnectionFactory,
     ServiceBusClient serviceBusClient,
     TimeProvider timeProvider) : ServiceBusMessageReceiver(dbConnectionFactory, serviceBusClient, timeProvider)
@@ -17,7 +17,7 @@ internal sealed class UsersEventsReceiver(
         { "registration.completed", typeof(RegistrationCompleted) }
     };
 
-    protected override string TopicName => "users.events";
+    protected override string TopicName => "customers.events";
     protected override string SubscriptionName => "orders";
     protected override Dictionary<string, Type> EventTypeMapping => _eventTypeMappings;
     protected override string DatabaseSchema => "orders";
@@ -39,7 +39,7 @@ internal sealed class CartsEventsReceiver(
     protected override string DatabaseSchema => "orders";
 }
 
-internal sealed class ProductsEventsReceiver(
+internal sealed class CatalogEventsReceiver(
     IDbConnectionFactory dbConnectionFactory,
     ServiceBusClient serviceBusClient,
     TimeProvider timeProvider) : ServiceBusMessageReceiver(dbConnectionFactory, serviceBusClient, timeProvider)
@@ -50,7 +50,7 @@ internal sealed class ProductsEventsReceiver(
         { "order.rejected", typeof(OrderRejected) }
     };
 
-    protected override string TopicName => "products.events";
+    protected override string TopicName => "catalog.events";
     protected override string SubscriptionName => "orders";
     protected override Dictionary<string, Type> EventTypeMapping => _eventTypeMappings;
     protected override string DatabaseSchema => "orders";
