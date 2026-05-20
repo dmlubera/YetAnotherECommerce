@@ -45,7 +45,7 @@ internal static class SharedInfrastructureInstaller
         services.AddControllers()
             .ConfigureApplicationPartManager(manager =>
             {
-                manager.FeatureProviders.Add(new InternalControllerFeautreProvider());
+                manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
             });
 
         services.AddMemoryCache();
